@@ -24,11 +24,17 @@ export type SendEmailInput = {
 
 export type SendEmailResult = { id: string; via: "resend" | "outbox" };
 
-const resend = emailEnv.RESEND_API_KEY ? new Resend(emailEnv.RESEND_API_KEY) : null;
+/** Capture mode (EMAIL_OUTBOX=1): never deliver, always write to the outbox. */
+const captureMode = ["1", "true"].includes(String(process.env.EMAIL_OUTBOX ?? "").toLowerCase());
+
+const resend = emailEnv.RESEND_API_KEY && !captureMode ? new Resend(emailEnv.RESEND_API_KEY) : null;
+
+/** True when emails can be captured locally (development or capture mode). */
+export const outboxEnabled = process.env.NODE_ENV !== "production" || captureMode;
 
 /**
- * Sends an email. With RESEND_API_KEY it goes through Resend; without it (development only)
- * it is rendered and stored in the local outbox, viewable at /dev/outbox.
+ * Sends an email. With RESEND_API_KEY it goes through Resend; without it (development, or
+ * EMAIL_OUTBOX=1) it is rendered and stored in the local outbox, viewable at /dev/outbox.
  */
 export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult> {
   const from = input.from ?? emailEnv.EMAIL_FROM ?? "Site <onboarding@resend.dev>";
@@ -53,8 +59,10 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
     return { id: data.id, via: "resend" };
   }
 
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("RESEND_API_KEY is not set; cannot send email in production.");
+  if (!outboxEnabled) {
+    throw new Error(
+      "RESEND_API_KEY is not set; cannot send email in production (set EMAIL_OUTBOX=1 to capture instead).",
+    );
   }
 
   const [html, text] = await Promise.all([

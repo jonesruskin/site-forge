@@ -3,8 +3,14 @@ import "server-only";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-/** Development-only mailbox on disk, so every flow works without an email provider. */
-const OUTBOX_DIR = path.join(process.cwd(), ".site", "dev", "outbox");
+/**
+ * Mailbox on disk, so every flow works without an email provider. On serverless
+ * hosts the project directory is read-only, so capture mode falls back to /tmp
+ * (per instance).
+ */
+const OUTBOX_DIR = process.env.VERCEL
+  ? "/tmp/site-outbox"
+  : path.join(process.cwd(), ".site", "dev", "outbox");
 
 export type OutboxMessage = {
   id: string;

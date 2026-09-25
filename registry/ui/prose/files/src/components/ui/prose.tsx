@@ -17,6 +17,8 @@ export function Prose({ className, ...props }: ComponentProps<"div">) {
         "[&_h3]:font-display [&_h3]:mt-9 [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-semibold",
         "[&_h4]:mt-7 [&_h4]:scroll-mt-24 [&_h4]:font-semibold",
         "[&_a]:text-foreground [&_a]:decoration-muted-foreground/50 hover:[&_a]:decoration-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors",
+        // Heading anchors (rehype-autolink-headings) read as headings, not links.
+        "[&_:is(h2,h3,h4)>a]:no-underline hover:[&_:is(h2,h3,h4)>a]:underline",
         "[&_strong]:font-semibold",
         "[&_:is(ul,ol)]:pl-6 [&_li]:mt-2 [&_li]:pl-1 [&_ol]:list-decimal [&_ul]:list-disc [&_li::marker]:text-muted-foreground",
         "[&_blockquote]:text-muted-foreground [&_blockquote]:border-l-2 [&_blockquote]:pl-5 [&_blockquote]:italic",

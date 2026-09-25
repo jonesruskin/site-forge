@@ -90,6 +90,18 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
 9. Bump `version` in `module.json` whenever files change (drives `site diff`).
 10. README sections: What it does · Setup · Environment · Customization · Removal.
 
+## Next.js gotchas (learned the hard way)
+
+- A page-level `openGraph` replaces the parent's, so `createMetadata()` always names an image.
+  Routes that ship their own `opengraph-image.tsx` must pass `image: false` (or an explicit
+  image) so the file-based image wins. Dynamic image routes get hashed URLs; never hardcode them.
+- `opengraph-image` cannot live under catch-all segments; use fixed-depth dynamic routes.
+- Sibling dynamic segments must share a name (`[slug]` and `[slug]/[page]`, not `[group]`).
+- Never open connections at import time (builds import every route). The `db` export is a
+  lazy proxy; follow that pattern for any client that connects.
+- Forms are rate limited per IP. E2E tests set a random `x-forwarded-for` per test.
+- `EMAIL_OUTBOX=1` captures email in production builds (CI, previews); the e2e suite uses it.
+
 ## Slots
 
 A slot is a generated file that aggregates contributions from installed modules.

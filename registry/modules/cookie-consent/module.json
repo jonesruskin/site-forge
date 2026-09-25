@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "cookie-consent",
+  "version": "1.0.0",
+  "title": "Cookie consent",
+  "description": "GDPR-style consent banner with equal accept/reject, per-category choices, and a cookie contract other modules read.",
+  "category": "marketing",
+  "ui": ["button", "switch"],
+  "files": [
+    "src/lib/consent/consent.ts",
+    "src/lib/consent/server.ts",
+    "src/lib/consent/config.ts",
+    "src/components/consent/cookie-banner.tsx",
+    "src/components/consent/use-consent.ts"
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "body-end",
+        "import": "CookieBanner",
+        "from": "src/components/consent/cookie-banner.tsx",
+        "order": 90
+      }
+    ],
+    "nav": [{ "location": "legal", "label": "Cookie settings", "href": "#cookie-settings" }],
+    "siteConfig": {
+      "cookieConsent": {
+        "title": "Cookies",
+        "description": "We use essential cookies to run this site, and optional ones to understand usage and improve it. You choose.",
+        "policyHref": "/legal/cookies",
+        "categories": {
+          "analytics": "Analytics: anonymous usage statistics",
+          "marketing": "Marketing: campaign measurement"
+        }
+      }
+    }
+  },
+  "postInstall": [
+    "Consent is stored in the `site_consent` cookie ({\"v\":1,\"analytics\":bool,\"marketing\":bool}).",
+    "Any link to #cookie-settings reopens the banner (one is added to the legal footer links)."
+  ]
+}

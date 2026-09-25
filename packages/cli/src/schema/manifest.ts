@@ -55,6 +55,11 @@ export const slotDefinitionSchema = z.object({
   /** Import lines needed by `type`. */
   typeImports: z.array(z.string()).default([]),
   description: z.string().min(1),
+  /**
+   * Emit `[...] as const satisfies readonly Type[]` instead of annotating the
+   * array, so each contribution keeps its precise type (typed plugin APIs).
+   */
+  inferred: z.boolean().default(false),
 });
 
 export type SlotDefinition = z.output<typeof slotDefinitionSchema>;

@@ -21,8 +21,12 @@ type MetadataInput = {
   description?: string;
   /** Path of the page, used for the canonical URL and og:url. */
   path?: string;
-  /** Path or absolute URL of a social image. Defaults to `seo.ogImage`. */
-  image?: string;
+  /**
+   * Path or absolute URL of a social image. Defaults to `seo.ogImage`, or the
+   * seo module's generated image. Pass `false` on routes that have their own
+   * `opengraph-image` file so the file-based image is used.
+   */
+  image?: string | false;
   /** Adds noindex/nofollow — for private, thin or duplicate pages. */
   noIndex?: boolean;
   type?: "website" | "article" | "profile";
@@ -61,7 +65,7 @@ export function rootMetadata(): Metadata {
 /** Per-page metadata with sensible canonical, Open Graph and Twitter defaults. */
 export function createMetadata(input: MetadataInput = {}): Metadata {
   const { title, description = siteConfig.description, path, noIndex, type = "website" } = input;
-  const imageSrc = input.image ?? defaultImage();
+  const imageSrc = input.image === false ? undefined : (input.image ?? defaultImage());
   const images = imageSrc ? [{ url: absoluteUrl(imageSrc) }] : undefined;
 
   return {

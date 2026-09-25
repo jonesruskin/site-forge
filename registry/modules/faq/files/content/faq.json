@@ -1,0 +1,7 @@
+[
+  {
+    "category": "General",
+    "question": "How do I edit these questions?",
+    "answer": "Edit content/faq.json. Each entry has a question, an answer and an optional category. Separate paragraphs with a blank line."
+  }
+]

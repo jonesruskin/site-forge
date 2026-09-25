@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "email",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Email",
   "description": "Send React Email templates through Resend. In development, mail lands in a local outbox at /dev/outbox.",
   "category": "infrastructure",
@@ -35,6 +35,11 @@
       "required": true,
       "example": "Acme <hello@acme.com>",
       "howTo": "https://resend.com/domains"
+    },
+    {
+      "name": "EMAIL_OUTBOX",
+      "description": "Set to 1 to capture every email in the outbox instead of sending (previews, staging, CI). /dev/outbox then works in production builds too",
+      "example": ""
     }
   ],
   "routes": ["/dev/outbox"],

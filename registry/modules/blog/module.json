@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "blog",
+  "version": "1.0.0",
+  "title": "Blog",
+  "description": "MDX blog with static pagination, tags, reading time, per-post OG images, RSS, JSON-LD and sitemap entries.",
+  "category": "content",
+  "requires": ["mdx", "seo"],
+  "ui": ["prose", "pagination"],
+  "sections": ["blog-list", "page-header"],
+  "files": [
+    "content/blog/welcome.mdx",
+    "src/lib/blog/posts.ts",
+    "src/lib/blog/config.ts",
+    "src/lib/blog/sitemap.ts",
+    "src/app/(site)/blog/page.tsx",
+    "src/app/(site)/blog/page/[page]/page.tsx",
+    "src/app/(site)/blog/[slug]/page.tsx",
+    "src/app/(site)/blog/[slug]/opengraph-image.tsx",
+    "src/app/(site)/blog/tags/[tag]/page.tsx",
+    "src/app/(site)/blog/rss.xml/route.ts",
+    "src/components/blog/post-index.tsx"
+  ],
+  "contributes": {
+    "slots": [{ "slot": "sitemap", "import": "blogSitemap", "from": "src/lib/blog/sitemap.ts" }],
+    "nav": [{ "location": "header", "label": "Blog", "href": "/blog" }],
+    "siteConfig": {
+      "blog": {
+        "title": "Blog",
+        "description": "Notes, announcements and long reads.",
+        "postsPerPage": 12
+      }
+    }
+  },
+  "routes": ["/blog", "/blog/[slug]", "/blog/tags/[tag]", "/blog/page/[page]", "/blog/rss.xml"],
+  "postInstall": [
+    "Write posts in content/blog/*.mdx. Frontmatter: title, date, description?, tags?, image?, draft?",
+    "Delete content/blog/welcome.mdx once you have a real post."
+  ]
+}

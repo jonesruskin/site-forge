@@ -1,0 +1,32 @@
+---
+title: Writing pages
+description: Frontmatter, headings, code and components.
+order: 1
+---
+
+Create a file anywhere under `content/docs`:
+
+```mdx
+---
+title: Deploying
+description: Ship it to production.
+order: 3
+---
+
+Your content in Markdown.
+```
+
+## Headings build the outline
+
+Level-two and level-three headings appear in the "On this page" outline and get anchor links.
+
+### Code
+
+```bash
+pnpm install
+pnpm dev
+```
+
+<Callout type="warning" title="Keep titles short">
+  Titles appear in the sidebar, search results and the browser tab.
+</Callout>

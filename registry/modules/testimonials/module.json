@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "testimonials",
+  "version": "1.0.0",
+  "title": "Testimonials",
+  "description": "Typed testimonials data source (content/testimonials.json) with filters, plus a /testimonials wall of love.",
+  "category": "marketing",
+  "sections": ["testimonials", "page-header"],
+  "files": [
+    "content/testimonials.json",
+    "src/lib/testimonials.ts",
+    "src/app/(site)/testimonials/page.tsx"
+  ],
+  "contributes": {
+    "siteConfig": {
+      "testimonials": {
+        "title": "Wall of love",
+        "description": "What people say about working with us."
+      }
+    }
+  },
+  "routes": ["/testimonials"],
+  "postInstall": [
+    "Replace the example in content/testimonials.json. Use getTestimonials() with the testimonials section anywhere."
+  ]
+}

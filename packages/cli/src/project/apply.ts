@@ -1,3 +1,4 @@
+import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 import { describeChanges, updateSiteConfig, type SiteConfigChanges } from "../codemods/site-config";
@@ -93,7 +94,11 @@ async function copyFile(
 /** Rewrites every CLI-owned file (slots, env, .env.example) from the installed modules. */
 export async function syncGenerated(projectDir: string, manifest: ProjectManifest) {
   const modules = orderedModules(manifest);
-  const generated = generateFiles(manifest.core, modules);
+  const schemaDir = path.join(projectDir, "src", "db", "schema");
+  const extraSchemaFiles = (await readdir(schemaDir).catch(() => [] as string[]))
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => `src/db/schema/${file}`);
+  const generated = generateFiles(manifest.core, modules, { extraSchemaFiles });
   const changed: string[] = [];
   for (const [file, content] of generated.write) {
     const destination = path.join(projectDir, file);

@@ -1,0 +1,39 @@
+---
+title: Writing posts
+description: How posts work on this site, and everything a post can contain.
+date: 2026-01-01
+tags: [guide]
+---
+
+Every file in `content/blog` becomes a post at `/blog/<file-name>`. This one lives at
+`content/blog/welcome.mdx`. Delete it once you have published something real.
+
+## Frontmatter
+
+The block between the `---` lines at the top describes the post:
+
+```yaml
+title: Writing posts # required
+date: 2026-01-01 # required, used for sorting and feeds
+description: One sentence. # optional, shown in lists and search results
+tags: [guide, product] # optional, each tag gets a page
+image: /blog/cover.jpg # optional social and cover image (in /public)
+draft: true # optional, hidden in production
+```
+
+## What you can write
+
+Standard Markdown works: **bold**, _italic_, [links](/), lists, tables and quotes.
+
+> Code blocks are highlighted with your theme's colors.
+
+```ts
+export function greet(name: string) {
+  return `Hello, ${name}!`;
+}
+```
+
+<Callout type="info" title="Components in Markdown">
+  MDX lets you use React components like this callout. Register your own in
+  `src/components/mdx/mdx-components.tsx`.
+</Callout>

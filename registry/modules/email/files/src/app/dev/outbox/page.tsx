@@ -3,13 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { listOutbox } from "@/lib/email/outbox";
+import { outboxEnabled } from "@/lib/email/send";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Outbox", robots: { index: false } };
 
 /** Every email sent in development without RESEND_API_KEY. Not available in production. */
 export default async function OutboxPage() {
-  if (process.env.NODE_ENV === "production") notFound();
+  if (!outboxEnabled) notFound();
   const messages = await listOutbox();
 
   return (

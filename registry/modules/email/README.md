@@ -21,6 +21,7 @@ Transactional email with [Resend](https://resend.com) and [React Email](https://
 | ---------------- | ---------- | --------------------------------------------------------------------------------- |
 | `RESEND_API_KEY` | production | Resend API key. Missing in development → local outbox.                            |
 | `EMAIL_FROM`     | production | Default sender on a verified domain. Dev default: `Site <onboarding@resend.dev>`. |
+| `EMAIL_OUTBOX`   | no         | `1` = capture mode: never deliver, write to the outbox (previews, staging, CI).   |
 
 ## Usage
 

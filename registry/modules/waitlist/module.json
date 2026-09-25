@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "waitlist",
+  "version": "1.0.0",
+  "title": "Waitlist",
+  "description": "Waitlist with live positions and referral links that move people up, welcome email, and a token-protected CSV export.",
+  "category": "marketing",
+  "requires": ["database", "email", "rate-limit"],
+  "ui": ["button", "input", "field"],
+  "files": [
+    "src/db/schema/waitlist.ts",
+    "src/env/waitlist.ts",
+    "src/lib/waitlist/waitlist.ts",
+    "src/lib/waitlist/config.ts",
+    "src/lib/waitlist/actions.tsx",
+    "src/components/waitlist/waitlist-form.tsx",
+    "src/components/waitlist/copy-link.tsx",
+    "src/emails/waitlist-welcome.tsx",
+    "src/app/(site)/waitlist/page.tsx",
+    "src/app/(site)/waitlist/[code]/page.tsx",
+    "src/app/api/waitlist/export/route.ts"
+  ],
+  "dbSchema": ["src/db/schema/waitlist.ts"],
+  "envFile": "src/env/waitlist.ts",
+  "env": [
+    {
+      "name": "WAITLIST_ADMIN_TOKEN",
+      "description": "Bearer token for GET /api/waitlist/export (CSV). Leave unset to disable the export",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "siteConfig": {
+      "waitlist": {
+        "title": "Join the waitlist",
+        "description": "Be first in line when we launch. Invite friends to move up.",
+        "shareText": "I just joined the waitlist. Get in early:"
+      }
+    }
+  },
+  "routes": ["/waitlist", "/waitlist/[code]", "/api/waitlist/export"],
+  "postInstall": [
+    "Use <WaitlistForm /> on any page (the hero of a landing page is a good spot). /waitlist works standalone.",
+    "Export sign-ups: curl -H \"Authorization: Bearer $WAITLIST_ADMIN_TOKEN\" https://your.site/api/waitlist/export"
+  ]
+}

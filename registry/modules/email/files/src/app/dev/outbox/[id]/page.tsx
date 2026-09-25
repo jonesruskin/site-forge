@@ -3,12 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { readOutboxMessage } from "@/lib/email/outbox";
+import { outboxEnabled } from "@/lib/email/send";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Outbox", robots: { index: false } };
 
 export default async function OutboxMessagePage({ params }: { params: Promise<{ id: string }> }) {
-  if (process.env.NODE_ENV === "production") notFound();
+  if (!outboxEnabled) notFound();
   const { id } = await params;
   const message = await readOutboxMessage(id);
   if (!message) notFound();

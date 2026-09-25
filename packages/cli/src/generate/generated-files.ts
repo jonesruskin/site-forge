@@ -78,7 +78,14 @@ function listSlotFile(definition: SlotDefinition, contributions: Contribution[])
   out.push("");
   out.push(`/** ${definition.description} */`);
   const value = locals.length === 0 ? "[]" : `[\n${locals.map((l) => `  ${l},`).join("\n")}\n]`;
-  out.push(`export const ${definition.export}: ${arrayType(definition.type)} = ${value};`);
+  if (definition.inferred) {
+    // Keep each element's own type (e.g. Better Auth plugins drive the typed API surface).
+    out.push(
+      `export const ${definition.export} = ${value} as const satisfies readonly (${definition.type})[];`,
+    );
+  } else {
+    out.push(`export const ${definition.export}: ${arrayType(definition.type)} = ${value};`);
+  }
   return `${out.join("\n")}\n`;
 }
 
@@ -179,13 +186,16 @@ export const moduleNextConfig = {
 `;
 }
 
-function dbSchemaFile(modules: ModuleManifest[]) {
+function dbSchemaFile(modules: ModuleManifest[], extraSchemaFiles: string[]) {
   const file = "src/generated/db-schema.ts";
-  const lines = modules.flatMap((m) =>
-    m.dbSchema.map((schema) => `export * from "${relativeImport(file, schema)}";`),
-  );
+  const moduleFiles = modules.flatMap((m) => m.dbSchema);
+  const files = [
+    ...moduleFiles,
+    ...extraSchemaFiles.filter((f) => !moduleFiles.includes(f)).sort(),
+  ];
+  const lines = files.map((schema) => `export * from "${relativeImport(file, schema)}";`);
   return `${GENERATED_HEADER}
-// Every Drizzle table from installed modules. Relative imports keep drizzle-kit happy.
+// Every Drizzle table in src/db/schema (module-owned and your own). Relative imports keep drizzle-kit happy.
 ${lines.length ? lines.join("\n") : "export {};"}
 `;
 }
@@ -211,9 +221,15 @@ export const config = {
 `;
 
 /** Computes every CLI-owned file for a set of installed modules. */
+export type GenerateOptions = {
+  /** Project-owned schema files found in src/db/schema (not installed by a module). */
+  extraSchemaFiles?: string[];
+};
+
 export function generateFiles(
   core: Pick<CoreManifest, "slots">,
   modules: ModuleManifest[],
+  options: GenerateOptions = {},
 ): GeneratedFiles {
   const write = new Map<string, string>();
   const remove: string[] = [];
@@ -236,7 +252,7 @@ export function generateFiles(
   write.set("src/generated/next.ts", nextFile(modules, contributions.get("next-plugins") ?? []));
 
   if (modules.some((m) => m.dbSchema.length > 0 || m.name === "database")) {
-    write.set("src/generated/db-schema.ts", dbSchemaFile(modules));
+    write.set("src/generated/db-schema.ts", dbSchemaFile(modules, options.extraSchemaFiles ?? []));
   } else {
     remove.push("src/generated/db-schema.ts");
   }

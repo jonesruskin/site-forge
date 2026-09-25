@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "faq",
+  "version": "1.0.0",
+  "title": "FAQ",
+  "description": "Typed FAQ data source (content/faq.json) grouped by category, a /faq page and FAQPage structured data.",
+  "category": "marketing",
+  "requires": ["seo"],
+  "sections": ["faq", "page-header"],
+  "files": ["content/faq.json", "src/lib/faq.ts", "src/app/(site)/faq/page.tsx"],
+  "contributes": {
+    "nav": [{ "location": "footer", "group": "Support", "label": "FAQ", "href": "/faq" }],
+    "siteConfig": {
+      "faq": {
+        "title": "Frequently asked questions",
+        "description": "Quick answers to common questions."
+      }
+    }
+  },
+  "routes": ["/faq"],
+  "postInstall": [
+    "Edit content/faq.json. Use getFaqs() with the faq section on any page (e.g. pricing)."
+  ]
+}
