@@ -3,15 +3,15 @@ import { index, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-c
 export const waitlistEntry = pgTable(
   "waitlist_entry",
   {
-    id: uuid().primaryKey().defaultRandom(),
-    email: text().notNull().unique(),
-    name: text(),
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull().unique(),
+    name: text("name"),
     /** Public code used in referral links and the status page URL. */
-    referralCode: text().notNull().unique(),
+    referralCode: text("referral_code").notNull().unique(),
     /** referralCode of whoever invited this person. */
-    referredBy: text(),
-    referrals: integer().notNull().default(0),
-    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    referredBy: text("referred_by"),
+    referrals: integer("referrals").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index("waitlist_rank_idx").on(table.referrals, table.createdAt)],
 );

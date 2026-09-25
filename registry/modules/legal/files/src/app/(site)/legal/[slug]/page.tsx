@@ -7,7 +7,6 @@ import { Mdx } from "@/lib/mdx/render";
 import { createMetadata } from "@/lib/metadata";
 import siteConfig from "@/site.config";
 
-export const dynamicParams = false;
 export const generateStaticParams = legalPages.params;
 
 type Props = { params: Promise<{ slug: string }> };

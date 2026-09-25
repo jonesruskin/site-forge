@@ -4,8 +4,9 @@
 any Postgres.
 
 - **Zero-setup development**: without `DATABASE_URL`, the app uses an embedded Postgres
-  ([PGlite](https://pglite.dev)) stored in `.site/dev/pglite`, and `pnpm dev` pushes the schema
-  into it first. Clone, install, `pnpm dev`, and sign-ups, waitlists and dashboards work.
+  ([PGlite](https://pglite.dev)) stored in `.site/dev/pglite`, and `pnpm dev` syncs the schema
+  into it first (`pnpm db:dev` runs that step alone). Clone, install, `pnpm dev`, and sign-ups,
+  waitlists and dashboards work.
 - **Production**: set `DATABASE_URL`. The client disables prepared statements so transaction
   poolers (Neon pooled URLs, Supabase's pooler, PgBouncer) work.
 - Every module's tables live in `src/db/schema/<module>.ts` and are collected into
@@ -41,8 +42,9 @@ import { eq } from "drizzle-orm";
 const user = await db.query.user.findFirst({ where: eq(schema.user.email, email) });
 ```
 
-Add your own tables in `src/db/schema/app.ts` (relative imports only) and run `pnpm site sync`
-to include them in the generated schema index.
+Add your own tables in `src/db/schema/app.ts` (relative imports only; name columns explicitly,
+e.g. `createdAt: timestamp("created_at")`) and run `pnpm site sync` to include them in the
+generated schema index.
 
 ## Customization
 

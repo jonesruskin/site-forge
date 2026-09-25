@@ -84,7 +84,9 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
    (e.g. email logs to console, database falls back to embedded PGlite).
 6. No placeholder TODOs, no fake data in module code. Demo content lives in the playground only
    (content modules may ship ONE example entry per collection so pages render).
-7. DB schema files live in `src/db/schema/<module>.ts` and use **relative imports only** (drizzle-kit).
+7. DB schema files live in `src/db/schema/<module>.ts`, use **relative imports only** (drizzle-kit)
+   and **explicit snake_case column names** (`text("user_id")`): no `casing` option, because
+   drizzle-kit's programmatic push ignores it.
 8. Everything user-facing is keyboard accessible and labelled. Forms: progressive enhancement
    with server actions + `useActionState`, Zod validation shared by client and server.
 9. Bump `version` in `module.json` whenever files change (drives `site diff`).

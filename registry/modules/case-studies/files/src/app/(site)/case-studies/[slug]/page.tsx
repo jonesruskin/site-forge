@@ -9,7 +9,6 @@ import { Mdx } from "@/lib/mdx/render";
 import { createMetadata } from "@/lib/metadata";
 import { articleJsonLd, JsonLd } from "@/lib/seo/json-ld";
 
-export const dynamicParams = false;
 export const generateStaticParams = caseStudies.params;
 
 type Props = { params: Promise<{ slug: string }> };

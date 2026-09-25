@@ -5,8 +5,6 @@ import { blogConfig } from "@/lib/blog/config";
 import { allTags, posts, tagSlug } from "@/lib/blog/posts";
 import { createMetadata } from "@/lib/metadata";
 
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
   const tags = await allTags();
   return tags.length ? tags.map((tag) => ({ tag: tag.slug })) : [{ tag: "all" }];

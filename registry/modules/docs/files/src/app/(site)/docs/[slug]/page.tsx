@@ -1,7 +1,6 @@
 import { DocPage, docMetadata } from "@/components/docs/doc-page";
 import { docParams } from "@/lib/docs/docs";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => docParams(1);
 
 type Props = { params: Promise<{ slug: string }> };

@@ -10,7 +10,6 @@ export default defineConfig({
   dialect: "postgresql",
   schema: "./src/db/schema/*.ts",
   out: "./drizzle",
-  casing: "snake_case",
   ...(url
     ? { dbCredentials: { url } }
     : { driver: "pglite", dbCredentials: { url: "./.site/dev/pglite" } }),

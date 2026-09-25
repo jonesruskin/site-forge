@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "dashboard",
+  "version": "1.0.0",
+  "title": "Dashboard shell",
+  "description": "Signed-in app area: sidebar + topbar layout, nav from site.config, overview with widget and topbar slots for other modules.",
+  "category": "saas",
+  "requires": ["auth"],
+  "ui": ["card", "badge"],
+  "sections": ["dashboard-shell", "empty-state"],
+  "files": [
+    "src/app/(app)/layout.tsx",
+    "src/app/(app)/dashboard/page.tsx",
+    "src/app/(app)/dashboard/loading.tsx",
+    "src/lib/dashboard/icons.tsx",
+    "src/lib/dashboard/nav.ts"
+  ],
+  "slots": {
+    "dashboard-widgets": {
+      "file": "src/generated/dashboard-widgets.ts",
+      "export": "dashboardWidgets",
+      "type": "(props: { userId: string }) => ReactNode | Promise<ReactNode>",
+      "typeImports": ["import type { ReactNode } from \"react\";"],
+      "description": "Cards on the dashboard overview (plan, team, notifications …). Server components."
+    },
+    "dashboard-topbar": {
+      "file": "src/generated/dashboard-topbar.ts",
+      "export": "dashboardTopbar",
+      "type": "(props: { userId: string }) => ReactNode | Promise<ReactNode>",
+      "typeImports": ["import type { ReactNode } from \"react\";"],
+      "description": "Items in the app top bar (team switcher, notifications …). Server components."
+    }
+  },
+  "contributes": {
+    "nav": [
+      {
+        "location": "dashboard",
+        "label": "Overview",
+        "href": "/dashboard",
+        "icon": "layout-dashboard"
+      },
+      { "location": "footer", "group": "Product", "label": "Dashboard", "href": "/dashboard" }
+    ]
+  },
+  "routes": ["/dashboard"],
+  "postInstall": [
+    "Build your app under src/app/(app)/: every page there gets the shell and requires a session.",
+    "Add sidebar links in site.config.ts → nav.dashboard (icon names from lucide, e.g. \"bar-chart-3\")."
+  ]
+}

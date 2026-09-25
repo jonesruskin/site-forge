@@ -24,17 +24,14 @@ function createDatabase(): Database {
       prepare: false,
       max: Number(process.env.DATABASE_POOL_SIZE ?? 10),
     });
-    return drizzlePostgres(client, { schema, casing: "snake_case" });
+    return drizzlePostgres(client, { schema });
   }
   if (process.env.NODE_ENV === "production" && !process.env.SKIP_ENV_VALIDATION) {
     throw new Error("DATABASE_URL is required in production.");
   }
   // Same query API, different driver: an in-process Postgres for zero-setup development.
   mkdirSync(PGLITE_DIR, { recursive: true });
-  return drizzlePglite(new PGlite(PGLITE_DIR), {
-    schema,
-    casing: "snake_case",
-  }) as unknown as Database;
+  return drizzlePglite(new PGlite(PGLITE_DIR), { schema }) as unknown as Database;
 }
 
 const globalForDb = globalThis as unknown as { __db?: Database };

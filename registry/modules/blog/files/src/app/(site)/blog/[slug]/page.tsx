@@ -12,7 +12,6 @@ import { createMetadata } from "@/lib/metadata";
 import { articleJsonLd, breadcrumbJsonLd, JsonLd } from "@/lib/seo/json-ld";
 import siteConfig from "@/site.config";
 
-export const dynamicParams = false;
 export const generateStaticParams = posts.params;
 
 type Props = { params: Promise<{ slug: string }> };

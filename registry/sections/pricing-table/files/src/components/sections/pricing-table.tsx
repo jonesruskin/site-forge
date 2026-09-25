@@ -1,5 +1,4 @@
 import { CheckIcon } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Section } from "@/components/sections/kit/section";
@@ -17,7 +16,11 @@ export type PricingPlan = {
   currency?: string;
   customPriceLabel?: string;
   features: string[];
-  cta: { label: string; href: string };
+  /**
+   * Where the button goes. Pass `{ monthly, yearly }` to send each interval to
+   * its own URL (the right one shows with the CSS toggle).
+   */
+  cta: { label: string; href: string | { monthly: string; yearly: string } };
   highlighted?: boolean;
   badge?: string;
 };
@@ -75,6 +78,7 @@ export function PricingTable({
   // Literal class names so Tailwind can see them.
   const hideWhenYearly = "group-has-[[data-interval=yearly]:checked]/pricing:hidden";
   const showWhenYearly = "group-has-[[data-interval=yearly]:checked]/pricing:inline";
+  const showWhenYearlyFlex = "group-has-[[data-interval=yearly]:checked]/pricing:inline-flex";
 
   return (
     <Section tone={tone} className={cn("group/pricing", className)}>
@@ -186,14 +190,40 @@ export function PricingTable({
                   </>
                 )}
               </p>
-              <Button
-                asChild
-                variant={plan.highlighted ? "primary" : "outline"}
-                size="lg"
-                className="w-full"
-              >
-                <Link href={plan.cta.href}>{plan.cta.label}</Link>
-              </Button>
+              {typeof plan.cta.href === "string" || !toggle ? (
+                <Button
+                  asChild
+                  variant={plan.highlighted ? "primary" : "outline"}
+                  size="lg"
+                  className="w-full"
+                >
+                  {/* Plain anchors: CTAs often hit checkout routes, which must never be prefetched. */}
+                  <a
+                    href={typeof plan.cta.href === "string" ? plan.cta.href : plan.cta.href.monthly}
+                  >
+                    {plan.cta.label}
+                  </a>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    asChild
+                    variant={plan.highlighted ? "primary" : "outline"}
+                    size="lg"
+                    className={cn("w-full", hideWhenYearly)}
+                  >
+                    <a href={plan.cta.href.monthly}>{plan.cta.label}</a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant={plan.highlighted ? "primary" : "outline"}
+                    size="lg"
+                    className={cn("hidden w-full", showWhenYearlyFlex)}
+                  >
+                    <a href={plan.cta.href.yearly}>{plan.cta.label}</a>
+                  </Button>
+                </>
+              )}
               <ul className="flex flex-col gap-3 text-sm">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex gap-3">

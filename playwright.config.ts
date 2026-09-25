@@ -24,7 +24,7 @@ export default defineConfig({
   ],
   webServer: {
     // Push the schema into the embedded database, then serve the production build.
-    command: `pnpm --filter playground exec drizzle-kit push --force && pnpm --filter playground exec next start -p ${port}`,
+    command: `pnpm --filter playground db:dev && pnpm --filter playground exec next start -p ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     env: {
@@ -32,6 +32,8 @@ export default defineConfig({
       EMAIL_OUTBOX: "1",
       NEWSLETTER_SECRET: "e2e-only-secret-that-is-long-enough-to-pass",
       WAITLIST_ADMIN_TOKEN: "e2e-admin-token-1234567890",
+      BETTER_AUTH_SECRET: "e2e-only-better-auth-secret-0123456789abcdef",
+      BETTER_AUTH_URL: `http://localhost:${port}`,
     },
     timeout: 60_000,
   },

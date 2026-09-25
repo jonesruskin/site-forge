@@ -5,8 +5,6 @@ import { blogConfig } from "@/lib/blog/config";
 import { posts, postsPage } from "@/lib/blog/posts";
 import { createMetadata } from "@/lib/metadata";
 
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
   const count = Math.ceil((await posts.all()).length / blogConfig.postsPerPage);
   // Page 1 lives at /blog; Next needs at least one param, so an unused "2" keeps the route valid.

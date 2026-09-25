@@ -207,6 +207,14 @@ for (const item of items) {
       });
     }
     if (/\bTODO\b|\bFIXME\b/.test(content)) fail(where, `${file.to} contains a TODO/FIXME`);
+    if (file.to.startsWith("src/db/schema/")) {
+      const unnamed =
+        /\b(text|varchar|boolean|timestamp|date|integer|bigint|serial|uuid|jsonb|json|numeric|real)\(\)/.exec(
+          content,
+        );
+      if (unnamed)
+        fail(where, `${file.to}: name every column explicitly (${unnamed[1]}("snake_case_name"))`);
+    }
   }
 }
 

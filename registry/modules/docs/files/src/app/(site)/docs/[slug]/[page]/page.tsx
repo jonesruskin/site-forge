@@ -1,7 +1,6 @@
 import { DocPage, docMetadata } from "@/components/docs/doc-page";
 import { docParams } from "@/lib/docs/docs";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => docParams(2);
 
 /** `slug` is the group (folder), `page` the file inside it. */
