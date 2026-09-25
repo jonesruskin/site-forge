@@ -109,17 +109,47 @@ export async function resolveRegistry(options: RegistryOptions = {}): Promise<Re
     return { root: dir, source: `github:${repo}`, ref, commit };
   }
 
-  try {
-    await downloadTemplate(`gh:${repo}#${commit ?? ref}`, {
-      dir,
-      force: true,
-      forceClean: true,
-      auth: githubToken(),
+  const target = commit ?? ref;
+  // codeload serves public tarballs without the REST API's rate limit, so try it
+  // anonymously first; fall back to the authenticated API for private forks.
+  const attempts: { name: string; tar: string; headers: Record<string, string> }[] = [
+    { name: "codeload", tar: `https://codeload.github.com/${repo}/tar.gz/${target}`, headers: {} },
+  ];
+  const token = githubToken();
+  if (token) {
+    attempts.push({
+      name: "api",
+      tar: `https://api.github.com/repos/${repo}/tarball/${target}`,
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
     });
-  } catch (error) {
+  }
+
+  let lastError: unknown;
+  for (const attempt of attempts) {
+    try {
+      await downloadTemplate(`sf:${repo}`, {
+        dir,
+        force: true,
+        forceClean: true,
+        providers: {
+          sf: () => ({
+            name: "site-forge",
+            version: target,
+            tar: attempt.tar,
+            headers: attempt.headers,
+          }),
+        },
+      });
+      lastError = undefined;
+      break;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  if (lastError) {
     throw new CliError(
-      `Could not download ${repo}@${ref} from GitHub: ${(error as Error).message}`,
-      "Check your network, pass --ref with an existing branch/tag, set GITHUB_TOKEN if you hit rate limits, or use a local checkout via SITE_FORGE_PATH.",
+      `Could not download ${repo}@${ref} from GitHub: ${(lastError as Error).message}`,
+      "Check your network, pass --ref with an existing branch/tag, set GITHUB_TOKEN for private forks, or use a local checkout via SITE_FORGE_PATH.",
     );
   }
 
