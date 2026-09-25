@@ -10,18 +10,32 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { inviteMemberAction, type TeamState } from "@/lib/teams/actions";
 
 export function InviteForm({ organizationId }: { organizationId: string }) {
-  const [state, action, pending] = useActionState<TeamState, FormData>(inviteMemberAction, { status: "idle" });
+  const [state, action, pending] = useActionState<TeamState, FormData>(inviteMemberAction, {
+    status: "idle",
+  });
   return (
     <form action={action} className="grid gap-4">
       {state.message && (
         <Alert variant={state.status === "success" ? "success" : "destructive"}>
-          <AlertDescription className={state.status === "success" ? "text-foreground" : "text-destructive"}>{state.message}</AlertDescription>
+          <AlertDescription
+            className={state.status === "success" ? "text-foreground" : "text-destructive"}
+          >
+            {state.message}
+          </AlertDescription>
         </Alert>
       )}
       <input type="hidden" name="organizationId" value={organizationId} />
       <div className="grid gap-4 sm:grid-cols-[1fr_10rem_auto] sm:items-end">
         <Field id="invite-email" label="Email" error={state.errors?.email}>
-          {(control) => <Input {...control} name="email" type="email" required placeholder="teammate@example.com" />}
+          {(control) => (
+            <Input
+              {...control}
+              name="email"
+              type="email"
+              required
+              placeholder="teammate@example.com"
+            />
+          )}
         </Field>
         <Field id="invite-role" label="Role" error={state.errors?.role}>
           {(control) => (

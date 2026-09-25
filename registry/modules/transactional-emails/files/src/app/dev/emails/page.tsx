@@ -16,8 +16,8 @@ export default function EmailGalleryPage() {
       <p className="text-eyebrow text-muted-foreground">Development</p>
       <h1 className="text-heading mt-2">Email templates</h1>
       <p className="text-muted-foreground mt-2 text-sm">
-        Rendered with each template&apos;s <code className="font-mono">PreviewProps</code>. Colors come from{" "}
-        <code className="font-mono">src/emails/theme.ts</code>.
+        Rendered with each template&apos;s <code className="font-mono">PreviewProps</code>. Colors
+        come from <code className="font-mono">src/emails/theme.ts</code>.
       </p>
       <ul className="mt-8 grid gap-6 lg:grid-cols-2">
         {emailTemplates.map((template) => (

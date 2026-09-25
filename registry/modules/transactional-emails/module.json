@@ -24,7 +24,11 @@
   },
   "contributes": {
     "slots": [
-      { "slot": "auth-events", "import": "sendWelcomeEmail", "from": "src/lib/transactional/welcome.ts" },
+      {
+        "slot": "auth-events",
+        "import": "sendWelcomeEmail",
+        "from": "src/lib/transactional/welcome.ts"
+      },
       { "slot": "email-templates", "import": "WelcomeEmail", "from": "src/emails/welcome.tsx" }
     ]
   },

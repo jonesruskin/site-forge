@@ -34,6 +34,7 @@ export default defineConfig({
       WAITLIST_ADMIN_TOKEN: "e2e-admin-token-1234567890",
       BETTER_AUTH_SECRET: "e2e-only-better-auth-secret-0123456789abcdef",
       BETTER_AUTH_URL: `http://localhost:${port}`,
+      ADMIN_EMAILS: "admin-desktop@example.com,admin-mobile@example.com",
     },
     timeout: 60_000,
   },

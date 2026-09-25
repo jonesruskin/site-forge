@@ -6,7 +6,10 @@ import { sendEmail } from "@/lib/email/send";
 import siteConfig from "@/site.config";
 
 const teamsConfig = z
-  .object({ membershipLimit: z.number().int().positive().default(50), invitationExpiresInDays: z.number().positive().default(7) })
+  .object({
+    membershipLimit: z.number().int().positive().default(50),
+    invitationExpiresInDays: z.number().positive().default(7),
+  })
   .parse((siteConfig as { teams?: unknown }).teams ?? {});
 
 /** Better Auth organization plugin, added to auth through the auth-plugins slot. */
@@ -20,7 +23,12 @@ export const teamsPlugin = organization({
     await sendEmail({
       to: email,
       subject: `${inviter.user.name} invited you to ${team.name}`,
-      react: TeamInviteEmail({ teamName: team.name, inviterName: inviter.user.name, role, url: `${origin}/invite/${id}` }),
+      react: TeamInviteEmail({
+        teamName: team.name,
+        inviterName: inviter.user.name,
+        role,
+        url: `${origin}/invite/${id}`,
+      }),
     });
   },
 });

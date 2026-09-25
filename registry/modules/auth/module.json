@@ -5,23 +5,9 @@
   "title": "Authentication",
   "description": "Better Auth: email + password with verification, magic links, Google and GitHub OAuth, password reset, protected routes.",
   "category": "saas",
-  "requires": [
-    "database",
-    "email",
-    "rate-limit"
-  ],
-  "ui": [
-    "button",
-    "input",
-    "field",
-    "separator",
-    "alert",
-    "dropdown-menu",
-    "avatar"
-  ],
-  "sections": [
-    "auth-card"
-  ],
+  "requires": ["database", "email", "rate-limit"],
+  "ui": ["button", "input", "field", "separator", "alert", "dropdown-menu", "avatar"],
+  "sections": ["auth-card"],
   "files": [
     "src/db/schema/auth.ts",
     "src/env/auth.ts",
@@ -54,9 +40,7 @@
   "dependencies": {
     "better-auth": "^1.7.0"
   },
-  "dbSchema": [
-    "src/db/schema/auth.ts"
-  ],
+  "dbSchema": ["src/db/schema/auth.ts"],
   "envFile": "src/env/auth.ts",
   "env": [
     {
@@ -99,9 +83,7 @@
       "file": "src/generated/auth-plugins.ts",
       "export": "authPlugins",
       "type": "BetterAuthPlugin",
-      "typeImports": [
-        "import type { BetterAuthPlugin } from \"better-auth\";"
-      ],
+      "typeImports": ["import type { BetterAuthPlugin } from \"better-auth\";"],
       "description": "Better Auth server plugins contributed by modules (teams \u2192 organization, admin \u2192 admin).",
       "inferred": true
     },
@@ -109,9 +91,7 @@
       "file": "src/generated/auth-client-plugins.ts",
       "export": "authClientPlugins",
       "type": "BetterAuthClientPlugin",
-      "typeImports": [
-        "import type { BetterAuthClientPlugin } from \"better-auth\";"
-      ],
+      "typeImports": ["import type { BetterAuthClientPlugin } from \"better-auth\";"],
       "description": "Better Auth client plugins matching the server plugins.",
       "inferred": true
     },
@@ -119,9 +99,7 @@
       "file": "src/generated/auth-events.ts",
       "export": "authEvents",
       "type": "(event: AuthEvent) => Promise<void>",
-      "typeImports": [
-        "import type { AuthEvent } from \"../lib/auth/events\";"
-      ],
+      "typeImports": ["import type { AuthEvent } from \"../lib/auth/events\";"],
       "description": "Handlers for user lifecycle events (welcome email, notifications, onboarding)."
     }
   },
@@ -157,22 +135,14 @@
     "siteConfig": {
       "auth": {
         "afterSignIn": "/dashboard",
-        "protectedPaths": [
-          "/dashboard",
-          "/settings",
-          "/admin",
-          "/onboarding"
-        ],
+        "protectedPaths": ["/dashboard", "/settings", "/admin", "/onboarding"],
         "requireEmailVerification": true,
         "magicLink": true
       }
     },
     "next": {
       "csp": {
-        "img-src": [
-          "https://lh3.googleusercontent.com",
-          "https://avatars.githubusercontent.com"
-        ]
+        "img-src": ["https://lh3.googleusercontent.com", "https://avatars.githubusercontent.com"]
       },
       "imageRemotePatterns": [
         {

@@ -5,8 +5,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { banUserAction, impersonateAction, revokeSessionsAction, setRoleAction, unbanUserAction } from "@/lib/admin/actions";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  banUserAction,
+  impersonateAction,
+  revokeSessionsAction,
+  setRoleAction,
+  unbanUserAction,
+} from "@/lib/admin/actions";
 import { requireAdmin } from "@/lib/admin/guard";
 import { auth } from "@/lib/auth/auth";
 
@@ -26,7 +39,11 @@ export default async function AdminUsersPage({ searchParams }: Props) {
       offset: (page - 1) * PAGE_SIZE,
       sortBy: "createdAt",
       sortDirection: "desc",
-      ...(q && { searchValue: q, searchField: q.includes("@") ? "email" : "name", searchOperator: "contains" }),
+      ...(q && {
+        searchValue: q,
+        searchField: q.includes("@") ? "email" : "name",
+        searchOperator: "contains",
+      }),
     },
     headers: await headers(),
   });
@@ -44,7 +61,13 @@ export default async function AdminUsersPage({ searchParams }: Props) {
           <label htmlFor="user-search" className="sr-only">
             Search users
           </label>
-          <Input id="user-search" name="q" defaultValue={q} placeholder="Name or email" className="w-64" />
+          <Input
+            id="user-search"
+            name="q"
+            defaultValue={q}
+            placeholder="Name or email"
+            className="w-64"
+          />
           <Button type="submit" variant="outline">
             Search
           </Button>
@@ -103,7 +126,9 @@ export default async function AdminUsersPage({ searchParams }: Props) {
                       <Badge variant="outline">Unverified</Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-muted-foreground whitespace-nowrap">{date.format(new Date(user.createdAt))}</TableCell>
+                  <TableCell className="text-muted-foreground whitespace-nowrap">
+                    {date.format(new Date(user.createdAt))}
+                  </TableCell>
                   <TableCell>
                     {!isMe && (
                       <div className="flex justify-end gap-1">
@@ -121,7 +146,11 @@ export default async function AdminUsersPage({ searchParams }: Props) {
                         </form>
                         <form action={user.banned ? unbanUserAction : banUserAction}>
                           <input type="hidden" name="id" value={user.id} />
-                          <Button type="submit" size="sm" variant={user.banned ? "outline" : "ghost"}>
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant={user.banned ? "outline" : "ghost"}
+                          >
                             {user.banned ? "Unban" : "Ban"}
                           </Button>
                         </form>
@@ -134,7 +163,11 @@ export default async function AdminUsersPage({ searchParams }: Props) {
           </TableBody>
         </Table>
       </div>
-      <Pagination page={page} pageCount={pageCount} href={(p) => `/admin/users?${new URLSearchParams({ ...(q && { q }), page: String(p) })}`} />
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        href={(p) => `/admin/users?${new URLSearchParams({ ...(q && { q }), page: String(p) })}`}
+      />
     </div>
   );
 }

@@ -1,26 +1,13 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "billing",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "title": "Billing",
   "description": "Subscriptions from plans in site.config: pricing page, checkout, webhooks, customer portal, entitlements and limits.",
   "category": "saas",
-  "requires": [
-    "auth",
-    "database",
-    "payments",
-    "dashboard"
-  ],
-  "ui": [
-    "button",
-    "card",
-    "badge",
-    "progress"
-  ],
-  "sections": [
-    "pricing-table",
-    "page-header"
-  ],
+  "requires": ["auth", "database", "payments", "dashboard"],
+  "ui": ["button", "card", "badge", "progress"],
+  "sections": ["pricing-table", "page-header"],
   "files": [
     "src/db/schema/billing.ts",
     "src/lib/billing/config.ts",
@@ -34,11 +21,10 @@
     "src/app/(app)/settings/billing/page.tsx",
     "src/app/billing/checkout/route.ts",
     "src/app/billing/portal/route.ts",
-    "scripts/billing-sync.ts"
+    "scripts/billing-sync.ts",
+    "src/lib/billing/onboarding.ts"
   ],
-  "dbSchema": [
-    "src/db/schema/billing.ts"
-  ],
+  "dbSchema": ["src/db/schema/billing.ts"],
   "devDependencies": {
     "tsx": "^4.20.0"
   },
@@ -59,6 +45,12 @@
         "slot": "email-templates",
         "import": "PaymentFailedEmail",
         "from": "src/emails/payment-failed.tsx"
+      },
+      {
+        "slot": "onboarding-tasks",
+        "import": "billingOnboardingTask",
+        "from": "src/lib/billing/onboarding.ts",
+        "order": 20
       }
     ],
     "nav": [
@@ -90,10 +82,7 @@
               "monthly": 0,
               "yearly": 0
             },
-            "features": [
-              "1 project",
-              "Community support"
-            ],
+            "features": ["1 project", "Community support"],
             "limits": {
               "projects": 1
             }
@@ -106,11 +95,7 @@
               "monthly": 19,
               "yearly": 190
             },
-            "features": [
-              "Unlimited projects",
-              "Priority email support",
-              "Advanced analytics"
-            ],
+            "features": ["Unlimited projects", "Priority email support", "Advanced analytics"],
             "limits": {
               "projects": 1000
             },
@@ -124,25 +109,16 @@
             "price": {
               "monthly": null
             },
-            "features": [
-              "Everything in Pro",
-              "SSO and audit log",
-              "Dedicated support"
-            ],
+            "features": ["Everything in Pro", "SSO and audit log", "Dedicated support"],
             "contactHref": "/contact"
           }
         ]
       }
     }
   },
-  "routes": [
-    "/pricing",
-    "/settings/billing",
-    "/billing/checkout",
-    "/billing/portal"
-  ],
+  "routes": ["/pricing", "/settings/billing", "/billing/checkout", "/billing/portal"],
   "postInstall": [
-    "Plans, prices, features and limits live in site.config.ts \u2192 billing.plans.",
+    "Plans, prices, features and limits live in site.config.ts → billing.plans.",
     "Development: checkout uses the mock provider (/dev/checkout). Production: `pnpm billing:sync` creates the Stripe products and prices (lookup keys <plan>_monthly / <plan>_yearly)."
   ]
 }

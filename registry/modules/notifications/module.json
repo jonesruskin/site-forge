@@ -20,10 +20,21 @@
   "dbSchema": ["src/db/schema/notifications.ts"],
   "contributes": {
     "slots": [
-      { "slot": "dashboard-topbar", "import": "NotificationBell", "from": "src/components/notifications/notification-bell.tsx", "order": 20 },
-      { "slot": "auth-events", "import": "welcomeNotification", "from": "src/lib/notifications/welcome.ts" }
+      {
+        "slot": "dashboard-topbar",
+        "import": "NotificationBell",
+        "from": "src/components/notifications/notification-bell.tsx",
+        "order": 20
+      },
+      {
+        "slot": "auth-events",
+        "import": "welcomeNotification",
+        "from": "src/lib/notifications/welcome.ts"
+      }
     ]
   },
   "routes": ["/notifications"],
-  "postInstall": ["Send one from any server code: await notify(user.id, { title: \"Export ready\", href: \"/exports/42\" })."]
+  "postInstall": [
+    "Send one from any server code: await notify(user.id, { title: \"Export ready\", href: \"/exports/42\" })."
+  ]
 }

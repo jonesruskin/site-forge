@@ -1,0 +1,70 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "onboarding",
+  "version": "1.0.0",
+  "title": "Onboarding",
+  "description": "A focused first-run questionnaire configured in site.config.ts, plus a setup checklist on the dashboard that other modules add tasks to.",
+  "category": "saas",
+  "requires": ["auth", "dashboard", "database"],
+  "ui": ["button", "input", "card", "progress", "kbd"],
+  "files": [
+    "src/db/schema/onboarding.ts",
+    "src/lib/onboarding/config.ts",
+    "src/lib/onboarding/types.ts",
+    "src/lib/onboarding/state.ts",
+    "src/lib/onboarding/actions.ts",
+    "src/components/onboarding/wizard.tsx",
+    "src/components/onboarding/checklist-widget.tsx",
+    "src/app/(onboarding)/onboarding/page.tsx"
+  ],
+  "dbSchema": ["src/db/schema/onboarding.ts"],
+  "slots": {
+    "onboarding-tasks": {
+      "file": "src/generated/onboarding-tasks.ts",
+      "export": "onboardingTasks",
+      "type": "OnboardingTask",
+      "typeImports": ["import type { OnboardingTask } from \"@/lib/onboarding/types\";"],
+      "description": "Setup checklist items on the dashboard (choose a plan, invite a teammate …), each with a done(userId) check."
+    }
+  },
+  "contributes": {
+    "slots": [
+      {
+        "slot": "dashboard-widgets",
+        "import": "OnboardingChecklist",
+        "from": "src/components/onboarding/checklist-widget.tsx",
+        "order": 0
+      }
+    ],
+    "siteConfig": {
+      "onboarding": {
+        "redirectNewUsers": true,
+        "questions": [
+          {
+            "id": "role",
+            "type": "choice",
+            "title": "What best describes you?",
+            "options": ["Founder", "Engineer", "Designer", "Marketer", "Something else"]
+          },
+          {
+            "id": "teamSize",
+            "type": "choice",
+            "title": "How many people will use it?",
+            "options": ["Just me", "2–10", "11–50", "More than 50"]
+          },
+          {
+            "id": "goal",
+            "type": "text",
+            "title": "What do you want to get done first?",
+            "placeholder": "e.g. launch our beta by June"
+          }
+        ]
+      }
+    }
+  },
+  "routes": ["/onboarding"],
+  "postInstall": [
+    "Edit the questions in site.config.ts → onboarding.questions; read answers with getOnboardingAnswers(userId).",
+    "Modules add checklist items through the onboarding-tasks slot; add your own in src/lib/onboarding/state.ts."
+  ]
+}

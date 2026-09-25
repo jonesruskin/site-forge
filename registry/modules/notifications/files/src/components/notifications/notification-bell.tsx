@@ -10,14 +10,25 @@ import { NotificationList } from "./notification-list";
 
 /** Top-bar bell: unread badge and the latest items in a popover. */
 export async function NotificationBell({ userId }: { userId: string }) {
-  const [items, unread] = await Promise.all([listNotifications(userId, { limit: 6 }), unreadCount(userId)]);
+  const [items, unread] = await Promise.all([
+    listNotifications(userId, { limit: 6 }),
+    unreadCount(userId),
+  ]);
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+          aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}
+        >
           <BellIcon aria-hidden />
           {unread > 0 && (
-            <span aria-hidden className="bg-primary text-primary-foreground absolute top-1 right-1 flex min-w-4 items-center justify-center rounded-full px-1 text-[0.625rem] leading-4 font-semibold">
+            <span
+              aria-hidden
+              className="bg-primary text-primary-foreground absolute top-1 right-1 flex min-w-4 items-center justify-center rounded-full px-1 text-[0.625rem] leading-4 font-semibold"
+            >
               {unread > 9 ? "9+" : unread}
             </span>
           )}
@@ -37,10 +48,15 @@ export async function NotificationBell({ userId }: { userId: string }) {
         {items.length ? (
           <NotificationList items={items} compact />
         ) : (
-          <p className="text-muted-foreground px-4 py-8 text-center text-sm">You&apos;re all caught up.</p>
+          <p className="text-muted-foreground px-4 py-8 text-center text-sm">
+            You&apos;re all caught up.
+          </p>
         )}
         <div className="border-t px-4 py-2 text-center">
-          <Link href="/notifications" className="text-sm font-medium underline-offset-4 hover:underline">
+          <Link
+            href="/notifications"
+            className="text-sm font-medium underline-offset-4 hover:underline"
+          >
             View all
           </Link>
         </div>

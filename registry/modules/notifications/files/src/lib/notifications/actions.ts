@@ -17,7 +17,9 @@ export async function markAllReadAction() {
 /** Marks one notification read, then follows its link. */
 export async function openNotificationAction(formData: FormData) {
   const { user } = await requireSession("/notifications");
-  const { id, href } = z.object({ id: z.uuid(), href: z.string().optional() }).parse(Object.fromEntries(formData));
+  const { id, href } = z
+    .object({ id: z.uuid(), href: z.string().optional() })
+    .parse(Object.fromEntries(formData));
   await markRead(user.id, id);
   revalidatePath("/", "layout");
   redirect(href && href.startsWith("/") && !href.startsWith("//") ? href : "/notifications");

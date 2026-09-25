@@ -20,7 +20,9 @@ async function main() {
     process.exit(1);
   }
   const url = process.env.DATABASE_URL;
-  const promote = async (db: ReturnType<typeof drizzlePglite> | ReturnType<typeof drizzlePostgres>) => {
+  const promote = async (
+    db: ReturnType<typeof drizzlePglite> | ReturnType<typeof drizzlePostgres>,
+  ) => {
     await db.update(user).set({ role: "admin" }).where(eq(user.email, email));
     const [row] = await db.select({ role: user.role }).from(user).where(eq(user.email, email));
     return row?.role === "admin";

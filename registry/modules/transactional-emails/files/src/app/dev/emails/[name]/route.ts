@@ -13,6 +13,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ nam
   const { name } = await params;
   const template = emailTemplates.find((candidate) => templateName(candidate) === name);
   if (!template) return new Response("Not found", { status: 404 });
-  const element = createElement(template as unknown as ComponentType<object>, (template.PreviewProps ?? {}) as object);
-  return new Response(await render(element), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  const element = createElement(
+    template as unknown as ComponentType<object>,
+    (template.PreviewProps ?? {}) as object,
+  );
+  return new Response(await render(element), {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
 }

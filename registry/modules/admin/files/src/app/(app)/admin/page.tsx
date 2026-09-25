@@ -35,10 +35,21 @@ export default async function AdminOverviewPage() {
           <CardTitle>Sign-ups, last 14 days</CardTitle>
         </CardHeader>
         <figure className="px-6 pb-6">
-          <div className="flex h-40 items-end gap-1.5" role="img" aria-label={`Sign-ups per day: ${signups.map((d) => d.value).join(", ")}`}>
+          <div
+            className="flex h-40 items-end gap-1.5"
+            role="img"
+            aria-label={`Sign-ups per day: ${signups.map((d) => d.value).join(", ")}`}
+          >
             {signups.map((day) => (
-              <div key={day.day} className="flex h-full flex-1 flex-col justify-end" title={`${day.day}: ${day.value}`}>
-                <div className="bg-primary min-h-px rounded-t-sm" style={{ height: `${(day.value / peak) * 100}%` }} />
+              <div
+                key={day.day}
+                className="flex h-full flex-1 flex-col justify-end"
+                title={`${day.day}: ${day.value}`}
+              >
+                <div
+                  className="bg-primary min-h-px rounded-t-sm"
+                  style={{ height: `${(day.value / peak) * 100}%` }}
+                />
               </div>
             ))}
           </div>

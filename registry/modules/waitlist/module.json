@@ -5,16 +5,8 @@
   "title": "Waitlist",
   "description": "Waitlist with live positions and referral links that move people up, welcome email, and a token-protected CSV export.",
   "category": "marketing",
-  "requires": [
-    "database",
-    "email",
-    "rate-limit"
-  ],
-  "ui": [
-    "button",
-    "input",
-    "field"
-  ],
+  "requires": ["database", "email", "rate-limit"],
+  "ui": ["button", "input", "field"],
   "files": [
     "src/db/schema/waitlist.ts",
     "src/env/waitlist.ts",
@@ -28,9 +20,7 @@
     "src/app/(site)/waitlist/[code]/page.tsx",
     "src/app/api/waitlist/export/route.ts"
   ],
-  "dbSchema": [
-    "src/db/schema/waitlist.ts"
-  ],
+  "dbSchema": ["src/db/schema/waitlist.ts"],
   "envFile": "src/env/waitlist.ts",
   "env": [
     {
@@ -55,11 +45,7 @@
       }
     ]
   },
-  "routes": [
-    "/waitlist",
-    "/waitlist/[code]",
-    "/api/waitlist/export"
-  ],
+  "routes": ["/waitlist", "/waitlist/[code]", "/api/waitlist/export"],
   "postInstall": [
     "Use <WaitlistForm /> on any page (the hero of a landing page is a good spot). /waitlist works standalone.",
     "Export sign-ups: curl -H \"Authorization: Bearer $WAITLIST_ADMIN_TOKEN\" https://your.site/api/waitlist/export"

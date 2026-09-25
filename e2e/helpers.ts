@@ -28,9 +28,17 @@ export async function linkFromOutbox(
   return `${url.pathname}${url.search}`;
 }
 
+type SignUpOptions = {
+  name?: string;
+  email?: string;
+  /** New accounts are sent to the onboarding questionnaire; "skip" (default) dismisses it. */
+  onboarding?: "skip" | "stay";
+};
+
 /** Signs up a fresh user, verifies the email through the outbox, and lands on the dashboard. */
-export async function signUpVerified(page: Page, name = "Ada Lovelace") {
-  const email = uniqueEmail("user");
+export async function signUpVerified(page: Page, nameOrOptions: string | SignUpOptions = {}) {
+  const options = typeof nameOrOptions === "string" ? { name: nameOrOptions } : nameOrOptions;
+  const { name = "Ada Lovelace", email = uniqueEmail("user"), onboarding = "skip" } = options;
   const password = "correct-horse-battery";
   await page.goto("/sign-up");
   await page.getByLabel("Name").fill(name);
@@ -40,6 +48,32 @@ export async function signUpVerified(page: Page, name = "Ada Lovelace") {
   await expect(page).toHaveURL(/\/verify-email/);
   const verify = await linkFromOutbox(page, /Verify your email/, email, /verify-email/);
   await page.goto(verify);
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page).toHaveURL(/\/(dashboard|onboarding)/);
+  if (
+    page.url().includes("/onboarding") ||
+    (await page.waitForURL(/\/onboarding/, { timeout: 3_000 }).then(
+      () => true,
+      () => false,
+    ))
+  ) {
+    if (onboarding === "skip") {
+      await page.getByRole("button", { name: "Skip for now" }).click();
+      await expect(page).toHaveURL(/\/dashboard/);
+    }
+  }
   return { email, password };
+}
+
+/** Signs in, or signs up and verifies when the account doesn't exist yet (for fixed emails). */
+export async function signInOrUp(page: Page, email: string, name: string) {
+  const password = "correct-horse-battery";
+  await page.goto("/sign-in");
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  const signedIn = await page.waitForURL(/\/dashboard/, { timeout: 5_000 }).then(
+    () => true,
+    () => false,
+  );
+  if (!signedIn) await signUpVerified(page, { name, email });
 }

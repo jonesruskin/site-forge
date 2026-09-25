@@ -49,7 +49,9 @@ export function TeamSwitcher({ teams, activeId }: { teams: Team[]; activeId: str
               {team.id === activeId && <CheckIcon aria-hidden className="ml-auto" />}
             </DropdownMenuItem>
           ))}
-          {teams.length === 0 && <p className="text-muted-foreground px-2 py-1.5 text-sm">No teams yet.</p>}
+          {teams.length === 0 && (
+            <p className="text-muted-foreground px-2 py-1.5 text-sm">No teams yet.</p>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => setCreating(true)}>
             <PlusIcon aria-hidden /> Create team

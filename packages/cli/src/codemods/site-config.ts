@@ -25,6 +25,16 @@ export type SiteConfigRemoval = {
   features?: string[];
 };
 
+/** Matches the starter's Prettier style closely enough that diffs stay small. */
+const FORMAT = {
+  tabWidth: 2,
+  useTabs: false,
+  quote: "double",
+  trailingComma: true,
+  objectCurlySpacing: true,
+  wrapColumn: 100,
+} as const;
+
 function load(code: string) {
   const mod = parseModule(code);
   let config: any;
@@ -163,7 +173,7 @@ export function updateSiteConfig(code: string, changes: SiteConfigChanges) {
 
   for (const entry of changes.nav ?? []) addNav(config, entry);
 
-  return tidy(generateCode(mod).code);
+  return tidy(generateCode(mod, { format: FORMAT }).code);
 }
 
 export function removeFromSiteConfig(code: string, removal: SiteConfigRemoval) {
@@ -171,7 +181,7 @@ export function removeFromSiteConfig(code: string, removal: SiteConfigRemoval) {
   for (const entry of removal.nav ?? []) removeNav(config, entry);
   for (const key of removal.blocks ?? []) delete config[key];
   if (config.features) for (const flag of removal.features ?? []) delete config.features[flag];
-  return tidy(generateCode(mod).code);
+  return tidy(generateCode(mod, { format: FORMAT }).code);
 }
 
 /** Human-readable description of changes, printed when the codemod can't run. */

@@ -1,16 +1,11 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "teams",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "title": "Teams",
   "description": "Organizations with roles (owner, admin, member), email invitations, team switcher and team settings, on Better Auth's organization plugin.",
   "category": "saas",
-  "requires": [
-    "auth",
-    "dashboard",
-    "database",
-    "email"
-  ],
+  "requires": ["auth", "dashboard", "database", "email"],
   "ui": [
     "button",
     "input",
@@ -23,9 +18,7 @@
     "alert",
     "avatar"
   ],
-  "sections": [
-    "empty-state"
-  ],
+  "sections": ["empty-state"],
   "files": [
     "src/db/schema/teams.ts",
     "src/lib/teams/auth-plugin.ts",
@@ -40,11 +33,10 @@
     "src/components/teams/team-widget.tsx",
     "src/emails/team-invite.tsx",
     "src/app/(app)/settings/team/page.tsx",
-    "src/app/(app)/invite/[id]/page.tsx"
+    "src/app/(app)/invite/[id]/page.tsx",
+    "src/lib/teams/onboarding.ts"
   ],
-  "dbSchema": [
-    "src/db/schema/teams.ts"
-  ],
+  "dbSchema": ["src/db/schema/teams.ts"],
   "contributes": {
     "slots": [
       {
@@ -73,6 +65,12 @@
         "slot": "email-templates",
         "import": "TeamInviteEmail",
         "from": "src/emails/team-invite.tsx"
+      },
+      {
+        "slot": "onboarding-tasks",
+        "import": "teamsOnboardingTask",
+        "from": "src/lib/teams/onboarding.ts",
+        "order": 30
       }
     ],
     "nav": [
@@ -90,10 +88,7 @@
       }
     }
   },
-  "routes": [
-    "/settings/team",
-    "/invite/[id]"
-  ],
+  "routes": ["/settings/team", "/invite/[id]"],
   "postInstall": [
     "Create a team from the switcher in the top bar. Invitations are emailed (see /dev/outbox in development)."
   ]

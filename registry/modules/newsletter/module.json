@@ -5,18 +5,9 @@
   "title": "Newsletter",
   "description": "Signup form with double opt-in (signed links, no database) and a provider adapter: Resend, Buttondown or Kit.",
   "category": "marketing",
-  "requires": [
-    "email",
-    "rate-limit"
-  ],
-  "ui": [
-    "button",
-    "input"
-  ],
-  "sections": [
-    "newsletter-band",
-    "page-header"
-  ],
+  "requires": ["email", "rate-limit"],
+  "ui": ["button", "input"],
+  "sections": ["newsletter-band", "page-header"],
   "files": [
     "src/env/newsletter.ts",
     "src/lib/newsletter/providers.ts",
@@ -92,10 +83,7 @@
       }
     ]
   },
-  "routes": [
-    "/newsletter",
-    "/newsletter/confirm"
-  ],
+  "routes": ["/newsletter", "/newsletter/confirm"],
   "postInstall": [
     "Drop <NewsletterForm /> anywhere (e.g. inside the newsletter-band section or the footer).",
     "Set NEWSLETTER_PROVIDER + its keys and NEWSLETTER_SECRET for production."

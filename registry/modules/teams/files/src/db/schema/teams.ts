@@ -28,7 +28,10 @@ export const member = pgTable(
     role: text("role").notNull().default("member"),
     createdAt: timestamp("created_at").notNull(),
   },
-  (table) => [index("member_organization_id_idx").on(table.organizationId), index("member_user_id_idx").on(table.userId)],
+  (table) => [
+    index("member_organization_id_idx").on(table.organizationId),
+    index("member_user_id_idx").on(table.userId),
+  ],
 );
 
 export const invitation = pgTable(
@@ -47,5 +50,8 @@ export const invitation = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
   },
-  (table) => [index("invitation_organization_id_idx").on(table.organizationId), index("invitation_email_idx").on(table.email)],
+  (table) => [
+    index("invitation_organization_id_idx").on(table.organizationId),
+    index("invitation_email_idx").on(table.email),
+  ],
 );

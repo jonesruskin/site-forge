@@ -13,7 +13,9 @@ export const metadata: Metadata = { title: "Team invitation", robots: { index: f
 export default async function InvitationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { user } = await requireSession(`/invite/${id}`);
-  const invitation = await auth.api.getInvitation({ query: { id }, headers: await headers() }).catch(() => null);
+  const invitation = await auth.api
+    .getInvitation({ query: { id }, headers: await headers() })
+    .catch(() => null);
 
   if (!invitation || invitation.status !== "pending") {
     return (

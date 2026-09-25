@@ -22,7 +22,11 @@ No variables.
 ```ts
 import { notify } from "@/lib/notifications/notify";
 
-await notify(user.id, { type: "billing", title: "Your invoice is ready", href: "/settings/billing" });
+await notify(user.id, {
+  type: "billing",
+  title: "Your invoice is ready",
+  href: "/settings/billing",
+});
 ```
 
 ## Customization

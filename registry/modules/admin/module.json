@@ -31,8 +31,17 @@
   "contributes": {
     "slots": [
       { "slot": "auth-plugins", "import": "adminPlugin", "from": "src/lib/admin/auth-plugin.ts" },
-      { "slot": "auth-client-plugins", "import": "adminClientPlugin", "from": "src/lib/admin/auth-client-plugin.ts" },
-      { "slot": "dashboard-topbar", "import": "ImpersonationBanner", "from": "src/components/admin/impersonation-banner.tsx", "order": 1 }
+      {
+        "slot": "auth-client-plugins",
+        "import": "adminClientPlugin",
+        "from": "src/lib/admin/auth-client-plugin.ts"
+      },
+      {
+        "slot": "dashboard-topbar",
+        "import": "ImpersonationBanner",
+        "from": "src/components/admin/impersonation-banner.tsx",
+        "order": 1
+      }
     ],
     "nav": [
       { "location": "admin", "label": "Overview", "href": "/admin", "icon": "shield" },

@@ -108,8 +108,10 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
 
 A slot is a generated file that aggregates contributions from installed modules.
 Core slots (defined in `registry/core.json`): `providers`, `body-end`, `header-actions`,
-`next-plugins`, `sitemap`, `proxy`. Modules can define more (`auth-plugins`, `payment-webhooks` …)
-in their own manifest under `slots`. Contributions look like:
+`next-plugins`, `proxy`. Modules define more in their manifest under `slots`: `sitemap` (seo),
+`auth-plugins`/`auth-client-plugins`/`auth-events` (auth), `dashboard-widgets`/`dashboard-topbar`
+(dashboard), `payment-webhooks` (payments), `email-templates` (transactional-emails),
+`onboarding-tasks` (onboarding). Contributions look like:
 
 ```json
 { "slot": "sitemap", "import": "blogSitemap", "from": "src/lib/blog/sitemap.ts" }
@@ -118,6 +120,13 @@ in their own manifest under `slots`. Contributions look like:
 Special generated files: `src/env.ts` (env fragments), `src/generated/modules.ts`,
 `src/generated/next.ts` (CSP sources, image hosts, server external packages, plugins),
 `src/generated/db-schema.ts` (when a module ships DB schema).
+
+- Contributing to a slot owned by a module you don't `require` is fine, but the contributed
+  file must not import that owner (use structural types, e.g. an object with `done(userId)`).
+- `proxy` handlers get `(request, response)`: set cookies/headers on the shared `response` and
+  return nothing to continue, or return a Response to stop (cookies already set are kept).
+- CSP sources written as `"$ENV_NAME"` resolve to that variable's origin at build time
+  (`src/lib/security-headers.ts`); use them for configurable hosts like `S3_ENDPOINT`.
 
 ## Adding things
 

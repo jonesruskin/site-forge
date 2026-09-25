@@ -10,7 +10,10 @@ export async function adminStats() {
   const [[users], [newUsers], [verified], [activeSessions], [banned]] = await Promise.all([
     db.select({ value: count() }).from(user),
     db.select({ value: count() }).from(user).where(gte(user.createdAt, weekAgo)),
-    db.select({ value: count() }).from(user).where(sql`${user.emailVerified} = true`),
+    db
+      .select({ value: count() })
+      .from(user)
+      .where(sql`${user.emailVerified} = true`),
     db.select({ value: count() }).from(session).where(gte(session.expiresAt, new Date())),
     db.select({ value: count() }).from(user).where(isNotNull(user.banExpires)),
   ]);

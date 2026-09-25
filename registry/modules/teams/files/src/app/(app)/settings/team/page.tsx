@@ -7,7 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireSession } from "@/lib/auth/session";
-import { cancelInvitationAction, leaveTeamAction, removeMemberAction, updateRoleAction } from "@/lib/teams/actions";
+import {
+  cancelInvitationAction,
+  leaveTeamAction,
+  removeMemberAction,
+  updateRoleAction,
+} from "@/lib/teams/actions";
 import { canManage, getActiveTeam, ROLES } from "@/lib/teams/queries";
 
 export const metadata: Metadata = { title: "Team", robots: { index: false } };
@@ -23,7 +28,9 @@ export default async function TeamSettingsPage() {
           <CardTitle className="flex items-center gap-2">
             <UsersIcon aria-hidden className="size-5" /> No team selected
           </CardTitle>
-          <CardDescription>Create a team or switch to one from the menu in the top bar.</CardDescription>
+          <CardDescription>
+            Create a team or switch to one from the menu in the top bar.
+          </CardDescription>
         </CardHeader>
       </Card>
     );
@@ -58,7 +65,10 @@ export default async function TeamSettingsPage() {
               <li key={member.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">
-                    {member.user.name} {member.userId === user.id && <span className="text-muted-foreground">(you)</span>}
+                    {member.user.name}{" "}
+                    {member.userId === user.id && (
+                      <span className="text-muted-foreground">(you)</span>
+                    )}
                   </p>
                   <p className="text-muted-foreground truncate text-xs">{member.user.email}</p>
                 </div>
@@ -95,7 +105,10 @@ export default async function TeamSettingsPage() {
                     </form>
                   </div>
                 ) : (
-                  <Badge variant={member.role === "owner" ? "default" : "outline"} className="capitalize">
+                  <Badge
+                    variant={member.role === "owner" ? "default" : "outline"}
+                    className="capitalize"
+                  >
                     {member.role}
                   </Badge>
                 )}
@@ -133,7 +146,9 @@ export default async function TeamSettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Leave team</CardTitle>
-            <CardDescription>You&apos;ll lose access to {team.name} until someone invites you again.</CardDescription>
+            <CardDescription>
+              You&apos;ll lose access to {team.name} until someone invites you again.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form action={leaveTeamAction}>

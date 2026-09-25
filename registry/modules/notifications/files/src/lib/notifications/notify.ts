@@ -9,7 +9,10 @@ export type NotifyInput = { title: string; body?: string; href?: string; type?: 
 
 /** Adds a notification to a user's inbox. Call from any server code. */
 export async function notify(userId: string, input: NotifyInput) {
-  const [row] = await db.insert(notification).values({ userId, ...input }).returning();
+  const [row] = await db
+    .insert(notification)
+    .values({ userId, ...input })
+    .returning();
   return row;
 }
 
@@ -35,5 +38,11 @@ export async function markRead(userId: string, id?: string) {
   await db
     .update(notification)
     .set({ readAt: new Date() })
-    .where(and(eq(notification.userId, userId), isNull(notification.readAt), ...(id ? [eq(notification.id, id)] : [])));
+    .where(
+      and(
+        eq(notification.userId, userId),
+        isNull(notification.readAt),
+        ...(id ? [eq(notification.id, id)] : []),
+      ),
+    );
 }

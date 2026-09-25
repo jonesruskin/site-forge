@@ -85,7 +85,7 @@ async function generate() {
       { location: "header", label: "Sections", href: "/sections" },
       { location: "header", label: "Theme lab", href: "/lab" },
     ],
-    merge: { features: { themeLab: true } },
+    merge: { features: { themeLab: true, flagsDevTools: true } },
   });
   await writeFile(configFile, config);
 

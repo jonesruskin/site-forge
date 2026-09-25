@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "copy-button",
+  "version": "1.0.0",
+  "description": "Button that copies a value to the clipboard and confirms it, announced to screen readers.",
+  "ui": ["button"],
+  "files": ["src/components/ui/copy-button.tsx"]
+}

@@ -1,4 +1,9 @@
-import { EmailButton, EmailHeading, EmailLayout, EmailText } from "@/emails/components/email-layout";
+import {
+  EmailButton,
+  EmailHeading,
+  EmailLayout,
+  EmailText,
+} from "@/emails/components/email-layout";
 import siteConfig from "@/site.config";
 
 type TeamInviteEmailProps = { teamName: string; inviterName: string; role: string; url: string };
@@ -11,11 +16,17 @@ export function TeamInviteEmail({ teamName, inviterName, role, url }: TeamInvite
     >
       <EmailHeading>Join {teamName}</EmailHeading>
       <EmailText>
-        {inviterName} invited you to join {teamName} on {siteConfig.name} as {role === "admin" ? "an admin" : `a ${role}`}.
+        {inviterName} invited you to join {teamName} on {siteConfig.name} as{" "}
+        {role === "admin" ? "an admin" : `a ${role}`}.
       </EmailText>
       <EmailButton href={url}>Accept invitation</EmailButton>
     </EmailLayout>
   );
 }
 
-TeamInviteEmail.PreviewProps = { teamName: "Acme", inviterName: "Ada Lovelace", role: "member", url: "https://example.com/invite/preview" };
+TeamInviteEmail.PreviewProps = {
+  teamName: "Acme",
+  inviterName: "Ada Lovelace",
+  role: "member",
+  url: "https://example.com/invite/preview",
+};

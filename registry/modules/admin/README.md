@@ -20,9 +20,9 @@ pnpm admin:grant you@example.com      # local or DATABASE_URL database
 
 ## Environment
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `ADMIN_EMAILS` | no | Comma-separated emails promoted to admin on first visit to /admin. |
+| Variable       | Required | Description                                                        |
+| -------------- | -------- | ------------------------------------------------------------------ |
+| `ADMIN_EMAILS` | no       | Comma-separated emails promoted to admin on first visit to /admin. |
 
 ## Customization
 

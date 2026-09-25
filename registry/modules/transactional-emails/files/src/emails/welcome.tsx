@@ -1,4 +1,9 @@
-import { EmailButton, EmailHeading, EmailLayout, EmailText } from "@/emails/components/email-layout";
+import {
+  EmailButton,
+  EmailHeading,
+  EmailLayout,
+  EmailText,
+} from "@/emails/components/email-layout";
 import siteConfig from "@/site.config";
 
 export function WelcomeEmail({ name, dashboardUrl }: { name: string; dashboardUrl: string }) {

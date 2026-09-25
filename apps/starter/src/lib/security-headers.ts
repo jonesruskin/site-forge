@@ -8,6 +8,10 @@
  * Scripts allow 'unsafe-inline' because statically rendered Next.js pages
  * inline their bootstrap scripts; nonce-based CSP would force every page to
  * render dynamically. Everything else is locked to known origins.
+ *
+ * A source written as "$NAME" resolves to the origin of the NAME environment
+ * variable at build time (dropped when unset), so modules can allow hosts that
+ * only exist in configuration, like an S3-compatible storage endpoint.
  */
 export type CspDirectives = Record<string, string[]>;
 
@@ -32,11 +36,23 @@ const baseCsp: CspDirectives = {
 /** Sources specific to this site. */
 const extraCsp: CspDirectives = {};
 
+function resolveSource(source: string): string[] {
+  if (!source.startsWith("$")) return [source];
+  const value = process.env[source.slice(1)];
+  if (!value) return [];
+  try {
+    return [new URL(value).origin];
+  } catch {
+    return [];
+  }
+}
+
 export function buildCsp(...sources: CspDirectives[]) {
   const merged: CspDirectives = {};
   for (const directives of [baseCsp, ...sources, extraCsp]) {
     for (const [directive, values] of Object.entries(directives)) {
-      merged[directive] = [...new Set([...(merged[directive] ?? []), ...values])];
+      const resolved = values.flatMap(resolveSource);
+      merged[directive] = [...new Set([...(merged[directive] ?? []), ...resolved])];
     }
   }
   const policy = Object.entries(merged).map(

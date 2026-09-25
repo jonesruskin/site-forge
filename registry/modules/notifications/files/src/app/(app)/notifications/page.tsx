@@ -28,7 +28,11 @@ export default async function NotificationsPage() {
       {items.length ? (
         <NotificationList items={items} />
       ) : (
-        <EmptyState icon={<BellIcon />} title="No notifications yet" description="Updates about your account will appear here." />
+        <EmptyState
+          icon={<BellIcon />}
+          title="No notifications yet"
+          description="Updates about your account will appear here."
+        />
       )}
     </div>
   );

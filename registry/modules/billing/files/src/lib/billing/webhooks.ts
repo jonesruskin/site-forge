@@ -65,8 +65,11 @@ export async function billingWebhookHandler(event: PaymentEvent) {
       await upsert({ ...event.subscription, status: "canceled" });
       return;
     case "invoice.payment_failed": {
-      const customer = await db.query.billingCustomer.findFirst({ where: eq(billingCustomer.customerId, event.customerId) });
-      const owner = customer && (await db.query.user.findFirst({ where: eq(user.id, customer.userId) }));
+      const customer = await db.query.billingCustomer.findFirst({
+        where: eq(billingCustomer.customerId, event.customerId),
+      });
+      const owner =
+        customer && (await db.query.user.findFirst({ where: eq(user.id, customer.userId) }));
       if (!owner) return;
       await sendEmail({
         to: owner.email,

@@ -201,16 +201,30 @@ ${lines.length ? lines.join("\n") : "export {};"}
 }
 
 const PROXY_FILE = `${GENERATED_HEADER}
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 import { proxyHandlers } from "./generated/proxy";
 
-/** Runs module proxy handlers in order; the first one that returns a response wins. */
+/**
+ * Runs module proxy handlers in order. A handler may set cookies or headers on
+ * the shared \`response\` and return nothing to continue, or return its own
+ * response (redirect, rewrite, 503 …) to stop; cookies already set are kept.
+ */
 export async function proxy(request: NextRequest) {
+  const response = NextResponse.next();
   for (const handler of proxyHandlers) {
-    const response = await handler(request);
-    if (response) return response;
+    const result = await handler(request, response);
+    if (!result) continue;
+    for (const cookie of response.headers.getSetCookie()) {
+      try {
+        result.headers.append("set-cookie", cookie);
+      } catch {
+        // Immutable headers (Response.redirect): nothing to carry over.
+      }
+    }
+    return result;
   }
+  return response;
 }
 
 export const config = {
