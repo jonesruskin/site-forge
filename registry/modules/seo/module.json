@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "seo",
+  "version": "1.0.0",
+  "title": "SEO",
+  "description": "sitemap.xml, robots.txt (no-index outside production), JSON-LD helpers and generated Open Graph images.",
+  "category": "seo-ops",
+  "files": [
+    "src/app/sitemap.ts",
+    "src/app/robots.ts",
+    "src/app/opengraph-image.tsx",
+    "src/lib/seo/json-ld.tsx",
+    "src/lib/seo/og-image.tsx",
+    "src/lib/seo/og-theme.ts",
+    "src/lib/seo/site-json-ld.tsx"
+  ],
+  "slots": {
+    "sitemap": {
+      "file": "src/generated/sitemap.ts",
+      "export": "sitemapSources",
+      "type": "() => MetadataRoute.Sitemap | Promise<MetadataRoute.Sitemap>",
+      "typeImports": ["import type { MetadataRoute } from \"next\";"],
+      "description": "Functions returning sitemap entries (blog posts, docs pages …), merged into /sitemap.xml."
+    }
+  },
+  "contributes": {
+    "slots": [
+      { "slot": "body-end", "import": "SiteJsonLd", "from": "src/lib/seo/site-json-ld.tsx" }
+    ]
+  },
+  "routes": ["/sitemap.xml", "/robots.txt", "/opengraph-image"],
+  "postInstall": [
+    "robots.txt blocks indexing unless VERCEL_ENV=production (or NODE_ENV=production off Vercel).",
+    "Open Graph images use colors from src/lib/seo/og-theme.ts."
+  ]
+}

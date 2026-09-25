@@ -1,0 +1,51 @@
+{
+  "$schema": "./schema/core.schema.json",
+  "version": "0.1.0",
+  "starter": "apps/starter",
+  "ignore": ["README.md", ".site/**"],
+  "allowBuilds": ["@tailwindcss/oxide", "esbuild", "sharp", "unrs-resolver"],
+  "env": [
+    {
+      "name": "NEXT_PUBLIC_SITE_URL",
+      "description": "Canonical public URL of the site, no trailing slash. Falls back to the url in site.config.ts",
+      "scope": "client",
+      "example": "http://localhost:3000"
+    }
+  ],
+  "slots": {
+    "providers": {
+      "file": "src/generated/providers.ts",
+      "export": "providers",
+      "type": "ComponentType<{ children: ReactNode }>",
+      "typeImports": ["import type { ComponentType, ReactNode } from \"react\";"],
+      "description": "Client providers contributed by modules, outermost first."
+    },
+    "body-end": {
+      "file": "src/generated/body-end.ts",
+      "export": "bodyEnd",
+      "type": "ComponentType",
+      "typeImports": ["import type { ComponentType } from \"react\";"],
+      "description": "Components rendered at the end of <body> (analytics, consent banners, toasters)."
+    },
+    "header-actions": {
+      "file": "src/generated/header-actions.ts",
+      "export": "headerActions",
+      "type": "ComponentType",
+      "typeImports": ["import type { ComponentType } from \"react\";"],
+      "description": "Components rendered in the site header next to the theme toggle (sign-in, cart …)."
+    },
+    "next-plugins": {
+      "file": "src/generated/next.ts",
+      "export": "nextPlugins",
+      "type": "(config: NextConfig) => NextConfig",
+      "description": "next.config wrappers (Sentry, next-intl …). Generated into src/generated/next.ts."
+    },
+    "proxy": {
+      "file": "src/generated/proxy.ts",
+      "export": "proxyHandlers",
+      "type": "(request: NextRequest) => Response | undefined | Promise<Response | undefined>",
+      "typeImports": ["import type { NextRequest } from \"next/server\";"],
+      "description": "Request handlers run by src/proxy.ts in order; return a Response to short-circuit."
+    }
+  }
+}

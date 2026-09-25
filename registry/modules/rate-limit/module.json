@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "rate-limit",
+  "version": "1.0.0",
+  "title": "Rate limiting",
+  "description": "Sliding-window rate limits for actions and API routes. Upstash Redis in production, in-memory locally.",
+  "category": "infrastructure",
+  "files": ["src/lib/rate-limit.ts", "src/env/rate-limit.ts"],
+  "envFile": "src/env/rate-limit.ts",
+  "dependencies": {
+    "@upstash/ratelimit": "^2.0.0",
+    "@upstash/redis": "^1.35.0",
+    "server-only": "^0.0.1"
+  },
+  "env": [
+    {
+      "name": "UPSTASH_REDIS_REST_URL",
+      "description": "Upstash Redis REST URL. Without it, limits are kept in memory (per server instance)",
+      "example": "https://your-db.upstash.io",
+      "howTo": "https://console.upstash.com → Redis → REST API"
+    },
+    {
+      "name": "UPSTASH_REDIS_REST_TOKEN",
+      "description": "Upstash Redis REST token",
+      "example": "",
+      "howTo": "Same page as the URL"
+    }
+  ]
+}

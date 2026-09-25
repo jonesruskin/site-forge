@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "label",
+  "version": "1.0.0",
+  "description": "Native form label (no client JS) that dims with a disabled peer.",
+  "files": ["src/components/ui/label.tsx"]
+}

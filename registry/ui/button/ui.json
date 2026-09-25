@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "button",
+  "version": "1.0.0",
+  "description": "Button with variants and sizes; renders any element via asChild (links, triggers).",
+  "files": ["src/components/ui/button.tsx"],
+  "dependencies": { "radix-ui": "^1.6.0" }
+}

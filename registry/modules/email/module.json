@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "email",
+  "version": "1.0.0",
+  "title": "Email",
+  "description": "Send React Email templates through Resend. In development, mail lands in a local outbox at /dev/outbox.",
+  "category": "infrastructure",
+  "files": [
+    "src/env/email.ts",
+    "src/lib/email/send.ts",
+    "src/lib/email/outbox.ts",
+    "src/emails/theme.ts",
+    "src/emails/components/email-layout.tsx",
+    "src/app/dev/outbox/page.tsx",
+    "src/app/dev/outbox/[id]/page.tsx"
+  ],
+  "envFile": "src/env/email.ts",
+  "dependencies": {
+    "@react-email/components": "^1.0.0",
+    "@react-email/render": "^2.0.0",
+    "resend": "^6.0.0",
+    "server-only": "^0.0.1"
+  },
+  "env": [
+    {
+      "name": "RESEND_API_KEY",
+      "description": "Resend API key. Without it (in development) emails are saved to the local outbox",
+      "required": true,
+      "example": "re_xxxxxxxx",
+      "howTo": "https://resend.com/api-keys"
+    },
+    {
+      "name": "EMAIL_FROM",
+      "description": "Default sender, on a domain verified in Resend",
+      "required": true,
+      "example": "Acme <hello@acme.com>",
+      "howTo": "https://resend.com/domains"
+    }
+  ],
+  "routes": ["/dev/outbox"],
+  "postInstall": [
+    "In development, open /dev/outbox to read every email the site sends.",
+    "For production, verify your domain in Resend and set RESEND_API_KEY + EMAIL_FROM.",
+    "Email colors live in src/emails/theme.ts (email clients can't read CSS variables)."
+  ]
+}

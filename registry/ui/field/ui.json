@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "field",
+  "version": "1.0.0",
+  "description": "Accessible form field: wires label, description and error to any control via ids.",
+  "ui": ["label"],
+  "files": ["src/components/ui/field.tsx"]
+}

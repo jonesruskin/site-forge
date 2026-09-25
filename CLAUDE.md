@@ -30,6 +30,12 @@ Read this file fully before changing anything under `apps/starter`, `registry/` 
 - Next.js 16 App Router: `proxy.ts` (not `middleware.ts`), async `params`/`searchParams`,
   `eslint .` instead of `next lint`, `next typegen` before `tsc`.
 - Tailwind v4 CSS-first config. There is no `tailwind.config.*` anywhere.
+- pnpm 12 enforces a `minimumReleaseAge` supply-chain policy: versions published in the last day
+  are rejected. In manifests and the starter, use ranges anchored on a minor (`^16.3.0`, not
+  `^16.3.6`) so fresh installs never require a just-published patch.
+- Generated projects ship a `pnpm-workspace.yaml` (written by the CLI) listing `allowBuilds`
+  for native deps. A module whose dependency runs install scripts must list it in
+  `contributes.allowBuilds`, or pnpm ≥11 fails the install.
 
 ## Starter rules
 

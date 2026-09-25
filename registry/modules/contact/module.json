@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "contact",
+  "version": "1.0.0",
+  "title": "Contact form",
+  "description": "Contact page and form with layered spam protection (honeypot, timing, rate limit, optional Turnstile) and email delivery.",
+  "category": "marketing",
+  "requires": ["email", "rate-limit"],
+  "ui": ["button", "input", "textarea", "field"],
+  "files": [
+    "src/app/(site)/contact/page.tsx",
+    "src/components/contact/contact-form.tsx",
+    "src/components/contact/turnstile.tsx",
+    "src/lib/contact/schema.ts",
+    "src/lib/contact/actions.tsx",
+    "src/lib/contact/spam.ts",
+    "src/lib/contact/config.ts",
+    "src/emails/contact-notification.tsx",
+    "src/env/contact.ts"
+  ],
+  "envFile": "src/env/contact.ts",
+  "env": [
+    {
+      "name": "CONTACT_TO_EMAIL",
+      "description": "Inbox that receives contact form submissions",
+      "required": true,
+      "example": "hello@example.com"
+    },
+    {
+      "name": "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+      "description": "Cloudflare Turnstile site key. Set both Turnstile keys to add an invisible challenge",
+      "scope": "client",
+      "example": "",
+      "howTo": "https://dash.cloudflare.com → Turnstile → Add site"
+    },
+    {
+      "name": "TURNSTILE_SECRET_KEY",
+      "description": "Cloudflare Turnstile secret key",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "nav": [{ "location": "footer", "group": "Company", "label": "Contact", "href": "/contact" }],
+    "siteConfig": {
+      "contact": {
+        "title": "Get in touch",
+        "description": "Questions, ideas or feedback. We read every message and reply by email.",
+        "successMessage": "Thanks! Your message is on its way. We'll get back to you by email.",
+        "subjectPrefix": "[Contact]"
+      }
+    },
+    "next": {
+      "csp": {
+        "script-src": ["https://challenges.cloudflare.com"],
+        "frame-src": ["https://challenges.cloudflare.com"],
+        "connect-src": ["https://challenges.cloudflare.com"]
+      }
+    }
+  },
+  "routes": ["/contact"],
+  "postInstall": [
+    "Set CONTACT_TO_EMAIL to the inbox that should receive messages.",
+    "Page copy lives in site.config.ts under `contact`.",
+    "Optional: add Cloudflare Turnstile keys for an invisible bot challenge."
+  ]
+}
