@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "analytics",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Analytics",
   "description": "One track() for Plausible, PostHog, Google Analytics 4 or Umami, chosen by env vars; waits for cookie consent when the provider needs it; logs events locally in dev.",
   "category": "seo-ops",

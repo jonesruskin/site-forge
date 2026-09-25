@@ -1,4 +1,4 @@
-import { installedModules } from "@/generated/modules";
+import { isInstalled } from "@/generated/modules";
 import siteConfig from "@/site.config";
 
 import type { Provider } from "./providers";
@@ -37,6 +37,6 @@ export function analyticsConsent() {
 
 /** Whether the provider may load without asking. Without a consent banner installed there is nobody to ask. */
 export function needsConsent(provider: Provider) {
-  if (policy === "always" || !installedModules.includes("cookie-consent")) return false;
+  if (policy === "always" || !isInstalled("cookie-consent")) return false;
   return policy === "required" || !provider.cookieless;
 }

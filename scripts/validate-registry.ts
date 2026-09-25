@@ -280,6 +280,35 @@ for (const m of registry.modules.values()) {
   }
 }
 
+// Items must not re-declare starter dependencies: `site remove` drops an item's
+// dependencies when nothing else lists them, which would break the starter.
+const starterPackage = JSON.parse(
+  await readFile(path.join(starterDir, "package.json"), "utf8"),
+) as {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+};
+const starterDeps = new Set([
+  ...Object.keys(starterPackage.dependencies ?? {}),
+  ...Object.keys(starterPackage.devDependencies ?? {}),
+]);
+const withDependencies = [
+  ...[...registry.modules.values()].map((m) => ({
+    where: `module:${m.name}`,
+    deps: { ...m.dependencies, ...m.devDependencies },
+  })),
+  ...[...registry.sections.values()].map((s) => ({
+    where: `section:${s.name}`,
+    deps: s.dependencies,
+  })),
+  ...[...registry.ui.values()].map((u) => ({ where: `ui:${u.name}`, deps: u.dependencies })),
+];
+for (const { where, deps } of withDependencies) {
+  for (const name of Object.keys(deps)) {
+    if (starterDeps.has(name)) fail(where, `"${name}" is already a starter dependency; remove it`);
+  }
+}
+
 for (const s of registry.sections.values()) {
   for (const name of s.ui)
     if (!registry.ui.has(name)) fail(`section:${s.name}`, `uses unknown ui "${name}"`);

@@ -20,7 +20,9 @@
     "sync:starter": "tsx scripts/sync-starter.ts",
     "validate": "tsx scripts/validate-registry.ts",
     "playground:sync": "tsx scripts/playground-sync.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "build:preset": "tsx scripts/build-preset.ts",
+    "docs:catalog": "tsx scripts/generate-catalog.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

@@ -15,12 +15,14 @@ Read this file fully before changing anything under `apps/starter`, `registry/` 
 | `registry/modules/<name>`  | `module.json` + `README.md` + `files/` (mirrors project paths).                          |
 | `registry/sections/<name>` | UI skeleton sections. `section.json` + `files/`.                                         |
 | `registry/ui/<name>`       | Primitives (button, input, dialog …). `ui.json` + `files/`.                              |
-| `registry/presets/*.json`  | Named bundles of modules + sections + pages + theme.                                     |
+| `registry/presets/*.json`  | Named bundles of modules + sections + theme; pages in `registry/presets/files/<name>/`.  |
 | `registry/themes/<name>`   | Example `theme.css` token sets (+ `theme.json` fonts).                                   |
 | `registry/core.json`       | Slot definitions owned by the starter.                                                   |
 | `packages/cli`             | `@site-forge/create-site` — bins `create-site` and `site`.                               |
 | `packages/config`          | Shared tsconfig/eslint/prettier for the CLI and scripts (NOT for generated sites).       |
-| `scripts/`                 | Registry validation, preset builds, playground sync, screenshots.                        |
+| `scripts/`                 | Registry validation, preset builds, playground sync, catalog, screenshots.               |
+| `docs/`                    | Architecture, CLI, theming, module authoring, cloud workflow; `catalog.md` is generated. |
+| `e2e/`                     | Playwright specs against the playground build (functional + axe).                        |
 
 ## Toolchain (pinned on purpose)
 
@@ -36,6 +38,24 @@ Read this file fully before changing anything under `apps/starter`, `registry/` 
 - Generated projects ship a `pnpm-workspace.yaml` (written by the CLI) listing `allowBuilds`
   for native deps. A module whose dependency runs install scripts must list it in
   `contributes.allowBuilds`, or pnpm ≥11 fails the install.
+- Items must not re-declare starter dependencies (the validator enforces it): `site remove`
+  prunes an item's dependencies when nothing else lists them.
+- Preset pages must typecheck with only the preset's modules installed: the playground can't
+  catch that. Use `isInstalled("name")` from `@/generated/modules` for optional checks, and run
+  `pnpm build:preset <name>` after touching a preset or anything it uses.
+
+## Commands
+
+| Command                     | Use                                                           |
+| --------------------------- | ------------------------------------------------------------- |
+| `pnpm validate`             | Registry rules (run after every registry change)              |
+| `pnpm check`                | Typecheck, lint, unit tests for workspace packages            |
+| `pnpm sync:starter`         | Regenerate starter baselines + JSON schemas (`--check` in CI) |
+| `pnpm playground:sync`      | Regenerate apps/playground, then `pnpm install`               |
+| `pnpm test:e2e`             | Playwright against the playground production build            |
+| `pnpm build:preset [names]` | Generate presets (or `starter`) with the CLI and build them   |
+| `pnpm docs:catalog`         | Regenerate docs/catalog.md (`--check` in CI)                  |
+| `pnpm format`               | Prettier                                                      |
 
 ## Starter rules
 

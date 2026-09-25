@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "database",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "Database",
   "description": "Drizzle ORM on Postgres (Neon, Supabase or any Postgres). Zero-setup embedded PGlite in development with automatic schema push.",
   "category": "saas",
@@ -14,8 +14,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.0",
-    "tsx": "^4.20.0"
+    "drizzle-kit": "^0.31.0"
   },
   "env": [
     {
@@ -23,7 +22,7 @@
       "description": "Postgres connection string. Unset in development = embedded PGlite in .site/dev/pglite",
       "required": true,
       "example": "postgres://user:password@host:5432/db?sslmode=require",
-      "howTo": "Neon: console.neon.tech \u2192 Connection string (pooled). Supabase: Project settings \u2192 Database \u2192 Transaction pooler"
+      "howTo": "Neon: console.neon.tech → Connection string (pooled). Supabase: Project settings → Database → Transaction pooler"
     }
   ],
   "contributes": {

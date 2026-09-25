@@ -1,0 +1,41 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "saas",
+  "title": "SaaS",
+  "description": "A subscription product: marketing site, sign-up, dashboard, billing, teams, admin, API keys and onboarding.",
+  "modules": [
+    "seo",
+    "analytics",
+    "ci",
+    "vercel",
+    "cookie-consent",
+    "legal",
+    "contact",
+    "blog",
+    "changelog",
+    "faq",
+    "testimonials",
+    "auth",
+    "dashboard",
+    "settings",
+    "billing",
+    "teams",
+    "admin",
+    "notifications",
+    "transactional-emails",
+    "onboarding",
+    "api"
+  ],
+  "sections": [
+    "hero-centered",
+    "feature-grid",
+    "feature-rows",
+    "testimonials",
+    "pricing-table",
+    "faq",
+    "cta-band"
+  ],
+  "theme": "neutral",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

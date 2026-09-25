@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "uploads",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "File uploads",
   "description": "Direct-to-storage uploads with progress: S3, R2, MinIO or any S3-compatible bucket via presigned URLs, private downloads, and a local-disk fallback in development.",
   "category": "saas",
@@ -24,9 +24,6 @@
   ],
   "dependencies": {
     "aws4fetch": "^1.0.20"
-  },
-  "devDependencies": {
-    "tsx": "^4.20.0"
   },
   "dbSchema": ["src/db/schema/uploads.ts"],
   "envFile": "src/env/uploads.ts",
@@ -72,7 +69,14 @@
         "order": 50
       }
     ],
-    "nav": [{ "location": "dashboard", "label": "Files", "href": "/files", "icon": "folder" }],
+    "nav": [
+      {
+        "location": "dashboard",
+        "label": "Files",
+        "href": "/files",
+        "icon": "folder"
+      }
+    ],
     "next": {
       "csp": {
         "connect-src": ["$S3_ENDPOINT"],

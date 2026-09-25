@@ -19,6 +19,15 @@ const env = {
 
 afterAll(() => rm(tmp, { recursive: true, force: true }));
 
+/** Like runCli, but returns the result instead of throwing on a non-zero exit. */
+async function tryCli(bin: string, args: string[], cwd: string) {
+  const result = await x(tsx, [cli(bin), ...args], {
+    nodeOptions: { cwd, env },
+    throwOnError: false,
+  });
+  return { code: result.exitCode, output: result.stdout + result.stderr };
+}
+
 async function runCli(bin: string, args: string[], cwd: string) {
   const result = await x(tsx, [cli(bin), ...args], {
     nodeOptions: { cwd, env },
@@ -80,5 +89,58 @@ describe("create-site + site add (local registry, no install)", () => {
     await rm(path.join(dir, "src/env.ts"));
     await runCli("site.ts", ["sync"], dir);
     expect(await readFile(path.join(dir, "src/env.ts"), "utf8")).toContain("contactEnv");
+  });
+
+  it("reports the project's health with doctor", async () => {
+    const healthy = await tryCli("site.ts", ["doctor", "--offline"], dir);
+    expect(healthy.code).toBe(0);
+    expect(healthy.output).toContain("Generated files are in sync");
+    expect(healthy.output).toContain("package.json lists every dependency");
+
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(path.join(dir, ".env.local"), "NEXT_PUBLIC_STRIPE_SECRET=sk_live_abc\n");
+    const leaky = await tryCli("site.ts", ["doctor", "--offline"], dir);
+    expect(leaky.code).toBe(1);
+    expect(leaky.output).toContain("exposed to the browser");
+    await rm(path.join(dir, ".env.local"));
+
+    const strict = await tryCli("site.ts", ["doctor", "--offline", "--production"], dir);
+    expect(strict.code).toBe(1);
+    expect(strict.output).toContain("RESEND_API_KEY");
+  });
+
+  it("shows and applies registry updates", async () => {
+    const manifestFile = path.join(dir, ".site/manifest.json");
+    const manifest = JSON.parse(await readFile(manifestFile, "utf8"));
+    const current = manifest.modules.seo.version;
+    manifest.modules.seo.version = "0.0.1";
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(manifestFile, JSON.stringify(manifest, null, 2));
+
+    const diff = await runCli("site.ts", ["diff"], dir);
+    expect(diff.stdout).toContain("update 0.0.1");
+
+    await runCli("site.ts", ["update", "--no-install"], dir);
+    const updated = JSON.parse(await readFile(manifestFile, "utf8"));
+    expect(updated.modules.seo.version).toBe(current);
+  });
+
+  it("refuses to remove what others depend on", async () => {
+    const result = await tryCli("site.ts", ["remove", "email", "--yes", "--no-install"], dir);
+    expect(result.code).not.toBe(0);
+    expect(result.output).toContain("module contact requires email");
+  });
+
+  it("removes a module, keeping files you changed", async () => {
+    await runCli("site.ts", ["remove", "contact", "--yes", "--no-install"], dir);
+    const manifest = JSON.parse(await readFile(path.join(dir, ".site/manifest.json"), "utf8"));
+    expect(Object.keys(manifest.modules).sort()).toEqual(["email", "rate-limit", "seo"]);
+    expect(manifest.files["src/lib/contact/config.ts"]).toBeUndefined();
+    // Edited earlier in this suite: kept, and now owned by the project.
+    expect(await readFile(path.join(dir, "src/lib/contact/config.ts"), "utf8")).toBe("// mine\n");
+    await expect(readFile(path.join(dir, "src/lib/contact/actions.tsx"), "utf8")).rejects.toThrow();
+    expect(await readFile(path.join(dir, "src/env.ts"), "utf8")).not.toContain("contactEnv");
+    expect(await readFile(path.join(dir, "site.config.ts"), "utf8")).not.toContain("contact:");
+    await expect(readFile(path.join(dir, ".site/modules/contact.md"), "utf8")).rejects.toThrow();
   });
 });

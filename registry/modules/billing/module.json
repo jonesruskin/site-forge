@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "billing",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "title": "Billing",
   "description": "Subscriptions from plans in site.config: pricing page, checkout, webhooks, customer portal, entitlements and limits.",
   "category": "saas",
@@ -25,9 +25,6 @@
     "src/lib/billing/onboarding.ts"
   ],
   "dbSchema": ["src/db/schema/billing.ts"],
-  "devDependencies": {
-    "tsx": "^4.20.0"
-  },
   "contributes": {
     "slots": [
       {

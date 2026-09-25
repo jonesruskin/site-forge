@@ -1,0 +1,21 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "digital-store",
+  "title": "Digital store",
+  "description": "Sell templates, guides or presets: product pages, Stripe checkout, emailed download links and a newsletter.",
+  "modules": [
+    "seo",
+    "analytics",
+    "ci",
+    "vercel",
+    "cookie-consent",
+    "legal",
+    "store",
+    "newsletter",
+    "faq"
+  ],
+  "sections": ["hero-split", "faq", "newsletter-band"],
+  "theme": "neutral",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

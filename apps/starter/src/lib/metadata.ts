@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { installedModules } from "@/generated/modules";
+import { isInstalled } from "@/generated/modules";
 import siteConfig from "@/site.config";
 
 import { absoluteUrl } from "./url";
@@ -12,7 +12,7 @@ import { absoluteUrl } from "./url";
  */
 function defaultImage() {
   if (siteConfig.seo.ogImage) return siteConfig.seo.ogImage;
-  return (installedModules as readonly string[]).includes("seo") ? "/opengraph-image" : undefined;
+  return isInstalled("seo") ? "/opengraph-image" : undefined;
 }
 
 type MetadataInput = {

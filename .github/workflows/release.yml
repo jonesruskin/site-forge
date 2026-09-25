@@ -1,0 +1,68 @@
+name: Release
+
+# Publishes @site-forge/create-site to npm when a version tag is pushed:
+#   1. bump packages/cli/package.json "version" (e.g. 0.2.0) and commit
+#   2. git tag v0.2.0 && git push origin v0.2.0
+# Needs the NPM_TOKEN repository secret (an npm automation token with publish
+# rights on the @site-forge scope). Only tag pushes by maintainers trigger it.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write # create the GitHub release
+  id-token: write # npm provenance
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tag matches the package version
+        run: |
+          version="$(node -p "require('./packages/cli/package.json').version")"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match packages/cli version $version"
+            exit 1
+          fi
+
+      - name: Test
+        run: pnpm --filter @site-forge/create-site test && pnpm validate
+
+      - name: Build
+        run: pnpm --filter @site-forge/create-site build
+
+      - name: Smoke test the packed CLI
+        working-directory: packages/cli
+        run: |
+          tarball="$(pnpm pack --pack-destination "$RUNNER_TEMP" | tail -n 1)"
+          mkdir -p "$RUNNER_TEMP/smoke" && cd "$RUNNER_TEMP/smoke"
+          npm init -y > /dev/null
+          npm install "$tarball" > /dev/null
+          npx --no-install create-site --version
+          npx --no-install site --help > /dev/null
+
+      - name: Publish to npm
+        working-directory: packages/cli
+        run: pnpm publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: GitHub release
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+        env:
+          GH_TOKEN: ${{ github.token }}

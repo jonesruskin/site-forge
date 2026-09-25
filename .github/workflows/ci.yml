@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only token. Pull requests from forks run with no secrets, and no workflow in
+# this repository uses pull_request_target.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  check:
+    name: Lint, typecheck, test, registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Formatting
+        run: pnpm exec prettier --check .
+      - name: Lint, typecheck, unit tests
+        run: pnpm check
+      - name: Registry is valid
+        run: pnpm validate
+      - name: Starter baselines match the generator
+        run: pnpm tsx scripts/sync-starter.ts --check
+      - name: Catalog matches the registry
+        run: pnpm docs:catalog --check
+
+  playground:
+    name: Playground build + e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Generate the playground (every module, section and primitive)
+        run: pnpm playground:sync
+      - name: Install playground dependencies (lockfile must already cover them)
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck and lint the generated app
+        working-directory: apps/playground
+        run: pnpm typecheck && pnpm lint
+      - name: Build
+        working-directory: apps/playground
+        run: pnpm build
+        env:
+          SKIP_ENV_VALIDATION: "1"
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: End-to-end and accessibility tests
+        run: pnpm test:e2e
+        env:
+          CI: "1"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7

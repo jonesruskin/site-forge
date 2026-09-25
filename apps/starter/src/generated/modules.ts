@@ -4,3 +4,8 @@
 export const installedModules = [] as const satisfies readonly string[];
 
 export type InstalledModule = (typeof installedModules)[number];
+
+/** Whether a module is installed. Takes any name, so optional integrations type-check either way. */
+export function isInstalled(name: string): boolean {
+  return (installedModules as readonly string[]).includes(name);
+}

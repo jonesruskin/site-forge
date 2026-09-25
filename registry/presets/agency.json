@@ -1,0 +1,30 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "agency",
+  "title": "Agency",
+  "description": "A studio site: services, case studies, process, testimonials and a contact form that lands in your inbox.",
+  "modules": [
+    "seo",
+    "analytics",
+    "ci",
+    "vercel",
+    "cookie-consent",
+    "legal",
+    "case-studies",
+    "contact",
+    "testimonials",
+    "blog"
+  ],
+  "sections": [
+    "hero-split",
+    "feature-grid",
+    "project-grid",
+    "timeline",
+    "stats",
+    "testimonials",
+    "contact-section"
+  ],
+  "theme": "playful",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

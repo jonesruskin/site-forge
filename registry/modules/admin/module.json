@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "admin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Admin panel",
   "description": "Admin area on Better Auth's admin plugin: user search, roles, ban/unban, session revocation, impersonation with a stop banner.",
   "category": "saas",
@@ -27,10 +27,13 @@
       "example": "you@example.com"
     }
   ],
-  "devDependencies": { "tsx": "^4.20.0" },
   "contributes": {
     "slots": [
-      { "slot": "auth-plugins", "import": "adminPlugin", "from": "src/lib/admin/auth-plugin.ts" },
+      {
+        "slot": "auth-plugins",
+        "import": "adminPlugin",
+        "from": "src/lib/admin/auth-plugin.ts"
+      },
       {
         "slot": "auth-client-plugins",
         "import": "adminClientPlugin",
@@ -44,10 +47,22 @@
       }
     ],
     "nav": [
-      { "location": "admin", "label": "Overview", "href": "/admin", "icon": "shield" },
-      { "location": "admin", "label": "Users", "href": "/admin/users", "icon": "users" }
+      {
+        "location": "admin",
+        "label": "Overview",
+        "href": "/admin",
+        "icon": "shield"
+      },
+      {
+        "location": "admin",
+        "label": "Users",
+        "href": "/admin/users",
+        "icon": "users"
+      }
     ],
-    "scripts": { "admin:grant": "tsx scripts/grant-admin.ts" }
+    "scripts": {
+      "admin:grant": "tsx scripts/grant-admin.ts"
+    }
   },
   "routes": ["/admin", "/admin/users"],
   "postInstall": [

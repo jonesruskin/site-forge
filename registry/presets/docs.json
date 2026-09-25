@@ -1,0 +1,11 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "docs",
+  "title": "Docs",
+  "description": "Product documentation with sidebar navigation, search and a changelog.",
+  "modules": ["seo", "analytics", "ci", "vercel", "docs", "changelog"],
+  "sections": ["hero-centered", "feature-grid", "cta-band"],
+  "theme": "terminal",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

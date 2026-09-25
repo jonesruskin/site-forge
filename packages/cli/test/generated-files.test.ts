@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { generateEnvExample } from "../src/generate/env-example";
 import { generateFiles, relativeImport } from "../src/generate/generated-files";
+import { pnpmWorkspace } from "../src/project/apply";
 import { generateFontsFile } from "../src/project/theme";
 import { resolvePlan } from "../src/resolve";
 import { loadRepoRegistry, repoRoot } from "./helpers";
@@ -91,5 +92,22 @@ describe("generated files", async () => {
     expect(example).toContain("CONTACT_TO_EMAIL=hello@example.com");
     expect(example).toContain("(required)");
     expect(example.match(/RESEND_API_KEY=/g)).toHaveLength(1);
+  });
+
+  it("exposes isInstalled() that accepts any module name", () => {
+    const plan = resolvePlan(registry, { modules: ["seo"], sections: [], ui: [] });
+    const modules = generateFiles(registry.core, plan.modules).write.get(
+      "src/generated/modules.ts",
+    )!;
+    expect(modules).toMatch(/installedModules = \[\s*"seo",?\s*\] as const/);
+    expect(modules).toContain("export function isInstalled(name: string): boolean");
+  });
+
+  it("writes explicit allow and deny entries for install scripts", () => {
+    const yaml = pnpmWorkspace(["sharp", "!@swc/core", "esbuild", "!sharp"]);
+    expect(yaml).toContain('"@swc/core": false');
+    expect(yaml).toContain('"sharp": true');
+    expect(yaml).not.toContain('"sharp": false');
+    expect(yaml.split("onlyBuiltDependencies:")[1]).not.toContain("@swc/core");
   });
 });

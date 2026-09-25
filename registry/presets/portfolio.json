@@ -1,0 +1,41 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "portfolio",
+  "title": "Portfolio",
+  "description": "Personal site for makers: projects, about and résumé, writing, a now page, gallery and a link-in-bio page.",
+  "modules": [
+    "seo",
+    "analytics",
+    "ci",
+    "vercel",
+    "projects",
+    "about",
+    "now",
+    "gallery",
+    "links",
+    "blog",
+    "contact"
+  ],
+  "sections": ["hero-centered", "project-grid", "blog-list", "cta-band"],
+  "theme": "editorial",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {
+    "links": {
+      "items": [
+        {
+          "label": "Selected work",
+          "href": "/projects",
+          "highlight": true
+        },
+        {
+          "label": "Writing",
+          "href": "/blog"
+        },
+        {
+          "label": "Get in touch",
+          "href": "/contact"
+        }
+      ]
+    }
+  }
+}

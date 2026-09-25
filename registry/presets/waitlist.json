@@ -1,0 +1,11 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "waitlist",
+  "title": "Waitlist",
+  "description": "Pre-launch page that collects sign-ups with referral positions, plus the basics you need to go live.",
+  "modules": ["seo", "analytics", "ci", "vercel", "cookie-consent", "legal", "waitlist", "faq"],
+  "sections": ["feature-grid", "faq"],
+  "theme": "playful",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}
