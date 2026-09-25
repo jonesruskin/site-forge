@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "notifications",
+  "version": "1.0.0",
+  "title": "In-app notifications",
+  "description": "Notification inbox: notify(userId, …) from anywhere, a bell with unread count in the top bar, and a /notifications page.",
+  "category": "saas",
+  "requires": ["auth", "dashboard", "database"],
+  "ui": ["button", "popover", "badge"],
+  "sections": ["empty-state"],
+  "files": [
+    "src/db/schema/notifications.ts",
+    "src/lib/notifications/notify.ts",
+    "src/lib/notifications/actions.ts",
+    "src/lib/notifications/welcome.ts",
+    "src/components/notifications/notification-bell.tsx",
+    "src/components/notifications/notification-list.tsx",
+    "src/app/(app)/notifications/page.tsx"
+  ],
+  "dbSchema": ["src/db/schema/notifications.ts"],
+  "contributes": {
+    "slots": [
+      { "slot": "dashboard-topbar", "import": "NotificationBell", "from": "src/components/notifications/notification-bell.tsx", "order": 20 },
+      { "slot": "auth-events", "import": "welcomeNotification", "from": "src/lib/notifications/welcome.ts" }
+    ]
+  },
+  "routes": ["/notifications"],
+  "postInstall": ["Send one from any server code: await notify(user.id, { title: \"Export ready\", href: \"/exports/42\" })."]
+}

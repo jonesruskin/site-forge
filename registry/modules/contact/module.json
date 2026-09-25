@@ -1,12 +1,20 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "contact",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Contact form",
   "description": "Contact page and form with layered spam protection (honeypot, timing, rate limit, optional Turnstile) and email delivery.",
   "category": "marketing",
-  "requires": ["email", "rate-limit"],
-  "ui": ["button", "input", "textarea", "field"],
+  "requires": [
+    "email",
+    "rate-limit"
+  ],
+  "ui": [
+    "button",
+    "input",
+    "textarea",
+    "field"
+  ],
   "files": [
     "src/app/(site)/contact/page.tsx",
     "src/components/contact/contact-form.tsx",
@@ -31,7 +39,7 @@
       "description": "Cloudflare Turnstile site key. Set both Turnstile keys to add an invisible challenge",
       "scope": "client",
       "example": "",
-      "howTo": "https://dash.cloudflare.com → Turnstile → Add site"
+      "howTo": "https://dash.cloudflare.com \u2192 Turnstile \u2192 Add site"
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
@@ -40,7 +48,14 @@
     }
   ],
   "contributes": {
-    "nav": [{ "location": "footer", "group": "Company", "label": "Contact", "href": "/contact" }],
+    "nav": [
+      {
+        "location": "footer",
+        "group": "Company",
+        "label": "Contact",
+        "href": "/contact"
+      }
+    ],
     "siteConfig": {
       "contact": {
         "title": "Get in touch",
@@ -51,13 +66,28 @@
     },
     "next": {
       "csp": {
-        "script-src": ["https://challenges.cloudflare.com"],
-        "frame-src": ["https://challenges.cloudflare.com"],
-        "connect-src": ["https://challenges.cloudflare.com"]
+        "script-src": [
+          "https://challenges.cloudflare.com"
+        ],
+        "frame-src": [
+          "https://challenges.cloudflare.com"
+        ],
+        "connect-src": [
+          "https://challenges.cloudflare.com"
+        ]
       }
-    }
+    },
+    "slots": [
+      {
+        "slot": "email-templates",
+        "import": "ContactNotificationEmail",
+        "from": "src/emails/contact-notification.tsx"
+      }
+    ]
   },
-  "routes": ["/contact"],
+  "routes": [
+    "/contact"
+  ],
   "postInstall": [
     "Set CONTACT_TO_EMAIL to the inbox that should receive messages.",
     "Page copy lives in site.config.ts under `contact`.",

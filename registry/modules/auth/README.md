@@ -50,6 +50,13 @@ session.user.email;
 Other modules extend auth through slots: `teams` adds the organization plugin and `admin`
 adds the admin plugin, and both keep fully typed APIs (`auth.api.*`).
 
+## Extending
+
+- **Plugins**: modules add Better Auth plugins through the `auth-plugins` / `auth-client-plugins`
+  slots (teams → organization, admin → admin) with fully typed `auth.api`.
+- **Events**: subscribe to `user.created` and `user.verified` through the `auth-events` slot
+  (welcome emails, notifications, onboarding). Handler errors are logged, never fatal.
+
 ## Customization
 
 - Behaviour: `auth` block in `site.config.ts` (`afterSignIn`, `protectedPaths`,

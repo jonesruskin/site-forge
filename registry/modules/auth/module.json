@@ -1,13 +1,27 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "auth",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Authentication",
   "description": "Better Auth: email + password with verification, magic links, Google and GitHub OAuth, password reset, protected routes.",
   "category": "saas",
-  "requires": ["database", "email", "rate-limit"],
-  "ui": ["button", "input", "field", "separator", "alert", "dropdown-menu", "avatar"],
-  "sections": ["auth-card"],
+  "requires": [
+    "database",
+    "email",
+    "rate-limit"
+  ],
+  "ui": [
+    "button",
+    "input",
+    "field",
+    "separator",
+    "alert",
+    "dropdown-menu",
+    "avatar"
+  ],
+  "sections": [
+    "auth-card"
+  ],
   "files": [
     "src/db/schema/auth.ts",
     "src/env/auth.ts",
@@ -16,6 +30,7 @@
     "src/lib/auth/config.ts",
     "src/lib/auth/session.ts",
     "src/lib/auth/actions.ts",
+    "src/lib/auth/events.ts",
     "src/lib/auth/proxy.ts",
     "src/lib/auth/redirect.ts",
     "src/components/auth/auth-form.tsx",
@@ -39,7 +54,9 @@
   "dependencies": {
     "better-auth": "^1.7.0"
   },
-  "dbSchema": ["src/db/schema/auth.ts"],
+  "dbSchema": [
+    "src/db/schema/auth.ts"
+  ],
   "envFile": "src/env/auth.ts",
   "env": [
     {
@@ -56,16 +73,20 @@
     },
     {
       "name": "GOOGLE_CLIENT_ID",
-      "description": "Google OAuth client ID (enables “Continue with Google”)",
+      "description": "Google OAuth client ID (enables \u201cContinue with Google\u201d)",
       "example": "",
-      "howTo": "console.cloud.google.com → APIs & Services → Credentials; redirect URI: <site>/api/auth/callback/google"
+      "howTo": "console.cloud.google.com \u2192 APIs & Services \u2192 Credentials; redirect URI: <site>/api/auth/callback/google"
     },
-    { "name": "GOOGLE_CLIENT_SECRET", "description": "Google OAuth client secret", "example": "" },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "description": "Google OAuth client secret",
+      "example": ""
+    },
     {
       "name": "GITHUB_CLIENT_ID",
-      "description": "GitHub OAuth app client ID (enables “Continue with GitHub”)",
+      "description": "GitHub OAuth app client ID (enables \u201cContinue with GitHub\u201d)",
       "example": "",
-      "howTo": "github.com/settings/developers → OAuth Apps; callback: <site>/api/auth/callback/github"
+      "howTo": "github.com/settings/developers \u2192 OAuth Apps; callback: <site>/api/auth/callback/github"
     },
     {
       "name": "GITHUB_CLIENT_SECRET",
@@ -78,43 +99,90 @@
       "file": "src/generated/auth-plugins.ts",
       "export": "authPlugins",
       "type": "BetterAuthPlugin",
-      "typeImports": ["import type { BetterAuthPlugin } from \"better-auth\";"],
-      "description": "Better Auth server plugins contributed by modules (teams → organization, admin → admin).",
+      "typeImports": [
+        "import type { BetterAuthPlugin } from \"better-auth\";"
+      ],
+      "description": "Better Auth server plugins contributed by modules (teams \u2192 organization, admin \u2192 admin).",
       "inferred": true
     },
     "auth-client-plugins": {
       "file": "src/generated/auth-client-plugins.ts",
       "export": "authClientPlugins",
       "type": "BetterAuthClientPlugin",
-      "typeImports": ["import type { BetterAuthClientPlugin } from \"better-auth\";"],
+      "typeImports": [
+        "import type { BetterAuthClientPlugin } from \"better-auth\";"
+      ],
       "description": "Better Auth client plugins matching the server plugins.",
       "inferred": true
+    },
+    "auth-events": {
+      "file": "src/generated/auth-events.ts",
+      "export": "authEvents",
+      "type": "(event: AuthEvent) => Promise<void>",
+      "typeImports": [
+        "import type { AuthEvent } from \"../lib/auth/events\";"
+      ],
+      "description": "Handlers for user lifecycle events (welcome email, notifications, onboarding)."
     }
   },
   "contributes": {
     "slots": [
-      { "slot": "proxy", "import": "authProxy", "from": "src/lib/auth/proxy.ts", "order": 50 },
+      {
+        "slot": "proxy",
+        "import": "authProxy",
+        "from": "src/lib/auth/proxy.ts",
+        "order": 50
+      },
       {
         "slot": "header-actions",
         "import": "AuthHeaderActions",
         "from": "src/components/auth/auth-header-actions.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "VerifyEmail",
+        "from": "src/emails/auth/verify-email.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "ResetPasswordEmail",
+        "from": "src/emails/auth/reset-password.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "MagicLinkEmail",
+        "from": "src/emails/auth/magic-link.tsx"
       }
     ],
     "siteConfig": {
       "auth": {
         "afterSignIn": "/dashboard",
-        "protectedPaths": ["/dashboard", "/settings", "/admin", "/onboarding"],
+        "protectedPaths": [
+          "/dashboard",
+          "/settings",
+          "/admin",
+          "/onboarding"
+        ],
         "requireEmailVerification": true,
         "magicLink": true
       }
     },
     "next": {
       "csp": {
-        "img-src": ["https://lh3.googleusercontent.com", "https://avatars.githubusercontent.com"]
+        "img-src": [
+          "https://lh3.googleusercontent.com",
+          "https://avatars.githubusercontent.com"
+        ]
       },
       "imageRemotePatterns": [
-        { "protocol": "https", "hostname": "lh3.googleusercontent.com" },
-        { "protocol": "https", "hostname": "avatars.githubusercontent.com" }
+        {
+          "protocol": "https",
+          "hostname": "lh3.googleusercontent.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "avatars.githubusercontent.com"
+        }
       ]
     }
   },

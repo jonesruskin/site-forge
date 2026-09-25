@@ -1,13 +1,22 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "newsletter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Newsletter",
   "description": "Signup form with double opt-in (signed links, no database) and a provider adapter: Resend, Buttondown or Kit.",
   "category": "marketing",
-  "requires": ["email", "rate-limit"],
-  "ui": ["button", "input"],
-  "sections": ["newsletter-band", "page-header"],
+  "requires": [
+    "email",
+    "rate-limit"
+  ],
+  "ui": [
+    "button",
+    "input"
+  ],
+  "sections": [
+    "newsletter-band",
+    "page-header"
+  ],
   "files": [
     "src/env/newsletter.ts",
     "src/lib/newsletter/providers.ts",
@@ -37,7 +46,7 @@
       "name": "RESEND_SEGMENT_ID",
       "description": "Resend segment that new contacts join (provider=resend)",
       "example": "",
-      "howTo": "https://resend.com/audience → Segments"
+      "howTo": "https://resend.com/audience \u2192 Segments"
     },
     {
       "name": "BUTTONDOWN_API_KEY",
@@ -59,7 +68,12 @@
   ],
   "contributes": {
     "nav": [
-      { "location": "footer", "group": "Company", "label": "Newsletter", "href": "/newsletter" }
+      {
+        "location": "footer",
+        "group": "Company",
+        "label": "Newsletter",
+        "href": "/newsletter"
+      }
     ],
     "siteConfig": {
       "newsletter": {
@@ -69,9 +83,19 @@
         "checkInboxMessage": "Almost there! Check your inbox to confirm your subscription.",
         "confirmedMessage": "You're subscribed. Thanks for joining!"
       }
-    }
+    },
+    "slots": [
+      {
+        "slot": "email-templates",
+        "import": "NewsletterConfirmEmail",
+        "from": "src/emails/newsletter-confirm.tsx"
+      }
+    ]
   },
-  "routes": ["/newsletter", "/newsletter/confirm"],
+  "routes": [
+    "/newsletter",
+    "/newsletter/confirm"
+  ],
   "postInstall": [
     "Drop <NewsletterForm /> anywhere (e.g. inside the newsletter-band section or the footer).",
     "Set NEWSLETTER_PROVIDER + its keys and NEWSLETTER_SECRET for production."

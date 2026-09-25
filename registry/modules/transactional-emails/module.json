@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "transactional-emails",
+  "version": "1.0.0",
+  "title": "Transactional emails",
+  "description": "Welcome email after verification, plus /dev/emails: a gallery previewing every email template installed by any module.",
+  "category": "saas",
+  "requires": ["auth", "email"],
+  "files": [
+    "src/emails/welcome.tsx",
+    "src/lib/transactional/welcome.ts",
+    "src/lib/transactional/templates.ts",
+    "src/app/dev/emails/page.tsx",
+    "src/app/dev/emails/[name]/route.ts"
+  ],
+  "slots": {
+    "email-templates": {
+      "file": "src/generated/email-templates.ts",
+      "export": "emailTemplates",
+      "type": "EmailTemplate",
+      "typeImports": ["import type { EmailTemplate } from \"../lib/transactional/templates\";"],
+      "description": "Email templates (with PreviewProps) shown in the /dev/emails gallery."
+    }
+  },
+  "contributes": {
+    "slots": [
+      { "slot": "auth-events", "import": "sendWelcomeEmail", "from": "src/lib/transactional/welcome.ts" },
+      { "slot": "email-templates", "import": "WelcomeEmail", "from": "src/emails/welcome.tsx" }
+    ]
+  },
+  "routes": ["/dev/emails"],
+  "postInstall": ["Open /dev/emails in development to preview every template with sample data."]
+}

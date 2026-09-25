@@ -15,6 +15,7 @@ import { sendEmail } from "@/lib/email/send";
 import siteConfig from "@/site.config";
 
 import { authConfig } from "./config";
+import { emitAuthEvent } from "./events";
 
 /**
  * `next build` evaluates route modules without serving requests. A placeholder
@@ -49,6 +50,9 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
+    afterEmailVerification: async (user) => {
+      await emitAuthEvent({ type: "user.verified", user });
+    },
     sendVerificationEmail: async ({ user, url }) => {
       await sendEmail({
         to: user.email,
@@ -73,6 +77,15 @@ export const auth = betterAuth({
     changeEmail: { enabled: true },
     // Account deletion (settings module) requires the current password.
     deleteUser: { enabled: true },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          await emitAuthEvent({ type: "user.created", user });
+        },
+      },
+    },
   },
   session: {
     // Session reads hit a signed cookie for 5 minutes before touching the database.
