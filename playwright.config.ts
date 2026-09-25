@@ -35,6 +35,7 @@ export default defineConfig({
       BETTER_AUTH_SECRET: "e2e-only-better-auth-secret-0123456789abcdef",
       BETTER_AUTH_URL: `http://localhost:${port}`,
       ADMIN_EMAILS: "admin-desktop@example.com,admin-mobile@example.com",
+      STORE_DOWNLOAD_SECRET: "e2e-only-store-secret-0123456789abcdefghij",
     },
     timeout: 60_000,
   },

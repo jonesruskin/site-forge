@@ -28,6 +28,8 @@ export function CodeBlock({ className, style, children, ...props }: ComponentPro
   return (
     <div data-code-block className="group relative">
       <pre
+        // Focusable so keyboard users can scroll long lines.
+        tabIndex={0}
         className={cn(
           "bg-muted overflow-x-auto rounded-lg border p-4 text-sm leading-6",
           className,

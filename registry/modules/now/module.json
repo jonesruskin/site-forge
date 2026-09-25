@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "now",
+  "version": "1.0.0",
+  "title": "Now page",
+  "description": "A /now page (nownownow.com style) from dated MDX entries, with an archive of past updates and an honest note when it goes stale.",
+  "category": "portfolio",
+  "requires": ["mdx", "seo"],
+  "ui": ["prose"],
+  "sections": ["page-header"],
+  "files": [
+    "content/now/2026-09-01.mdx",
+    "content/now/2026-05-10.mdx",
+    "src/lib/now/now.ts",
+    "src/app/(site)/now/page.tsx",
+    "src/app/(site)/now/[date]/page.tsx"
+  ],
+  "contributes": {
+    "slots": [{ "slot": "sitemap", "import": "nowSitemap", "from": "src/lib/now/now.ts" }],
+    "nav": [{ "location": "footer", "group": "Elsewhere", "label": "Now", "href": "/now" }],
+    "siteConfig": {
+      "now": {
+        "title": "Now",
+        "description": "What I'm focused on at the moment.",
+        "staleAfterDays": 120
+      }
+    }
+  },
+  "routes": ["/now", "/now/[date]"],
+  "postInstall": [
+    "Add a new file content/now/<yyyy-mm-dd>.mdx whenever your focus changes; older ones become the archive."
+  ]
+}

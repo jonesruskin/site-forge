@@ -24,7 +24,7 @@ export default async function MockCheckoutPage({ params }: { params: Promise<{ i
   if (!isMockPayments) notFound();
   const checkout = (await readMockState()).checkouts[(await params).id];
   if (!checkout) notFound();
-  const display = checkout.input.display;
+  const display = checkout.input.inlinePrice ?? checkout.input.display;
   const amount = display
     ? new Intl.NumberFormat(undefined, { style: "currency", currency: display.currency }).format(
         display.amount * (checkout.input.quantity ?? 1),
@@ -38,7 +38,9 @@ export default async function MockCheckoutPage({ params }: { params: Promise<{ i
           <Badge variant="warning" className="mb-2">
             Test mode · no real payment
           </Badge>
-          <CardTitle className="text-xl">{display?.name ?? checkout.input.price}</CardTitle>
+          <CardTitle className="text-xl">
+            {display?.name ?? checkout.input.price ?? "Checkout"}
+          </CardTitle>
           <CardDescription>
             {checkout.mode === "subscription" ? "Subscription" : "One-time payment"}
             {checkout.input.trialDays ? ` · ${checkout.input.trialDays}-day free trial` : ""}

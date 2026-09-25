@@ -17,6 +17,7 @@ import { CliError } from "../utils/errors";
 import {
   detectPackageManager,
   hasCommand,
+  packageManagerSpec,
   run,
   runVisible,
   type PackageManager,
@@ -263,6 +264,10 @@ export const create = defineCommand({
       ...pkg.devDependencies,
       [CLI_NAME]: args["cli-spec"] ?? `^${CLI_VERSION}`,
     };
+    if (pm !== "bun") {
+      const spec = await packageManagerSpec(pm);
+      if (spec) pkg.packageManager = spec;
+    }
     await writePackageJson(projectDir, pkg);
 
     if (pm === "pnpm") {

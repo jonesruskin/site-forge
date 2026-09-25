@@ -46,6 +46,18 @@
       "type": "(request: NextRequest, response: NextResponse) => Response | undefined | Promise<Response | undefined>",
       "typeImports": ["import type { NextRequest, NextResponse } from \"next/server\";"],
       "description": "Request handlers run by src/proxy.ts in order. Set cookies/headers on `response` and return nothing to continue, or return a Response to stop."
+    },
+    "html-lang": {
+      "file": "src/generated/html-lang.ts",
+      "export": "htmlLang",
+      "type": "() => string | undefined | Promise<string | undefined>",
+      "description": "Resolvers for <html lang> (i18n). The first non-empty result wins; otherwise site.config.ts locale."
+    },
+    "error-reporters": {
+      "file": "src/generated/error-reporters.ts",
+      "export": "errorReporters",
+      "type": "(error: Error & { digest?: string }) => void",
+      "description": "Called by error.tsx and global-error.tsx with errors caught by React boundaries (Sentry …). Client-side."
     }
   }
 }

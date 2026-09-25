@@ -15,6 +15,7 @@
     "src/lib/onboarding/actions.ts",
     "src/components/onboarding/wizard.tsx",
     "src/components/onboarding/checklist-widget.tsx",
+    "src/components/onboarding/send-to-onboarding.tsx",
     "src/app/(onboarding)/onboarding/page.tsx"
   ],
   "dbSchema": ["src/db/schema/onboarding.ts"],

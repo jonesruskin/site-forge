@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "about",
+  "version": "1.0.0",
+  "title": "About & résumé",
+  "description": "About page from MDX plus a typed résumé: experience timeline, skills, a print-perfect /resume and a JSON Resume export at /resume.json.",
+  "category": "portfolio",
+  "requires": ["mdx", "seo"],
+  "ui": ["prose", "badge", "button"],
+  "sections": ["page-header", "timeline"],
+  "files": [
+    "content/about/index.mdx",
+    "src/content/resume.ts",
+    "src/lib/about/resume.ts",
+    "src/lib/about/page.ts",
+    "src/components/about/print-button.tsx",
+    "src/components/about/resume-sections.tsx",
+    "src/app/(site)/about/page.tsx",
+    "src/app/resume/page.tsx",
+    "src/app/resume.json/route.ts"
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "sitemap",
+        "import": "aboutSitemap",
+        "from": "src/lib/about/resume.ts"
+      }
+    ],
+    "nav": [
+      {
+        "location": "header",
+        "label": "About",
+        "href": "/about"
+      }
+    ],
+    "siteConfig": {
+      "about": {
+        "title": "About",
+        "portrait": "",
+        "portraitAlt": ""
+      }
+    }
+  },
+  "routes": ["/about", "/resume", "/resume.json"],
+  "postInstall": [
+    "Write your bio in content/about/index.mdx and your experience in src/content/resume.ts.",
+    "Print /resume (or save it as PDF) for a clean one-page résumé."
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "payments",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Payments",
   "description": "Provider-agnostic checkout, customer portal and webhooks (Stripe adapter), with a mock provider so billing works locally with zero keys.",
   "category": "commerce",

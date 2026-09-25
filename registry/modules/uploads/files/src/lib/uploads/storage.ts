@@ -39,7 +39,7 @@ function s3Storage(): Storage {
     accessKeyId: uploadsEnv.S3_ACCESS_KEY_ID!,
     secretAccessKey: uploadsEnv.S3_SECRET_ACCESS_KEY!,
     service: "s3",
-    region: uploadsEnv.S3_REGION,
+    region: uploadsEnv.S3_REGION ?? "auto",
   });
   // Path-style URLs work on AWS, R2, MinIO, Spaces and B2 alike.
   const objectUrl = (key: string) => new URL(`${endpoint}/${bucket}/${encodeKey(key)}`);

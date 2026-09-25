@@ -24,6 +24,16 @@ export async function writeText(file: string, content: string) {
   await writeFile(file, content);
 }
 
+/** Bytes, so images and fonts survive copying (text hashes are identical either way). */
+export async function readBytesIfExists(file: string) {
+  return (await exists(file)) ? readFile(file) : null;
+}
+
+export async function writeBytes(file: string, content: Uint8Array) {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+}
+
 export async function readJson<T = unknown>(file: string): Promise<T> {
   return JSON.parse(await readFile(file, "utf8")) as T;
 }

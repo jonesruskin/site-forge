@@ -1,0 +1,12 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "vercel",
+  "version": "1.0.0",
+  "title": "Vercel deployment",
+  "description": "vercel.json that checks production env vars before building, security-minded defaults, and a step-by-step deploy guide.",
+  "category": "seo-ops",
+  "files": ["vercel.json"],
+  "postInstall": [
+    "Import the repository at vercel.com/new, add the variables from .env.example, and deploy."
+  ]
+}

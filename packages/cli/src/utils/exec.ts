@@ -37,3 +37,17 @@ export function detectPackageManager(): PackageManager {
   if (agent.startsWith("npm")) return "npm";
   return "pnpm";
 }
+
+/**
+ * "pnpm@12.6.0" for package.json#packageManager, so Corepack, CI and Docker use
+ * the same version. Null when the package manager isn't installed.
+ */
+export async function packageManagerSpec(pm: PackageManager) {
+  try {
+    const result = await x(pm, ["--version"], { throwOnError: false });
+    const version = result.stdout.trim();
+    return result.exitCode === 0 && /^\d+\.\d+\.\d+/.test(version) ? `${pm}@${version}` : null;
+  } catch {
+    return null;
+  }
+}

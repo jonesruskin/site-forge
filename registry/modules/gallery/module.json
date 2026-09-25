@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "gallery",
+  "version": "1.0.0",
+  "title": "Photo gallery",
+  "description": "Albums of photos in a masonry layout with a keyboard- and swipe-friendly lightbox, shareable links to single photos, and captions with place and date.",
+  "category": "portfolio",
+  "requires": ["seo"],
+  "sections": ["page-header"],
+  "files": [
+    "public/gallery/dunes.svg",
+    "public/gallery/tidepool.svg",
+    "public/gallery/basalt.svg",
+    "public/gallery/estuary.svg",
+    "public/gallery/kelp.svg",
+    "public/gallery/fog.svg",
+    "src/content/gallery.ts",
+    "src/lib/gallery/gallery.ts",
+    "src/components/gallery/album-grid.tsx",
+    "src/components/gallery/photo-grid.tsx",
+    "src/app/(site)/gallery/page.tsx",
+    "src/app/(site)/gallery/[album]/page.tsx"
+  ],
+  "contributes": {
+    "slots": [
+      { "slot": "sitemap", "import": "gallerySitemap", "from": "src/lib/gallery/gallery.ts" }
+    ],
+    "nav": [{ "location": "header", "label": "Gallery", "href": "/gallery" }],
+    "siteConfig": {
+      "gallery": { "title": "Gallery", "description": "Photographs, in albums." }
+    }
+  },
+  "routes": ["/gallery", "/gallery/[album]"],
+  "postInstall": [
+    "Put photos in public/gallery/ (or any image host) and list them in src/content/gallery.ts with their width and height."
+  ]
+}

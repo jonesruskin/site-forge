@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "ci",
+  "version": "1.0.0",
+  "title": "GitHub Actions CI",
+  "description": "Lint, typecheck, test and build on every push and pull request, with cached installs and Next.js builds, least-privilege tokens and grouped Dependabot updates.",
+  "category": "seo-ops",
+  "files": [".github/workflows/ci.yml", ".github/dependabot.yml"],
+  "postInstall": ["Push to GitHub: CI runs on pushes to main and on every pull request."]
+}

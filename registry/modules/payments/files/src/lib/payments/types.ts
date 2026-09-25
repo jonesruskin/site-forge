@@ -14,7 +14,9 @@ export type LineItemDisplay = {
 export type CreateCheckoutInput = {
   mode: "subscription" | "payment";
   /** A price reference. For Stripe this is a price lookup key (stable across test and live). */
-  price: string;
+  price?: string;
+  /** Or a price defined in code, with no dashboard setup (one-time payments). Wins over `price`. */
+  inlinePrice?: LineItemDisplay & { description?: string };
   quantity?: number;
   customerId?: string;
   customerEmail?: string;

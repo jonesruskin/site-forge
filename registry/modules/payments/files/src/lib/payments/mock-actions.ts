@@ -36,14 +36,15 @@ export async function completeMockCheckout(formData: FormData) {
 
   let subscription: Subscription | undefined;
   if (checkout.mode === "subscription") {
-    const interval = /year|annual/i.test(checkout.input.price) ? "year" : "month";
+    const price = checkout.input.price ?? checkout.input.inlinePrice?.name ?? "price";
+    const interval = /year|annual/i.test(price) ? "year" : "month";
     const trialDays = checkout.input.trialDays ?? 0;
     const trialEnd = trialDays ? new Date(Date.now() + trialDays * 86_400_000) : null;
     subscription = {
       id: newMockId("mock_sub"),
       customerId,
       status: trialEnd ? "trialing" : "active",
-      price: checkout.input.price,
+      price,
       interval,
       currentPeriodEnd: trialEnd ?? addInterval(new Date(), interval),
       cancelAtPeriodEnd: false,

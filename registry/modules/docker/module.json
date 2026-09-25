@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "docker",
+  "version": "1.0.0",
+  "title": "Docker",
+  "description": "Self-host anywhere: a small multi-stage image (standalone output, non-root, health check) and a compose file with optional Postgres and migrations.",
+  "category": "seo-ops",
+  "files": [
+    "Dockerfile",
+    ".dockerignore",
+    "compose.yaml",
+    "src/lib/docker/next-plugin.ts",
+    "src/app/api/health/route.ts"
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "next-plugins",
+        "import": "dockerNextPlugin",
+        "from": "src/lib/docker/next-plugin.ts",
+        "order": 10
+      }
+    ]
+  },
+  "routes": ["/api/health"],
+  "postInstall": ["docker compose up --build   (add --profile database for Postgres)"]
+}

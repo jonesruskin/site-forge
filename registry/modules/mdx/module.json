@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/module.schema.json",
   "name": "mdx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "MDX content",
   "description": "Typed MDX collections: Zod-validated frontmatter, drafts, TOC, reading time, token-themed code highlighting, RSS helper.",
   "category": "content",

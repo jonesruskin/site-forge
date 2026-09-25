@@ -1,0 +1,62 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "maintenance",
+  "version": "1.0.0",
+  "title": "Maintenance mode",
+  "description": "Switch the site to a proper 503 page from an env var or a scheduled window, with a bypass link for your team and an advance-notice banner.",
+  "category": "seo-ops",
+  "files": [
+    "src/env/maintenance.ts",
+    "src/lib/maintenance/window.ts",
+    "src/lib/maintenance/page.ts",
+    "src/lib/maintenance/proxy.ts",
+    "src/components/maintenance/maintenance-banner.tsx"
+  ],
+  "envFile": "src/env/maintenance.ts",
+  "env": [
+    {
+      "name": "MAINTENANCE_MODE",
+      "description": "\"on\" shows the maintenance page to everyone (except bypass holders)",
+      "example": "off"
+    },
+    {
+      "name": "MAINTENANCE_BYPASS_TOKEN",
+      "description": "Visit any URL with ?maintenance=<token> to browse normally during maintenance",
+      "example": "",
+      "howTo": "openssl rand -hex 16"
+    },
+    {
+      "name": "NEXT_PUBLIC_MAINTENANCE_WINDOW",
+      "scope": "client",
+      "description": "Scheduled window as start/end ISO times; announced 72h ahead, enforced while it lasts",
+      "example": "2026-10-01T02:00:00Z/2026-10-01T03:00:00Z"
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "proxy",
+        "import": "maintenanceProxy",
+        "from": "src/lib/maintenance/proxy.ts",
+        "order": 0
+      },
+      {
+        "slot": "body-end",
+        "import": "MaintenanceBanner",
+        "from": "src/components/maintenance/maintenance-banner.tsx",
+        "order": 5
+      }
+    ],
+    "siteConfig": {
+      "maintenance": {
+        "title": "We'll be right back",
+        "message": "We're making some improvements. Thanks for your patience.",
+        "allow": ["/api/payments/webhook", "/api/health", "/monitoring"]
+      }
+    }
+  },
+  "postInstall": [
+    "Turn it on with MAINTENANCE_MODE=on (and redeploy or restart), or schedule it with NEXT_PUBLIC_MAINTENANCE_WINDOW.",
+    "Set MAINTENANCE_BYPASS_TOKEN and open /?maintenance=<token> to keep working on the live site."
+  ]
+}

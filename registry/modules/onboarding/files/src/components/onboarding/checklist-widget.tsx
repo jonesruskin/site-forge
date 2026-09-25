@@ -1,6 +1,5 @@
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +8,8 @@ import { getSession } from "@/lib/auth/session";
 import { dismissChecklistAction } from "@/lib/onboarding/actions";
 import { getChecklist, getOnboarding, isNewAccount } from "@/lib/onboarding/state";
 import { cn } from "@/lib/utils";
+
+import { SendToOnboarding } from "./send-to-onboarding";
 
 /**
  * Dashboard card listing setup tasks. Also sends brand-new accounts to the
@@ -19,7 +20,7 @@ export async function OnboardingChecklist({ userId }: { userId: string }) {
 
   if (!state) {
     const session = await getSession();
-    if (session && isNewAccount(session.user.createdAt)) redirect("/onboarding");
+    if (session && isNewAccount(session.user.createdAt)) return <SendToOnboarding />;
   }
   if (state?.checklistDismissedAt) return null;
 

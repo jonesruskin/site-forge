@@ -32,6 +32,30 @@ async function resolvePrice(reference: string) {
   return price.id;
 }
 
+/** Currencies Stripe charges in whole units (no cents). */
+const ZERO_DECIMAL = new Set([
+  "bif",
+  "clp",
+  "djf",
+  "gnf",
+  "jpy",
+  "kmf",
+  "krw",
+  "mga",
+  "pyg",
+  "rwf",
+  "ugx",
+  "vnd",
+  "vuv",
+  "xaf",
+  "xof",
+  "xpf",
+]);
+
+function toMinorUnits(amount: number, currency: string) {
+  return ZERO_DECIMAL.has(currency.toLowerCase()) ? Math.round(amount) : Math.round(amount * 100);
+}
+
 function toCheckout(session: Stripe.Checkout.Session): Checkout {
   return {
     id: session.id,
@@ -100,10 +124,25 @@ export const stripeProvider: PaymentProvider = {
   },
 
   async createCheckout(input) {
-    const price = await resolvePrice(input.price);
+    const quantity = input.quantity ?? 1;
+    const inline = input.inlinePrice;
+    if (!inline && !input.price) throw new Error("createCheckout needs `price` or `inlinePrice`.");
+    const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = inline
+      ? {
+          quantity,
+          price_data: {
+            currency: inline.currency.toLowerCase(),
+            unit_amount: toMinorUnits(inline.amount, inline.currency),
+            product_data: {
+              name: inline.name,
+              ...(inline.description && { description: inline.description }),
+            },
+          },
+        }
+      : { price: await resolvePrice(input.price!), quantity };
     const session = await stripe().checkout.sessions.create({
       mode: input.mode,
-      line_items: [{ price, quantity: input.quantity ?? 1 }],
+      line_items: [lineItem],
       customer: input.customerId,
       customer_email: input.customerId ? undefined : input.customerEmail,
       success_url: input.successUrl,

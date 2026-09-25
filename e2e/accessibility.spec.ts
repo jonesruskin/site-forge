@@ -19,6 +19,15 @@ const publicPages = [
   "/sign-in",
   "/sign-up",
   "/dev/flags",
+  "/projects",
+  "/projects/field-notes",
+  "/about",
+  "/resume",
+  "/links",
+  "/gallery/coastlines",
+  "/now",
+  "/store",
+  "/store/field-guide",
 ];
 
 const appPages = [

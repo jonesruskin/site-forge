@@ -56,6 +56,7 @@ export const mockProvider: PaymentProvider = {
 
   async createCheckout(input) {
     const state = await readMockState();
+    const display = input.inlinePrice ?? input.display;
     const checkoutId = id("mock_cs");
     state.checkouts[checkoutId] = {
       id: checkoutId,
@@ -66,10 +67,8 @@ export const mockProvider: PaymentProvider = {
       customerEmail:
         input.customerEmail ??
         (input.customerId ? state.customers[input.customerId]?.email : undefined),
-      amountTotal: input.display
-        ? Math.round(input.display.amount * 100) * (input.quantity ?? 1)
-        : undefined,
-      currency: input.display?.currency,
+      amountTotal: display ? Math.round(display.amount * 100) * (input.quantity ?? 1) : undefined,
+      currency: display?.currency,
       metadata: input.metadata ?? {},
       input,
       createdAt: new Date().toISOString(),

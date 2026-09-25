@@ -90,6 +90,7 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
 8. Everything user-facing is keyboard accessible and labelled. Forms: progressive enhancement
    with server actions + `useActionState`, Zod validation shared by client and server.
 9. Bump `version` in `module.json` whenever files change (drives `site diff`).
+   Files may be binary (images, fonts); the CLI copies bytes.
 10. README sections: What it does · Setup · Environment · Customization · Removal.
 
 ## Next.js gotchas (learned the hard way)
@@ -103,12 +104,20 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
   lazy proxy; follow that pattern for any client that connects.
 - Forms are rate limited per IP. E2E tests set a random `x-forwarded-for` per test.
 - `EMAIL_OUTBOX=1` captures email in production builds (CI, previews); the e2e suite uses it.
+- `SKIP_ENV_VALIDATION=1` also skips Zod **defaults** in env fragments: values are raw
+  `process.env`. Repeat defaults at the call site (`env.X ?? "default"`).
+- Redirecting from inside a streamed boundary (pages with `loading.tsx`) aborts the response and
+  logs errors; redirect on the client after render instead (see onboarding's widget).
+- pnpm refuses installs when a dependency's build script is neither allowed nor denied. Modules
+  list them in `contributes.allowBuilds` (`"name"` allows, `"!name"` denies optional helpers);
+  the root `pnpm-workspace.yaml` needs the same entries for the playground.
 
 ## Slots
 
 A slot is a generated file that aggregates contributions from installed modules.
 Core slots (defined in `registry/core.json`): `providers`, `body-end`, `header-actions`,
-`next-plugins`, `proxy`. Modules define more in their manifest under `slots`: `sitemap` (seo),
+`next-plugins`, `proxy`, `html-lang` (i18n sets `<html lang>`), `error-reporters` (errors caught
+by `error.tsx`/`global-error.tsx`, e.g. Sentry). Modules define more in their manifest under `slots`: `sitemap` (seo),
 `auth-plugins`/`auth-client-plugins`/`auth-events` (auth), `dashboard-widgets`/`dashboard-topbar`
 (dashboard), `payment-webhooks` (payments), `email-templates` (transactional-emails),
 `onboarding-tasks` (onboarding). Contributions look like:
@@ -125,8 +134,9 @@ Special generated files: `src/env.ts` (env fragments), `src/generated/modules.ts
   file must not import that owner (use structural types, e.g. an object with `done(userId)`).
 - `proxy` handlers get `(request, response)`: set cookies/headers on the shared `response` and
   return nothing to continue, or return a Response to stop (cookies already set are kept).
-- CSP sources written as `"$ENV_NAME"` resolve to that variable's origin at build time
-  (`src/lib/security-headers.ts`); use them for configurable hosts like `S3_ENDPOINT`.
+- CSP sources can depend on env at build time (`src/lib/security-headers.ts`): `"$NAME"` is the
+  origin of NAME's value (e.g. `S3_ENDPOINT`), `"$NAME?https://host"` adds the host only when
+  NAME is set (analytics providers). Unset → nothing is added.
 
 ## Adding things
 

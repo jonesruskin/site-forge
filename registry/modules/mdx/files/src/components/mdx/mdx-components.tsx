@@ -35,7 +35,8 @@ export const mdxComponents: MDXComponents = {
   img: MdxImage,
   pre: CodeBlock,
   table: (props) => (
-    <div className="overflow-x-auto">
+    // Focusable so keyboard users can scroll wide tables.
+    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Table">
       <table {...props} />
     </div>
   ),

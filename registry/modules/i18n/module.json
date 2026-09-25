@@ -1,0 +1,65 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "i18n",
+  "version": "1.0.0",
+  "title": "Internationalization",
+  "description": "next-intl without locale prefixes in URLs: the language comes from a cookie or the browser, with a switcher, typed messages and <html lang> kept in sync.",
+  "category": "seo-ops",
+  "files": [
+    "messages/en.json",
+    "messages/es.json",
+    "src/i18n/config.ts",
+    "src/i18n/negotiate.ts",
+    "src/i18n/request.ts",
+    "src/i18n/messages.d.ts",
+    "src/lib/i18n/next-plugin.ts",
+    "src/lib/i18n/provider.tsx",
+    "src/lib/i18n/html-lang.ts",
+    "src/lib/i18n/actions.ts",
+    "src/components/i18n/locale-switcher.tsx"
+  ],
+  "dependencies": {
+    "next-intl": "^4.14.0"
+  },
+  "contributes": {
+    "slots": [
+      {
+        "slot": "next-plugins",
+        "import": "i18nNextPlugin",
+        "from": "src/lib/i18n/next-plugin.ts"
+      },
+      {
+        "slot": "providers",
+        "import": "I18nProvider",
+        "from": "src/lib/i18n/provider.tsx",
+        "order": 10
+      },
+      {
+        "slot": "html-lang",
+        "import": "i18nHtmlLang",
+        "from": "src/lib/i18n/html-lang.ts"
+      },
+      {
+        "slot": "header-actions",
+        "import": "LocaleSwitcher",
+        "from": "src/components/i18n/locale-switcher.tsx",
+        "order": 80
+      }
+    ],
+    "siteConfig": {
+      "i18n": {
+        "locales": ["en", "es"],
+        "defaultLocale": "en",
+        "labels": {
+          "en": "English",
+          "es": "Español"
+        }
+      }
+    },
+    "allowBuilds": ["!@parcel/watcher", "!@swc/core"]
+  },
+  "postInstall": [
+    "Add languages in site.config.ts → i18n.locales and a messages/<locale>.json for each.",
+    "Server: const t = await getTranslations(\"Home\"); client: const t = useTranslations(\"Home\") (both from next-intl)."
+  ]
+}

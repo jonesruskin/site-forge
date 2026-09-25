@@ -149,7 +149,7 @@ export const moduleManifestSchema = z.object({
       features: z.record(z.string(), z.boolean()).default({}),
       scripts: z.record(z.string(), z.string()).default({}),
       gitignore: z.array(z.string()).default([]),
-      /** Dependencies whose install scripts pnpm must be allowed to run. */
+      /** Dependencies whose install scripts pnpm may run; "!name" explicitly denies one. */
       allowBuilds: z.array(z.string()).default([]),
     })
     .prefault({}),
