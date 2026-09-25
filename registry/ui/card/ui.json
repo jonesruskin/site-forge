@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "card",
+  "version": "1.0.0",
+  "description": "Surface for grouped content: header, title, description, content, footer.",
+  "files": ["src/components/ui/card.tsx"]
+}

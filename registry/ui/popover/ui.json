@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "popover",
+  "version": "1.0.0",
+  "description": "Floating panel anchored to a trigger (Radix).",
+  "files": ["src/components/ui/popover.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

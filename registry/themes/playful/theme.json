@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "name": "playful",
+  "title": "Playful",
+  "description": "Candy-pink surfaces, a violet accent, pillowy radii, bouncy motion and a chunky grotesk display face.",
+  "fonts": {
+    "display": "Bricolage Grotesque",
+    "body": "DM Sans"
+  }
+}

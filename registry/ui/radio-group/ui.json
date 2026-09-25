@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "radio-group",
+  "version": "1.0.0",
+  "description": "Radio group with roving focus (Radix).",
+  "files": ["src/components/ui/radio-group.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

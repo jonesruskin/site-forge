@@ -48,7 +48,11 @@
           "scope": {
             "default": "server",
             "type": "string",
-            "enum": ["server", "client", "shared"]
+            "enum": [
+              "server",
+              "client",
+              "shared"
+            ]
           },
           "example": {
             "default": "",
@@ -58,7 +62,10 @@
             "type": "string"
           }
         },
-        "required": ["name", "description"]
+        "required": [
+          "name",
+          "description"
+        ]
       }
     },
     "slots": {
@@ -95,9 +102,18 @@
             "minLength": 1
           }
         },
-        "required": ["file", "export", "type", "description"]
+        "required": [
+          "file",
+          "export",
+          "type",
+          "description"
+        ]
       }
     }
   },
-  "required": ["version", "starter", "slots"]
+  "required": [
+    "version",
+    "starter",
+    "slots"
+  ]
 }

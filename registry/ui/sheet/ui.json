@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "sheet",
+  "version": "1.0.0",
+  "description": "Slide-in panel from any edge, built on the Radix dialog.",
+  "files": ["src/components/ui/sheet.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

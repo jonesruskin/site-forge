@@ -18,12 +18,16 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "sync:starter": "tsx scripts/sync-starter.ts",
-    "validate": "tsx scripts/validate-registry.ts"
+    "validate": "tsx scripts/validate-registry.ts",
+    "playground:sync": "tsx scripts/playground-sync.ts",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@site-forge/config": "workspace:*",
     "prettier": "^3.9.9",
+    "tinyexec": "^1.3.1",
     "tinyglobby": "^0.2.17",
     "tsx": "^4.23.15",
     "turbo": "^2.11.0",

@@ -72,7 +72,10 @@
                 "minLength": 1
               }
             },
-            "required": ["from", "to"]
+            "required": [
+              "from",
+              "to"
+            ]
           }
         ]
       }
@@ -86,5 +89,9 @@
       "additionalProperties": {}
     }
   },
-  "required": ["name", "title", "description"]
+  "required": [
+    "name",
+    "title",
+    "description"
+  ]
 }

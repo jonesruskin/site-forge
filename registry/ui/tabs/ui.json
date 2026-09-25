@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "tabs",
+  "version": "1.0.0",
+  "description": "Tabbed views with automatic keyboard support (Radix).",
+  "files": ["src/components/ui/tabs.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

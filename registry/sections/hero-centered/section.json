@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "hero-centered",
+  "version": "1.0.0",
+  "title": "Hero: centered",
+  "description": "Centered headline, lead, actions and optional media below.",
+  "group": "Hero",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/hero-centered.tsx"]
+}

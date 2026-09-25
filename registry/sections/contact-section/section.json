@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "contact-section",
+  "version": "1.0.0",
+  "title": "Contact section",
+  "description": "Intro, contact details and a slot for any form.",
+  "group": "Conversion",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/contact-section.tsx"]
+}

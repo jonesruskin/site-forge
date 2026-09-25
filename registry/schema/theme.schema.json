@@ -40,7 +40,9 @@
                   }
                 }
               },
-              "required": ["family"]
+              "required": [
+                "family"
+              ]
             }
           ]
         },
@@ -62,7 +64,9 @@
                   }
                 }
               },
-              "required": ["family"]
+              "required": [
+                "family"
+              ]
             }
           ]
         },
@@ -84,12 +88,18 @@
                   }
                 }
               },
-              "required": ["family"]
+              "required": [
+                "family"
+              ]
             }
           ]
         }
       }
     }
   },
-  "required": ["name", "title", "description"]
+  "required": [
+    "name",
+    "title",
+    "description"
+  ]
 }

@@ -27,7 +27,12 @@ const registry = await Registry.load({ root, source: "local", ref: "local", comm
 const starterDir = path.join(root, registry.core.starter);
 
 /** Files whose purpose is to hold literal values for places CSS variables can't reach. */
-const LITERAL_VALUE_FILES = new Set(["src/emails/theme.ts", "src/lib/seo/og-theme.ts"]);
+const LITERAL_VALUE_FILES = new Set([
+  "src/emails/theme.ts",
+  "src/lib/seo/og-theme.ts",
+  // Parses computed color strings (oklch()/rgb()) for contrast checks; styles nothing.
+  "src/lib/theme-lab/color.ts",
+]);
 
 const PALETTE =
   /\b(?:bg|text|border|ring|fill|stroke|from|via|to|outline|decoration|divide|shadow|accent|caret)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|white|black)(?:-\d{2,3})?\b/;

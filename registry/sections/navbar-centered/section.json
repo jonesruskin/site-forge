@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "navbar-centered",
+  "version": "1.0.0",
+  "title": "Navbar: centered",
+  "description": "Links centered between logo and actions; popover menu on mobile.",
+  "group": "Navigation",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/navbar-centered.tsx"]
+}

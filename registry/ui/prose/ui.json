@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "prose",
+  "version": "1.0.0",
+  "description": "Typography for rendered Markdown/MDX, fully driven by theme tokens.",
+  "files": ["src/components/ui/prose.tsx"]
+}

@@ -75,6 +75,7 @@ export const createArgs = {
   preset: { type: "string", description: "Preset to start from (see `site list presets`)" },
   modules: { type: "string", description: "Comma-separated modules to add on top of the preset" },
   sections: { type: "string", description: "Comma-separated sections to add" },
+  ui: { type: "string", description: "Comma-separated UI primitives to add" },
   theme: {
     type: "string",
     description: "Theme to apply (neutral, editorial, playful, terminal …)",
@@ -183,7 +184,7 @@ export const create = defineCommand({
     const selection: Selection = {
       modules: moduleNames,
       sections: [...(preset?.sections ?? []), ...splitList(args.sections)],
-      ui: preset?.ui ?? [],
+      ui: [...(preset?.ui ?? []), ...splitList(args.ui)],
     };
     const plan = resolvePlan(registry, selection);
 

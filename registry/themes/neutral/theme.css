@@ -32,47 +32,8 @@
   --typeface-display: var(--typeface-body);
   --typeface-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 
-  /* ─── Layer 2: tokens (light) ─────────────────────────────────────── */
-
-  --background: oklch(0.995 calc(var(--dial-tint) * 0.5) var(--dial-hue));
-  --foreground: oklch(0.17 calc(var(--dial-tint) * 1.5) var(--dial-hue));
-  --card: oklch(1 calc(var(--dial-tint) * 0.3) var(--dial-hue));
-  --card-foreground: var(--foreground);
-  --popover: var(--card);
-  --popover-foreground: var(--foreground);
-  --muted: oklch(0.965 var(--dial-tint) var(--dial-hue));
-  --muted-foreground: oklch(0.49 var(--dial-tint) var(--dial-hue));
-  --accent: oklch(0.955 calc(var(--dial-tint) * 1.2) var(--dial-hue));
-  --accent-foreground: var(--foreground);
-  --primary: oklch(var(--dial-accent-lightness) var(--dial-accent) var(--dial-accent-hue));
-  --primary-foreground: oklch(0.985 calc(var(--dial-tint) * 0.5) var(--dial-accent-hue));
-  --secondary: oklch(0.945 var(--dial-tint) var(--dial-hue));
-  --secondary-foreground: var(--foreground);
-  --border: oklch(0.905 var(--dial-tint) var(--dial-hue));
-  --input: oklch(0.87 var(--dial-tint) var(--dial-hue));
-  --ring: oklch(0.55 calc(var(--dial-accent) + var(--dial-tint)) var(--dial-accent-hue));
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.985 0 0);
-  --success: oklch(0.55 0.13 155);
-  --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.78 0.14 75);
-  --warning-foreground: oklch(0.2 0.03 75);
-
   /* Radius scale — every rounded-* utility derives from one dial. */
   --radius: var(--dial-radius);
-
-  /* Elevation — alpha is multiplied by the shadow dial. */
-  --shadow-color: calc(var(--dial-tint) * 2) var(--dial-hue);
-  --elevation-xs: 0 1px 2px oklch(0.2 var(--shadow-color) / calc(0.05 * var(--dial-shadow)));
-  --elevation-sm:
-    0 1px 3px oklch(0.2 var(--shadow-color) / calc(0.08 * var(--dial-shadow))),
-    0 1px 2px oklch(0.2 var(--shadow-color) / calc(0.05 * var(--dial-shadow)));
-  --elevation-md:
-    0 4px 12px -2px oklch(0.2 var(--shadow-color) / calc(0.1 * var(--dial-shadow))),
-    0 2px 4px -2px oklch(0.2 var(--shadow-color) / calc(0.06 * var(--dial-shadow)));
-  --elevation-lg:
-    0 16px 40px -8px oklch(0.2 var(--shadow-color) / calc(0.16 * var(--dial-shadow))),
-    0 6px 12px -6px oklch(0.2 var(--shadow-color) / calc(0.08 * var(--dial-shadow)));
 
   /* Motion. */
   --motion-fast: calc(110ms * var(--dial-motion));
@@ -96,13 +57,54 @@
   --type-eyebrow-tracking: 0.08em;
   --type-eyebrow-transform: uppercase;
   --type-eyebrow-weight: 500;
+}
+
+/* ─── Layer 2: color + elevation tokens ──────────────────────────────────
+ * Light values apply to the page, and to `.tone-inverted` sections on a dark
+ * page (and vice versa), so any section can flip its tone with one class.
+ */
+
+:root,
+.dark .tone-inverted {
+  --background: oklch(0.995 calc(var(--dial-tint) * 0.5) var(--dial-hue));
+  --foreground: oklch(0.17 calc(var(--dial-tint) * 1.5) var(--dial-hue));
+  --card: oklch(1 calc(var(--dial-tint) * 0.3) var(--dial-hue));
+  --muted: oklch(0.965 var(--dial-tint) var(--dial-hue));
+  --muted-foreground: oklch(0.49 var(--dial-tint) var(--dial-hue));
+  --accent: oklch(0.955 calc(var(--dial-tint) * 1.2) var(--dial-hue));
+  --primary: oklch(var(--dial-accent-lightness) var(--dial-accent) var(--dial-accent-hue));
+  --primary-foreground: oklch(0.985 calc(var(--dial-tint) * 0.5) var(--dial-accent-hue));
+  --secondary: oklch(0.945 var(--dial-tint) var(--dial-hue));
+  --border: oklch(0.905 var(--dial-tint) var(--dial-hue));
+  --input: oklch(
+    0.65 var(--dial-tint) var(--dial-hue)
+  ); /* ≥3:1 for control boundaries (WCAG 1.4.11) */
+  --ring: oklch(0.55 calc(var(--dial-accent) + var(--dial-tint)) var(--dial-accent-hue));
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.47 0.12 155);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.78 0.14 75);
+  --warning-foreground: oklch(0.2 0.03 75);
+
+  /* Elevation — alpha is multiplied by the shadow dial. */
+  --shadow-color: calc(var(--dial-tint) * 2) var(--dial-hue);
+  --elevation-xs: 0 1px 2px oklch(0.2 var(--shadow-color) / calc(0.05 * var(--dial-shadow)));
+  --elevation-sm:
+    0 1px 3px oklch(0.2 var(--shadow-color) / calc(0.08 * var(--dial-shadow))),
+    0 1px 2px oklch(0.2 var(--shadow-color) / calc(0.05 * var(--dial-shadow)));
+  --elevation-md:
+    0 4px 12px -2px oklch(0.2 var(--shadow-color) / calc(0.1 * var(--dial-shadow))),
+    0 2px 4px -2px oklch(0.2 var(--shadow-color) / calc(0.06 * var(--dial-shadow)));
+  --elevation-lg:
+    0 16px 40px -8px oklch(0.2 var(--shadow-color) / calc(0.16 * var(--dial-shadow))),
+    0 6px 12px -6px oklch(0.2 var(--shadow-color) / calc(0.08 * var(--dial-shadow)));
 
   color-scheme: light;
 }
 
-/* ─── Layer 2: tokens (dark) ─────────────────────────────────────────── */
-
-.dark {
+.dark,
+:root:not(.dark) .tone-inverted {
   --background: oklch(0.155 calc(var(--dial-tint) * 1.2) var(--dial-hue));
   --foreground: oklch(0.965 calc(var(--dial-tint) * 0.5) var(--dial-hue));
   --card: oklch(0.19 calc(var(--dial-tint) * 1.2) var(--dial-hue));
@@ -116,9 +118,10 @@
   --primary-foreground: oklch(0.16 calc(var(--dial-tint) * 1.5) var(--dial-accent-hue));
   --secondary: oklch(0.25 var(--dial-tint) var(--dial-hue));
   --border: oklch(0.28 var(--dial-tint) var(--dial-hue));
-  --input: oklch(0.34 var(--dial-tint) var(--dial-hue));
+  --input: oklch(0.5 var(--dial-tint) var(--dial-hue));
   --ring: oklch(0.7 calc(var(--dial-accent) + var(--dial-tint)) var(--dial-accent-hue));
   --destructive: oklch(0.64 0.2 25);
+  --destructive-foreground: oklch(0.16 0.03 25);
   --success: oklch(0.68 0.14 155);
   --success-foreground: oklch(0.16 0.03 155);
   --warning: oklch(0.8 0.14 75);
@@ -129,4 +132,15 @@
   --elevation-lg: 0 20px 48px -12px oklch(0 0 0 / calc(0.6 * var(--dial-shadow)));
 
   color-scheme: dark;
+}
+
+/* Aliases, recomputed in every scope so they follow the tokens above. */
+:root,
+.dark,
+.tone-inverted {
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --secondary-foreground: var(--foreground);
 }

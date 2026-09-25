@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "dropdown-menu",
+  "version": "1.0.0",
+  "description": "Menu with keyboard navigation, checkable items and sub-menus (Radix).",
+  "files": ["src/components/ui/dropdown-menu.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

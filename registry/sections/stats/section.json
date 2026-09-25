@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "stats",
+  "version": "1.0.0",
+  "title": "Stats",
+  "description": "Key numbers with labels, as a row or a bordered grid.",
+  "group": "Social proof",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/stats.tsx"]
+}

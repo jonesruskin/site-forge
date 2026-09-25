@@ -66,7 +66,10 @@
                 "minLength": 1
               }
             },
-            "required": ["from", "to"]
+            "required": [
+              "from",
+              "to"
+            ]
           }
         ]
       }
@@ -82,5 +85,12 @@
       }
     }
   },
-  "required": ["name", "version", "title", "description", "group", "files"]
+  "required": [
+    "name",
+    "version",
+    "title",
+    "description",
+    "group",
+    "files"
+  ]
 }

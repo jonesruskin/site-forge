@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "hero-split",
+  "version": "1.0.0",
+  "title": "Hero: split",
+  "description": "Copy on one side, media on the other; stacks on mobile.",
+  "group": "Hero",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/hero-split.tsx"]
+}

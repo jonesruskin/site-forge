@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "footer-columns",
+  "version": "1.0.0",
+  "title": "Footer: columns",
+  "description": "Brand block, link columns, legal row and socials.",
+  "group": "Navigation",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/footer-columns.tsx"]
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "faq",
+  "version": "1.0.0",
+  "title": "FAQ",
+  "description": "Questions as native <details> (exclusive, zero JS), with optional side intro.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/faq.tsx"]
+}

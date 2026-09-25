@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "toaster",
+  "version": "1.0.0",
+  "description": "Toast notifications (sonner) styled with tokens. Mount <Toaster /> once.",
+  "files": ["src/components/ui/toaster.tsx"],
+  "dependencies": {
+    "sonner": "^2.0.0"
+  }
+}

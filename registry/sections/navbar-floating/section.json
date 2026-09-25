@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "navbar-floating",
+  "version": "1.0.0",
+  "title": "Navbar: floating",
+  "description": "Detached, rounded bar that floats over the page; popover menu on mobile.",
+  "group": "Navigation",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/navbar-floating.tsx"]
+}

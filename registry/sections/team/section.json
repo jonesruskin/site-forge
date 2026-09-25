@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "team",
+  "version": "1.0.0",
+  "title": "Team",
+  "description": "People with photos, roles and links.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/team.tsx"]
+}

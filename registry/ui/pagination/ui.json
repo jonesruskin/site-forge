@@ -1,0 +1,8 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "pagination",
+  "version": "1.0.0",
+  "description": "Link-based pagination for server-rendered lists.",
+  "ui": ["button"],
+  "files": ["src/components/ui/pagination.tsx"]
+}

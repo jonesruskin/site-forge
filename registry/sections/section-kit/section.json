@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "section-kit",
+  "version": "1.0.0",
+  "title": "Section kit",
+  "description": "Shared building blocks for every section: Section wrapper with tones, SectionHeader, actions, media types.",
+  "group": "Foundation",
+  "ui": ["button"],
+  "files": [
+    "src/components/sections/kit/section.tsx",
+    "src/components/sections/kit/section-header.tsx",
+    "src/components/sections/kit/section-actions.tsx",
+    "src/components/sections/kit/section-media.tsx",
+    "src/components/sections/kit/types.ts"
+  ]
+}

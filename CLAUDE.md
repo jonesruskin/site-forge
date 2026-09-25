@@ -60,6 +60,13 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
   `dark:` is allowed only for showing/hiding elements.
 - Motion uses `transition-*` defaults (token-driven durations/easing) or `duration-(--motion-fast)`.
 - Spacing is scaled by `--dial-density` automatically — use normal spacing utilities.
+- Tones: any block can add `tone-inverted` (or `<Section tone="inverted">`) to flip light/dark
+  tokens locally. theme.css scopes light tokens to `:root, .dark .tone-inverted` and dark tokens
+  to `.dark, :root:not(.dark) .tone-inverted`; keep that structure in every theme.
+- Contrast: `--input` borders must stay ≥3:1 against `--background` (WCAG 1.4.11); text tokens
+  ≥4.5:1. The theme lab and the axe e2e suite both check this.
+- Tailwind only generates classes it can see as complete strings. Never build class names
+  dynamically (`${prefix}:hidden`); write the literal class in source.
 - `scripts/validate-registry.ts` greps registry files for forbidden patterns; CI fails on them.
 
 ## Module rules
@@ -103,11 +110,27 @@ Special generated files: `src/env.ts` (env fragments), `src/generated/modules.ts
 - **Module**: copy an existing small module (e.g. `registry/modules/contact`), edit
   `module.json`, write files + README, run `pnpm validate`, then `pnpm playground:sync` and build.
 - **Section**: `registry/sections/<name>/section.json` + `files/src/components/sections/<name>.tsx`.
-  Props only (no copy), semantic tokens only, one exported component (+ its prop types).
-  Add a demo to `apps/playground/demo`.
+  Content comes only from props; semantic tokens only; one exported component (+ its prop
+  types). Compose from `section-kit` (`Section`, `SectionHeader`, `SectionActions`,
+  `SectionMedia`). Micro-labels needed for accessibility or controls (e.g. "Menu", "Monthly")
+  are optional props with English defaults. Prefer zero-JS behavior (native `<details>`, the
+  Popover API, radio + `:has()`), and add a demo block to
+  `apps/playground/demo/src/app/(site)/sections/page.tsx`.
 - **UI primitive**: `registry/ui/<name>/ui.json` + `files/src/components/ui/<name>.tsx`.
 - **Preset**: `registry/presets/<name>.json` — modules, sections, pages, theme. CI builds every preset.
 - **Theme**: `registry/themes/<name>/theme.css` (+ `theme.json` for fonts). Only dials + token overrides.
+
+## Playground and e2e
+
+- `pnpm playground:sync` regenerates `apps/playground` through the real CLI with every module,
+  section and primitive, then overlays `apps/playground/demo/` (the only committed part).
+  The playground is gitignored, so the sync adds `@source "../"` to its globals.css (Tailwind
+  skips gitignored files otherwise).
+- `pnpm --filter playground build && pnpm test:e2e` runs Playwright + axe (WCAG 2.1 AA, light
+  and dark, desktop and mobile) plus zero-JS interaction tests. Set `CHROMIUM_PATH` to use a
+  preinstalled browser.
+- Visual QA: `node scripts/qa-sections.mjs http://localhost:3300 <out> [light|dark] [theme]`
+  screenshots every section, optionally under another registry theme.
 
 ## Quality gates
 
