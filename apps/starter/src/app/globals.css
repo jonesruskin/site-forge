@@ -1,0 +1,154 @@
+@import "tailwindcss";
+@import "../styles/theme.css";
+
+/* Class-based dark mode (toggled by next-themes on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Maps semantic tokens from theme.css onto Tailwind's theme namespaces.
+ * `inline` makes utilities reference the live CSS variables, so changing a
+ * token (or a dial) at runtime restyles everything instantly.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --font-sans: var(--typeface-body);
+  --font-display: var(--typeface-display);
+  --font-mono: var(--typeface-mono);
+
+  --radius-xs: calc(var(--radius) * 0.25);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+
+  --shadow-xs: var(--elevation-xs);
+  --shadow-sm: var(--elevation-sm);
+  --shadow-md: var(--elevation-md);
+  --shadow-lg: var(--elevation-lg);
+
+  /* The density dial scales every spacing utility (p-4, gap-6, h-10 …). */
+  --spacing: calc(0.25rem * var(--dial-density));
+
+  --container-measure: var(--dial-measure);
+
+  --ease-standard: var(--motion-ease);
+  --ease-emphasized: var(--motion-ease-in-out);
+  --default-transition-duration: var(--motion-base);
+  --default-transition-timing-function: var(--motion-ease);
+  --animate-in: fade-in var(--motion-base) var(--motion-ease);
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dial-motion: 0.01;
+  }
+}
+
+/* Typography roles — fully driven by --type-* tokens in theme.css. */
+@utility text-display {
+  font-family: var(--typeface-display);
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-leading);
+  letter-spacing: var(--type-display-tracking);
+  font-weight: var(--type-display-weight);
+  text-wrap: balance;
+}
+
+@utility text-heading {
+  font-family: var(--typeface-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-leading);
+  letter-spacing: var(--type-heading-tracking);
+  font-weight: var(--type-heading-weight);
+  text-wrap: balance;
+}
+
+@utility text-lead {
+  font-size: var(--type-lead-size);
+  line-height: var(--type-lead-leading);
+  text-wrap: pretty;
+}
+
+@utility text-eyebrow {
+  font-size: var(--type-eyebrow-size);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: var(--type-eyebrow-transform);
+  font-weight: var(--type-eyebrow-weight);
+}
+
+/* Centered, token-width page container. */
+@utility container-page {
+  width: 100%;
+  max-width: var(--dial-measure);
+  margin-inline: auto;
+  padding-inline: calc(var(--spacing) * 4);
+
+  @media (width >= 40rem) {
+    padding-inline: calc(var(--spacing) * 6);
+  }
+  @media (width >= 64rem) {
+    padding-inline: calc(var(--spacing) * 8);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/60;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+}
