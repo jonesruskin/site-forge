@@ -8,9 +8,13 @@ code lands in your repo, like [shadcn/ui](https://ui.shadcn.com) but for whole f
 billing, teams, a blog, a store, a gallery, analytics, maintenance mode.
 
 ```sh
-npx @site-forge/create-site my-site --preset saas
+pnpm dlx @site-forge/create-site my-site --preset saas
 cd my-site && pnpm dev
 ```
+
+Prefer npm? `npx @site-forge/create-site my-site --preset saas` makes an npm project; then run
+scripts as `npm run dev`, `npm run site add …`. (The docs use pnpm; `pnpm <script>` becomes
+`npm run <script>`.)
 
 That's a SaaS with sign-up, a dashboard, Stripe billing, teams, an admin panel, API keys and
 onboarding — running locally **without a single API key** (embedded Postgres, an email outbox,
@@ -29,7 +33,7 @@ a mock checkout). Add the keys when you deploy.
 | `waitlist`      | Pre-launch sign-ups with referral positions                                                   |
 | `digital-store` | Sell guides and templates: Stripe checkout, signed download links                             |
 
-Or start bare and pick à la carte: `npx @site-forge/create-site my-site` asks what you need.
+Or start bare and pick à la carte: `pnpm dlx @site-forge/create-site my-site` asks what you need.
 Everything available is in the [catalog](docs/catalog.md): 43 modules, 28 sections, 29 UI
 primitives, 4 themes.
 

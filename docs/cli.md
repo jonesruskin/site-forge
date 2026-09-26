@@ -2,14 +2,20 @@
 
 Published as [`@site-forge/create-site`](https://www.npmjs.com/package/@site-forge/create-site)
 with two binaries: `create-site` (new projects) and `site` (everything after). Generated
-projects depend on it, so inside a project run `pnpm site …`.
+projects depend on it, so inside a project run `pnpm site …` (or `npm run site …` in an npm
+project; see below).
 
 ## `create-site [dir]`
 
 ```sh
-npx @site-forge/create-site my-site                       # interactive
-npx @site-forge/create-site my-site --preset saas --yes   # non-interactive
+pnpm dlx @site-forge/create-site my-site                       # interactive
+pnpm dlx @site-forge/create-site my-site --preset saas --yes   # non-interactive
 ```
+
+The project uses the package manager that launched the CLI: `pnpm dlx` makes a pnpm project,
+`npx` an npm project, `yarn dlx` / `bunx` likewise (or pass `--pm`). It's recorded in
+`package.json#packageManager`, and the project's README and `AGENTS.md` use matching commands.
+In an npm project, run scripts with `npm run`: `npm run dev`, `npm run site add blog`.
 
 | Flag                                        |                                                                                  |
 | ------------------------------------------- | -------------------------------------------------------------------------------- |

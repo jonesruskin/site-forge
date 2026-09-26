@@ -1,6 +1,6 @@
 {
   "name": "@site-forge/create-site",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create and grow websites from the site-forge registry: presets, modules, UI sections and themes copied into a repo you own.",
   "keywords": [
     "nextjs",

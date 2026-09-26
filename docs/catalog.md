@@ -21,7 +21,7 @@ primitives as `ui:<name>`). Each module's README is copied into the project at
 | `saas` | A subscription product: marketing site, sign-up, dashboard, billing, teams, admin, API keys and onboarding. | `seo`, `analytics`, `ci`, `vercel`, `cookie-consent`, `legal`, `contact`, `blog`, `changelog`, `faq`, `testimonials`, `auth`, `dashboard`, `settings`, `billing`, `teams`, `admin`, `notifications`, `transactional-emails`, `onboarding`, `api` | neutral |
 | `waitlist` | Pre-launch page that collects sign-ups with referral positions, plus the basics you need to go live. | `seo`, `analytics`, `ci`, `vercel`, `cookie-consent`, `legal`, `waitlist`, `faq` | playful |
 
-`npx @site-forge/create-site my-site --preset <name>`
+`pnpm dlx @site-forge/create-site my-site --preset <name>`
 
 ## Modules
 

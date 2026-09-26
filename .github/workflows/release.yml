@@ -5,6 +5,8 @@ name: Release
 #   2. git tag v0.2.0 && git push origin v0.2.0
 #   3. approve the staged version on npmjs.com (Staged Packages) or with
 #      `npm stage approve <stage-id>`, using your 2FA. Until then nothing is public.
+# npm can only stage versions of packages that already exist: the first version of
+# a new package has to be published by hand (see docs/cloud.md).
 # Needs the NPM_TOKEN repository secret: a granular token with
 # "Read and write (stage only)" on the @site-forge scope. That token cannot
 # publish by itself, so a leaked token can't ship a release.

@@ -24,6 +24,7 @@ import {
 } from "../utils/exec";
 import { exists, readText, sha256, writeText } from "../utils/fs";
 import { formatList, isInteractive, log, pc } from "../utils/log";
+import { adaptCommands, runScript } from "../utils/package-manager";
 import { slugify, titleCase } from "../utils/strings";
 import { CLI_NAME, CLI_VERSION } from "../version";
 import { formatFiles, loadRegistry, registryArgs, splitList } from "./shared";
@@ -69,6 +70,22 @@ async function chooseModules(registry: Registry, preselected: string[]) {
       required: false,
     }),
   );
+}
+
+/** What to do when `gh repo create` fails; Codespaces needs a different login. */
+export function githubCreateHint(name: string, visibility: string, env = process.env) {
+  const retry = `gh repo create ${name} --${visibility} --source . --remote origin --push`;
+  if (env.CODESPACES === "true") {
+    return [
+      "Couldn't create the GitHub repository. In a Codespace, gh uses the Codespace's own token,",
+      "which can only access the repository the Codespace was opened from. Your site is ready;",
+      "to publish it, run inside the project:",
+      "  unset GITHUB_TOKEN   # use your own login in this terminal",
+      "  gh auth login",
+      `  ${retry}`,
+    ].join("\n");
+  }
+  return `Couldn't create the GitHub repository. Run \`gh auth login\`, then inside the project: ${retry}`;
 }
 
 export const createArgs = {
@@ -255,6 +272,13 @@ export const create = defineCommand({
     };
 
     await copyStarter(registry, projectDir, manifest);
+    // The starter's AGENTS.md is written for pnpm; match the project's package manager.
+    const agentsFile = path.join(projectDir, "AGENTS.md");
+    if (pm !== "pnpm" && (await exists(agentsFile))) {
+      const agents = adaptCommands(await readText(agentsFile), pm);
+      await writeText(agentsFile, agents);
+      manifest.files["AGENTS.md"] = { owner: "starter", hash: sha256(agents) };
+    }
 
     const pkg = await readPackageJson(projectDir);
     pkg.name = slugify(path.basename(projectDir)) || "site";
@@ -373,10 +397,7 @@ export const create = defineCommand({
           ],
           projectDir,
         );
-        if (!ok)
-          log.warn(
-            "gh repo create failed. Run `gh auth login` and retry the command inside the project.",
-          );
+        if (!ok) log.warn(githubCreateHint(pkg.name ?? "site", github));
       }
     }
 
@@ -390,7 +411,7 @@ export const create = defineCommand({
       );
     }
     const relative = path.relative(process.cwd(), projectDir) || ".";
-    const runCmd = pm === "npm" ? "npm run" : pm;
+    const runCmd = runScript(pm);
     p.outro(
       [
         "Next steps:",

@@ -47,7 +47,7 @@ const lines: string[] = [
     (p) => `| \`${p.name}\` | ${cell(p.description)} | ${code(p.modules)} | ${p.theme} |`,
   ),
   "",
-  "`npx @site-forge/create-site my-site --preset <name>`",
+  "`pnpm dlx @site-forge/create-site my-site --preset <name>`",
   "",
   "## Modules",
 ];

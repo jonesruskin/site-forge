@@ -50,7 +50,10 @@ describe("create-site + site add (local registry, no install)", () => {
     const manifest = JSON.parse(await readFile(path.join(dir, ".site/manifest.json"), "utf8"));
     expect(Object.keys(manifest.modules)).toEqual(["seo"]);
     expect(manifest.files["src/app/sitemap.ts"].owner).toBe("module:seo");
-    expect(manifest.files["package.json"].owner).toBe("starter");
+    expect(manifest.files["src/app/layout.tsx"].owner).toBe("starter");
+    // Files the CLI edits itself aren't hash-tracked.
+    expect(manifest.files["package.json"]).toBeUndefined();
+    expect(manifest.files["site.config.ts"]).toBeUndefined();
 
     const pkg = JSON.parse(await readFile(path.join(dir, "package.json"), "utf8"));
     expect(pkg.name).toBe("acme");
@@ -94,6 +97,8 @@ describe("create-site + site add (local registry, no install)", () => {
   it("reports the project's health with doctor", async () => {
     const healthy = await tryCli("site.ts", ["doctor", "--offline"], dir);
     expect(healthy.code).toBe(0);
+    // Only the file edited earlier in this suite counts, not files the CLI rewrote.
+    expect(healthy.output).toContain("1 file(s) customized");
     expect(healthy.output).toContain("Generated files are in sync");
     expect(healthy.output).toContain("package.json lists every dependency");
 
@@ -142,5 +147,23 @@ describe("create-site + site add (local registry, no install)", () => {
     expect(await readFile(path.join(dir, "src/env.ts"), "utf8")).not.toContain("contactEnv");
     expect(await readFile(path.join(dir, "site.config.ts"), "utf8")).not.toContain("contact:");
     await expect(readFile(path.join(dir, ".site/modules/contact.md"), "utf8")).rejects.toThrow();
+  });
+});
+
+describe("create-site with npm", () => {
+  it("writes AGENTS.md commands for npm and records the adapted hash", async () => {
+    await runCli(
+      "create-site.ts",
+      ["npm-site", "--yes", "--pm", "npm", "--name", "Npm Site", "--no-install", "--no-git"],
+      tmp,
+    );
+    const dir = path.join(tmp, "npm-site");
+    const agents = await readFile(path.join(dir, "AGENTS.md"), "utf8");
+    expect(agents).toContain("`npm run dev`");
+    expect(agents).toContain("`npm run site add <x>`");
+    expect(agents).not.toMatch(/`pnpm (dev|build|site)/);
+
+    const doctor = await tryCli("site.ts", ["doctor", "--offline"], dir);
+    expect(doctor.output).toContain("No local changes to installed files");
   });
 });

@@ -6,7 +6,7 @@ import { defineCommand } from "citty";
 
 import { syncGenerated } from "../project/apply";
 import { compareVersions, installedItems } from "../project/drift";
-import { findProjectRoot, readManifest, readPackageJson } from "../project/project";
+import { findProjectRoot, isCliManaged, readManifest, readPackageJson } from "../project/project";
 import type { EnvVar, ModuleManifest } from "../schema/manifest";
 import { run } from "../utils/exec";
 import { exists, readBytesIfExists, sha256 } from "../utils/fs";
@@ -190,6 +190,8 @@ export const doctor = defineCommand({
     let modified = 0;
     const missing: string[] = [];
     for (const [file, record] of Object.entries(manifest.files)) {
+      // Projects from 0.1.0 still track CLI-managed files; their hashes are meaningless.
+      if (isCliManaged(file)) continue;
       const current = await readBytesIfExists(path.join(projectDir, file));
       if (current === null) missing.push(file);
       else if (sha256(current) !== record.hash) modified++;
