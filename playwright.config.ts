@@ -38,5 +38,9 @@ export default defineConfig({
       STORE_DOWNLOAD_SECRET: "e2e-only-store-secret-0123456789abcdefghij",
     },
     timeout: 60_000,
+    // `next start` runs the server in its own process group. Playwright's default
+    // shutdown SIGKILLs the web server's group, which orphans the server and keeps
+    // the run waiting on its output pipe forever; SIGTERM is forwarded to it.
+    gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 },
   },
 });
