@@ -50,11 +50,14 @@ cloud sessions it installs dependencies and generates the playground, so `pnpm c
 
 ## Releasing the CLI
 
-1. Bump `packages/cli/package.json` → `version`, commit.
+1. Bump `packages/cli/package.json` → `version`, commit to `main`.
 2. `git tag v0.2.0 && git push origin v0.2.0`.
-3. `.github/workflows/release.yml` tests, builds, smoke-tests the packed tarball, publishes to
-   npm with provenance using the `NPM_TOKEN` secret, and creates a GitHub release.
+3. `.github/workflows/release.yml` tests, builds, smoke-tests the packed tarball and **stages**
+   it on npm with provenance, then creates a GitHub release.
+4. Approve it: npmjs.com → your avatar → **Staged Packages** → approve with your 2FA code (or
+   `npm stage approve <stage-id> --otp <code>`). Nothing is public until you do.
 
-One-time setup: create the `site-forge` organization on npmjs.com, generate an **automation**
-access token with publish rights, and add it as the `NPM_TOKEN` repository secret
-(_Settings → Secrets and variables → Actions_).
+One-time setup: create the `site-forge` organization on npmjs.com, enable 2FA, generate a
+**granular access token** with **Read and write (stage only)** for the `@site-forge` scope, and
+add it as the `NPM_TOKEN` repository secret (_Settings → Secrets and variables → Actions_). A
+stage-only token can't publish on its own, so a leaked token can't ship a release.

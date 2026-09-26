@@ -1,10 +1,13 @@
 name: Release
 
-# Publishes @site-forge/create-site to npm when a version tag is pushed:
+# Stages @site-forge/create-site on npm when a version tag is pushed:
 #   1. bump packages/cli/package.json "version" (e.g. 0.2.0) and commit
 #   2. git tag v0.2.0 && git push origin v0.2.0
-# Needs the NPM_TOKEN repository secret (an npm automation token with publish
-# rights on the @site-forge scope). Only tag pushes by maintainers trigger it.
+#   3. approve the staged version on npmjs.com (Staged Packages) or with
+#      `npm stage approve <stage-id>`, using your 2FA. Until then nothing is public.
+# Needs the NPM_TOKEN repository secret: a granular token with
+# "Read and write (stage only)" on the @site-forge scope. That token cannot
+# publish by itself, so a leaked token can't ship a release.
 on:
   push:
     tags: ["v*"]
@@ -46,23 +49,30 @@ jobs:
       - name: Build
         run: pnpm --filter @site-forge/create-site build
 
-      - name: Smoke test the packed CLI
+      # pnpm pack rewrites workspace: dependencies, so the tarball is what users get.
+      - name: Pack
+        id: pack
         working-directory: packages/cli
+        run: echo "tarball=$(pnpm pack --pack-destination "$RUNNER_TEMP" | tail -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test the packed CLI
         run: |
-          tarball="$(pnpm pack --pack-destination "$RUNNER_TEMP" | tail -n 1)"
           mkdir -p "$RUNNER_TEMP/smoke" && cd "$RUNNER_TEMP/smoke"
           npm init -y > /dev/null
-          npm install "$tarball" > /dev/null
+          npm install "${{ steps.pack.outputs.tarball }}" > /dev/null
           npx --no-install create-site --version
           npx --no-install site --help > /dev/null
 
-      - name: Publish to npm
-        working-directory: packages/cli
-        run: pnpm publish --access public --provenance --no-git-checks
+      # Staged publishing needs npm 11.15 or newer.
+      - name: Stage on npm (goes live only after a maintainer approves with 2FA)
+        run: npx --yes npm@^11.15.0 stage publish "${{ steps.pack.outputs.tarball }}" --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: GitHub release
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+        run: |
+          gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Staged on npm; available once approved on npmjs.com."
         env:
           GH_TOKEN: ${{ github.token }}
