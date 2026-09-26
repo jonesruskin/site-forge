@@ -1,0 +1,63 @@
+{
+  "name": "@site-forge/create-site",
+  "version": "0.1.0",
+  "description": "Create and grow websites from the site-forge registry: presets, modules, UI sections and themes copied into a repo you own.",
+  "keywords": [
+    "nextjs",
+    "starter",
+    "scaffold",
+    "cli",
+    "registry",
+    "shadcn",
+    "tailwind"
+  ],
+  "homepage": "https://github.com/jonesruskin/site-forge#readme",
+  "bugs": "https://github.com/jonesruskin/site-forge/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonesruskin/site-forge.git",
+    "directory": "packages/cli"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-site": "./dist/create-site.mjs",
+    "site": "./dist/site.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "citty": "^0.2.2",
+    "diff": "^9.0.0",
+    "giget": "^3.3.1",
+    "magicast": "^0.5.5",
+    "picocolors": "^1.1.1",
+    "tinyexec": "^1.3.1",
+    "tinyglobby": "^0.2.17",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@site-forge/config": "workspace:*",
+    "@types/node": "^24.0.0",
+    "eslint": "^9.39.5",
+    "tsdown": "^0.23.0",
+    "typescript": "6.0.3",
+    "vitest": "^5.0.2"
+  }
+}

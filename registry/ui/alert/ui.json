@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "alert",
+  "version": "1.0.0",
+  "description": "Inline message for info, success, warning and errors, announced to screen readers.",
+  "files": ["src/components/ui/alert.tsx"]
+}

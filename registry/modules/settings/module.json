@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "settings",
+  "version": "1.0.0",
+  "title": "Profile & settings",
+  "description": "Account settings: profile, email change, password, active sessions with revoke, account deletion. Tabs other modules extend.",
+  "category": "saas",
+  "requires": ["auth", "dashboard"],
+  "ui": ["button", "input", "field", "card", "alert", "badge", "dialog"],
+  "files": [
+    "src/lib/settings/actions.ts",
+    "src/components/settings/settings-tabs.tsx",
+    "src/components/settings/form-status.tsx",
+    "src/components/settings/profile-form.tsx",
+    "src/components/settings/email-form.tsx",
+    "src/components/settings/password-form.tsx",
+    "src/components/settings/sessions-list.tsx",
+    "src/components/settings/delete-account.tsx",
+    "src/app/(app)/settings/layout.tsx",
+    "src/app/(app)/settings/page.tsx",
+    "src/app/(app)/settings/security/page.tsx",
+    "src/app/(app)/settings/account/page.tsx"
+  ],
+  "contributes": {
+    "nav": [
+      { "location": "settings", "label": "Profile", "href": "/settings", "icon": "user" },
+      {
+        "location": "settings",
+        "label": "Security",
+        "href": "/settings/security",
+        "icon": "shield"
+      },
+      {
+        "location": "settings",
+        "label": "Account",
+        "href": "/settings/account",
+        "icon": "settings"
+      }
+    ]
+  },
+  "routes": ["/settings", "/settings/security", "/settings/account"],
+  "postInstall": [
+    "Other modules add tabs through nav.settings (billing, team, API keys, notifications)."
+  ]
+}

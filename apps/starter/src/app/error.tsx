@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { errorReporters } from "@/generated/error-reporters";
+
 export default function ErrorPage({
   error,
   reset,
@@ -11,6 +13,7 @@ export default function ErrorPage({
 }) {
   useEffect(() => {
     console.error(error);
+    for (const report of errorReporters) report(error);
   }, [error]);
 
   return (

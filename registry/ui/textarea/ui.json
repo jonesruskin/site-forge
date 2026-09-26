@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "textarea",
+  "version": "1.0.0",
+  "description": "Multi-line text input that grows with its content where supported.",
+  "files": ["src/components/ui/textarea.tsx"]
+}

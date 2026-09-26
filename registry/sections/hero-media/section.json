@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "hero-media",
+  "version": "1.0.0",
+  "title": "Hero: full-bleed media",
+  "description": "Headline over a full-bleed image or video with a token-based scrim.",
+  "group": "Hero",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/hero-media.tsx"]
+}

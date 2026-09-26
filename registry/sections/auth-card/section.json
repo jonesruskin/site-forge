@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "auth-card",
+  "version": "1.0.0",
+  "title": "Auth screen",
+  "description": "Centered or split-screen frame for sign-in, sign-up and reset flows.",
+  "group": "Application",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/auth-card.tsx"]
+}

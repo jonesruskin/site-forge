@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "pricing-table",
+  "version": "1.1.0",
+  "title": "Pricing table",
+  "description": "Plans with monthly/yearly toggle (CSS-only, no JS), features and CTAs. Reads plans from config.",
+  "group": "Pricing",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/pricing-table.tsx"]
+}

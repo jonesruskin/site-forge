@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "newsletter-band",
+  "version": "1.0.0",
+  "title": "Newsletter band",
+  "description": "Signup band with a slot for the form and a privacy note.",
+  "group": "Conversion",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/newsletter-band.tsx"]
+}

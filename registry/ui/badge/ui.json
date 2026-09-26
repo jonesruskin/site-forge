@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "badge",
+  "version": "1.0.0",
+  "description": "Small status label with neutral, outline and semantic variants.",
+  "files": ["src/components/ui/badge.tsx"]
+}

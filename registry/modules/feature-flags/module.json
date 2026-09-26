@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "feature-flags",
+  "version": "1.0.0",
+  "title": "Feature flags",
+  "description": "Flags declared in site.config.ts with percentage rollouts, allow lists and env kill switches; <Feature>, isEnabled() and a /dev/flags override panel.",
+  "category": "developer",
+  "ui": ["button", "badge", "card"],
+  "files": [
+    "src/env/flags.ts",
+    "src/lib/flags/evaluate.ts",
+    "src/lib/flags/config.ts",
+    "src/lib/flags/index.ts",
+    "src/lib/flags/proxy.ts",
+    "src/lib/flags/actions.ts",
+    "src/components/flags/feature.tsx",
+    "src/components/flags/overrides-pill.tsx",
+    "src/app/dev/flags/page.tsx"
+  ],
+  "envFile": "src/env/flags.ts",
+  "env": [
+    {
+      "name": "FLAG_OVERRIDES",
+      "description": "Force flags on or off for everyone without a code change, e.g. \"newCheckout=off,betaBanner=on\"",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "slots": [
+      { "slot": "proxy", "import": "flagsProxy", "from": "src/lib/flags/proxy.ts", "order": 10 },
+      {
+        "slot": "body-end",
+        "import": "FlagOverridesPill",
+        "from": "src/components/flags/overrides-pill.tsx"
+      }
+    ],
+    "siteConfig": {
+      "flags": {
+        "newDashboard": {
+          "description": "Preview of the redesigned dashboard",
+          "default": false,
+          "rollout": 10,
+          "allow": ["*@example.com"]
+        }
+      }
+    },
+    "features": { "flagsDevTools": false }
+  },
+  "routes": ["/dev/flags"],
+  "postInstall": [
+    "Declare flags in site.config.ts → flags, then: if (await isEnabled(\"newDashboard\", user)) … or <Feature flag=\"newDashboard\">…</Feature>.",
+    "Open /dev/flags in development to force flags on or off in your browser."
+  ]
+}

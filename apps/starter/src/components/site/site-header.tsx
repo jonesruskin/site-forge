@@ -17,14 +17,14 @@ export function SiteHeader() {
           {siteConfig.name}
         </Link>
         {links.length > 0 && (
-          <nav aria-label="Main" className="hidden md:block">
+          <nav aria-label="Main" className="hidden lg:block">
             <ul className="flex items-center gap-1">
               {links.map((link) => (
                 <li key={link.href}>
                   <NavLink
                     href={link.href}
                     external={link.external}
-                    className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="rounded-md px-3 py-2 text-sm whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
                   </NavLink>

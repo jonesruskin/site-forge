@@ -1,0 +1,91 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "newsletter",
+  "version": "1.1.0",
+  "title": "Newsletter",
+  "description": "Signup form with double opt-in (signed links, no database) and a provider adapter: Resend, Buttondown or Kit.",
+  "category": "marketing",
+  "requires": ["email", "rate-limit"],
+  "ui": ["button", "input"],
+  "sections": ["newsletter-band", "page-header"],
+  "files": [
+    "src/env/newsletter.ts",
+    "src/lib/newsletter/providers.ts",
+    "src/lib/newsletter/token.ts",
+    "src/lib/newsletter/actions.tsx",
+    "src/lib/newsletter/config.ts",
+    "src/components/newsletter/newsletter-form.tsx",
+    "src/emails/newsletter-confirm.tsx",
+    "src/app/(site)/newsletter/page.tsx",
+    "src/app/(site)/newsletter/confirm/page.tsx"
+  ],
+  "envFile": "src/env/newsletter.ts",
+  "env": [
+    {
+      "name": "NEWSLETTER_PROVIDER",
+      "description": "Where subscribers are stored: resend, buttondown or kit. Unset in development = log only",
+      "required": true,
+      "example": "resend"
+    },
+    {
+      "name": "NEWSLETTER_SECRET",
+      "description": "Secret for signing confirmation links (32+ random characters, e.g. `openssl rand -base64 32`)",
+      "required": true,
+      "example": ""
+    },
+    {
+      "name": "RESEND_SEGMENT_ID",
+      "description": "Resend segment that new contacts join (provider=resend)",
+      "example": "",
+      "howTo": "https://resend.com/audience \u2192 Segments"
+    },
+    {
+      "name": "BUTTONDOWN_API_KEY",
+      "description": "Buttondown API key (provider=buttondown)",
+      "example": "",
+      "howTo": "https://buttondown.com/settings/api"
+    },
+    {
+      "name": "KIT_API_KEY",
+      "description": "Kit (ConvertKit) v4 API key (provider=kit)",
+      "example": "",
+      "howTo": "https://app.kit.com/account_settings/developer_settings"
+    },
+    {
+      "name": "KIT_FORM_ID",
+      "description": "Kit form that subscribers are added to (provider=kit)",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "nav": [
+      {
+        "location": "footer",
+        "group": "Company",
+        "label": "Newsletter",
+        "href": "/newsletter"
+      }
+    ],
+    "siteConfig": {
+      "newsletter": {
+        "title": "Newsletter",
+        "description": "Occasional updates. No spam, unsubscribe any time.",
+        "doubleOptIn": true,
+        "checkInboxMessage": "Almost there! Check your inbox to confirm your subscription.",
+        "confirmedMessage": "You're subscribed. Thanks for joining!"
+      }
+    },
+    "slots": [
+      {
+        "slot": "email-templates",
+        "import": "NewsletterConfirmEmail",
+        "from": "src/emails/newsletter-confirm.tsx"
+      }
+    ]
+  },
+  "routes": ["/newsletter", "/newsletter/confirm"],
+  "postInstall": [
+    "Drop <NewsletterForm /> anywhere (e.g. inside the newsletter-band section or the footer).",
+    "Set NEWSLETTER_PROVIDER + its keys and NEWSLETTER_SECRET for production."
+  ]
+}

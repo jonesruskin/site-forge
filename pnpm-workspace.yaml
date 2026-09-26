@@ -3,6 +3,14 @@ packages:
   - packages/*
 
 allowBuilds:
+  "@parcel/watcher": false
+  "@sentry/cli": true
+  "@swc/core": false
   esbuild: true
   sharp: true
   unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - "@vitest/mocker@5.0.2"
+  - "@vitest/spy@5.0.2"
+  - vitest@5.0.2

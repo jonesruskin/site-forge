@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "legal",
+  "version": "1.0.0",
+  "title": "Legal pages",
+  "description": "Privacy policy, terms of service and cookie policy as editable MDX templates filled from site.config.",
+  "category": "content",
+  "requires": ["mdx"],
+  "ui": ["prose"],
+  "sections": ["page-header"],
+  "files": [
+    "content/legal/privacy.mdx",
+    "content/legal/terms.mdx",
+    "content/legal/cookies.mdx",
+    "src/lib/legal/pages.ts",
+    "src/app/(site)/legal/[slug]/page.tsx"
+  ],
+  "contributes": {
+    "nav": [
+      { "location": "legal", "label": "Privacy", "href": "/legal/privacy" },
+      { "location": "legal", "label": "Terms", "href": "/legal/terms" },
+      { "location": "legal", "label": "Cookies", "href": "/legal/cookies" }
+    ],
+    "siteConfig": {
+      "legal": {
+        "companyName": "",
+        "contactEmail": "",
+        "jurisdiction": "",
+        "address": ""
+      }
+    }
+  },
+  "routes": ["/legal/privacy", "/legal/terms", "/legal/cookies"],
+  "postInstall": [
+    "Fill the `legal` block in site.config.ts: the templates use those values.",
+    "The templates are a starting point, not legal advice. Have them reviewed for your jurisdiction."
+  ]
+}

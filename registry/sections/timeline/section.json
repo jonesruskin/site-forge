@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "timeline",
+  "version": "1.0.0",
+  "title": "Timeline",
+  "description": "Vertical sequence of dated milestones.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/timeline.tsx"]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "landing",
+  "title": "Landing page",
+  "description": "One page that explains, convinces and converts: hero, benefits, proof, FAQ, newsletter and contact.",
+  "modules": [
+    "seo",
+    "analytics",
+    "ci",
+    "vercel",
+    "cookie-consent",
+    "legal",
+    "contact",
+    "newsletter",
+    "faq",
+    "testimonials"
+  ],
+  "sections": [
+    "hero-split",
+    "bento-grid",
+    "feature-rows",
+    "stats",
+    "testimonials",
+    "faq",
+    "newsletter-band",
+    "cta-band"
+  ],
+  "theme": "playful",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

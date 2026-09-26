@@ -1,0 +1,172 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "auth",
+  "version": "1.1.0",
+  "title": "Authentication",
+  "description": "Better Auth: email + password with verification, magic links, Google and GitHub OAuth, password reset, protected routes.",
+  "category": "saas",
+  "requires": ["database", "email", "rate-limit"],
+  "ui": ["button", "input", "field", "separator", "alert", "dropdown-menu", "avatar"],
+  "sections": ["auth-card"],
+  "files": [
+    "src/db/schema/auth.ts",
+    "src/env/auth.ts",
+    "src/lib/auth/auth.ts",
+    "src/lib/auth/client.ts",
+    "src/lib/auth/config.ts",
+    "src/lib/auth/session.ts",
+    "src/lib/auth/actions.ts",
+    "src/lib/auth/events.ts",
+    "src/lib/auth/proxy.ts",
+    "src/lib/auth/redirect.ts",
+    "src/components/auth/auth-form.tsx",
+    "src/components/auth/sign-in-form.tsx",
+    "src/components/auth/sign-up-form.tsx",
+    "src/components/auth/password-reset-forms.tsx",
+    "src/components/auth/social-buttons.tsx",
+    "src/components/auth/user-menu.tsx",
+    "src/components/auth/auth-header-actions.tsx",
+    "src/emails/auth/verify-email.tsx",
+    "src/emails/auth/reset-password.tsx",
+    "src/emails/auth/magic-link.tsx",
+    "src/app/(auth)/layout.tsx",
+    "src/app/(auth)/sign-in/page.tsx",
+    "src/app/(auth)/sign-up/page.tsx",
+    "src/app/(auth)/forgot-password/page.tsx",
+    "src/app/(auth)/reset-password/page.tsx",
+    "src/app/(auth)/verify-email/page.tsx",
+    "src/app/api/auth/[...all]/route.ts"
+  ],
+  "dependencies": {
+    "better-auth": "^1.7.0"
+  },
+  "dbSchema": ["src/db/schema/auth.ts"],
+  "envFile": "src/env/auth.ts",
+  "env": [
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "description": "Secret for signing sessions and tokens (32+ random characters)",
+      "required": true,
+      "example": "",
+      "howTo": "openssl rand -base64 32"
+    },
+    {
+      "name": "BETTER_AUTH_URL",
+      "description": "Public base URL for auth callbacks. Defaults to the site URL in production and the request origin in development",
+      "example": "https://example.com"
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "description": "Google OAuth client ID (enables \u201cContinue with Google\u201d)",
+      "example": "",
+      "howTo": "console.cloud.google.com \u2192 APIs & Services \u2192 Credentials; redirect URI: <site>/api/auth/callback/google"
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "description": "Google OAuth client secret",
+      "example": ""
+    },
+    {
+      "name": "GITHUB_CLIENT_ID",
+      "description": "GitHub OAuth app client ID (enables \u201cContinue with GitHub\u201d)",
+      "example": "",
+      "howTo": "github.com/settings/developers \u2192 OAuth Apps; callback: <site>/api/auth/callback/github"
+    },
+    {
+      "name": "GITHUB_CLIENT_SECRET",
+      "description": "GitHub OAuth app client secret",
+      "example": ""
+    }
+  ],
+  "slots": {
+    "auth-plugins": {
+      "file": "src/generated/auth-plugins.ts",
+      "export": "authPlugins",
+      "type": "BetterAuthPlugin",
+      "typeImports": ["import type { BetterAuthPlugin } from \"better-auth\";"],
+      "description": "Better Auth server plugins contributed by modules (teams \u2192 organization, admin \u2192 admin).",
+      "inferred": true
+    },
+    "auth-client-plugins": {
+      "file": "src/generated/auth-client-plugins.ts",
+      "export": "authClientPlugins",
+      "type": "BetterAuthClientPlugin",
+      "typeImports": ["import type { BetterAuthClientPlugin } from \"better-auth\";"],
+      "description": "Better Auth client plugins matching the server plugins.",
+      "inferred": true
+    },
+    "auth-events": {
+      "file": "src/generated/auth-events.ts",
+      "export": "authEvents",
+      "type": "(event: AuthEvent) => Promise<void>",
+      "typeImports": ["import type { AuthEvent } from \"../lib/auth/events\";"],
+      "description": "Handlers for user lifecycle events (welcome email, notifications, onboarding)."
+    }
+  },
+  "contributes": {
+    "slots": [
+      {
+        "slot": "proxy",
+        "import": "authProxy",
+        "from": "src/lib/auth/proxy.ts",
+        "order": 50
+      },
+      {
+        "slot": "header-actions",
+        "import": "AuthHeaderActions",
+        "from": "src/components/auth/auth-header-actions.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "VerifyEmail",
+        "from": "src/emails/auth/verify-email.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "ResetPasswordEmail",
+        "from": "src/emails/auth/reset-password.tsx"
+      },
+      {
+        "slot": "email-templates",
+        "import": "MagicLinkEmail",
+        "from": "src/emails/auth/magic-link.tsx"
+      }
+    ],
+    "siteConfig": {
+      "auth": {
+        "afterSignIn": "/dashboard",
+        "protectedPaths": ["/dashboard", "/settings", "/admin", "/onboarding"],
+        "requireEmailVerification": true,
+        "magicLink": true
+      }
+    },
+    "next": {
+      "csp": {
+        "img-src": ["https://lh3.googleusercontent.com", "https://avatars.githubusercontent.com"]
+      },
+      "imageRemotePatterns": [
+        {
+          "protocol": "https",
+          "hostname": "lh3.googleusercontent.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "avatars.githubusercontent.com"
+        }
+      ]
+    }
+  },
+  "routes": [
+    "/sign-in",
+    "/sign-up",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/api/auth/*"
+  ],
+  "postInstall": [
+    "Development works immediately: verification and magic-link emails land in /dev/outbox.",
+    "Production: set BETTER_AUTH_SECRET; add Google/GitHub credentials to show their buttons.",
+    "Protect a page with `await requireSession()` from @/lib/auth/session (the proxy also redirects protectedPaths)."
+  ]
+}

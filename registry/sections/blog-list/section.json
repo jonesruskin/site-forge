@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "blog-list",
+  "version": "1.0.0",
+  "title": "Blog list",
+  "description": "Post cards as a grid or a compact list, with dates, tags and reading time.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/blog-list.tsx"]
+}

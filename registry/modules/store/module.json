@@ -1,0 +1,75 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "store",
+  "version": "1.0.0",
+  "title": "Digital store",
+  "description": "Sell (or give away) digital products with no database: products in code, checkout through the payments adapter, and expiring signed download links by email.",
+  "category": "commerce",
+  "requires": ["payments", "email", "rate-limit", "seo"],
+  "ui": ["button", "input", "field", "badge", "alert", "card"],
+  "sections": ["page-header"],
+  "files": [
+    "private/downloads/field-guide.md",
+    "private/downloads/starter-kit.md",
+    "src/content/products.ts",
+    "src/env/store.ts",
+    "src/lib/store/products.ts",
+    "src/lib/store/tokens.ts",
+    "src/lib/store/delivery.ts",
+    "src/lib/store/actions.ts",
+    "src/lib/store/webhooks.ts",
+    "src/lib/store/next-plugin.ts",
+    "src/emails/store/purchase.tsx",
+    "src/components/store/price.tsx",
+    "src/components/store/product-card.tsx",
+    "src/components/store/buy-form.tsx",
+    "src/app/(site)/store/page.tsx",
+    "src/app/(site)/store/[slug]/page.tsx",
+    "src/app/(site)/store/thanks/page.tsx",
+    "src/app/(site)/store/download/[token]/route.ts"
+  ],
+  "envFile": "src/env/store.ts",
+  "env": [
+    {
+      "name": "STORE_DOWNLOAD_SECRET",
+      "description": "Signs download links (32+ random characters). Changing it invalidates links already sent",
+      "required": true,
+      "example": "",
+      "howTo": "openssl rand -base64 32"
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "payment-webhooks",
+        "import": "storeWebhookHandler",
+        "from": "src/lib/store/webhooks.ts",
+        "order": 50
+      },
+      {
+        "slot": "next-plugins",
+        "import": "storeNextPlugin",
+        "from": "src/lib/store/next-plugin.ts"
+      },
+      {
+        "slot": "email-templates",
+        "import": "PurchaseEmail",
+        "from": "src/emails/store/purchase.tsx"
+      },
+      { "slot": "sitemap", "import": "storeSitemap", "from": "src/lib/store/products.ts" }
+    ],
+    "nav": [{ "location": "header", "label": "Store", "href": "/store" }],
+    "siteConfig": {
+      "store": {
+        "title": "Store",
+        "description": "Guides, templates and tools. Instant download.",
+        "downloadExpiresInDays": 7
+      }
+    }
+  },
+  "routes": ["/store", "/store/[slug]", "/store/thanks", "/store/download/[token]"],
+  "postInstall": [
+    "Add products in src/content/products.ts and their files in private/downloads/ (never public/).",
+    "Development: checkout uses the mock provider; the download email lands in /dev/outbox."
+  ]
+}

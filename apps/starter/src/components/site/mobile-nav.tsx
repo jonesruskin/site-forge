@@ -28,7 +28,7 @@ export function MobileNav({ links, label = "Menu" }: { links: NavLinkType[]; lab
       <button
         type="button"
         popoverTarget="mobile-nav"
-        className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
+        className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden"
       >
         <MenuIcon aria-hidden className="size-5" />
         <span className="sr-only">{label}</span>

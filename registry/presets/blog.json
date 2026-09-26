@@ -1,0 +1,11 @@
+{
+  "$schema": "../schema/preset.schema.json",
+  "name": "blog",
+  "title": "Blog",
+  "description": "A writing-first site: posts with tags, RSS and OG images, an about page and a newsletter.",
+  "modules": ["seo", "analytics", "ci", "vercel", "blog", "newsletter", "about", "legal"],
+  "sections": ["blog-list", "newsletter-band"],
+  "theme": "editorial",
+  "files": ["src/app/(site)/page.tsx"],
+  "siteConfig": {}
+}

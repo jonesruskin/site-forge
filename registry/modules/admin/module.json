@@ -1,0 +1,72 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "admin",
+  "version": "1.0.1",
+  "title": "Admin panel",
+  "description": "Admin area on Better Auth's admin plugin: user search, roles, ban/unban, session revocation, impersonation with a stop banner.",
+  "category": "saas",
+  "requires": ["auth", "dashboard", "database"],
+  "ui": ["button", "input", "card", "badge", "table", "native-select", "pagination", "alert"],
+  "files": [
+    "src/env/admin.ts",
+    "src/lib/admin/auth-plugin.ts",
+    "src/lib/admin/auth-client-plugin.ts",
+    "src/lib/admin/guard.ts",
+    "src/lib/admin/actions.ts",
+    "src/lib/admin/stats.ts",
+    "src/components/admin/impersonation-banner.tsx",
+    "src/app/(app)/admin/page.tsx",
+    "src/app/(app)/admin/users/page.tsx",
+    "scripts/grant-admin.ts"
+  ],
+  "envFile": "src/env/admin.ts",
+  "env": [
+    {
+      "name": "ADMIN_EMAILS",
+      "description": "Comma-separated emails that are promoted to admin the first time they open /admin",
+      "example": "you@example.com"
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "auth-plugins",
+        "import": "adminPlugin",
+        "from": "src/lib/admin/auth-plugin.ts"
+      },
+      {
+        "slot": "auth-client-plugins",
+        "import": "adminClientPlugin",
+        "from": "src/lib/admin/auth-client-plugin.ts"
+      },
+      {
+        "slot": "dashboard-topbar",
+        "import": "ImpersonationBanner",
+        "from": "src/components/admin/impersonation-banner.tsx",
+        "order": 1
+      }
+    ],
+    "nav": [
+      {
+        "location": "admin",
+        "label": "Overview",
+        "href": "/admin",
+        "icon": "shield"
+      },
+      {
+        "location": "admin",
+        "label": "Users",
+        "href": "/admin/users",
+        "icon": "users"
+      }
+    ],
+    "scripts": {
+      "admin:grant": "tsx scripts/grant-admin.ts"
+    }
+  },
+  "routes": ["/admin", "/admin/users"],
+  "postInstall": [
+    "Make yourself admin: set ADMIN_EMAILS=you@example.com, or run `pnpm admin:grant you@example.com`.",
+    "Non-admins get a 404 at /admin (the area's existence isn't revealed)."
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "billing",
+  "version": "1.2.1",
+  "title": "Billing",
+  "description": "Subscriptions from plans in site.config: pricing page, checkout, webhooks, customer portal, entitlements and limits.",
+  "category": "saas",
+  "requires": ["auth", "database", "payments", "dashboard"],
+  "ui": ["button", "card", "badge", "progress"],
+  "sections": ["pricing-table", "page-header"],
+  "files": [
+    "src/db/schema/billing.ts",
+    "src/lib/billing/config.ts",
+    "src/lib/billing/plans.ts",
+    "src/lib/billing/entitlements.ts",
+    "src/lib/billing/customer.ts",
+    "src/lib/billing/webhooks.ts",
+    "src/emails/payment-failed.tsx",
+    "src/components/billing/plan-widget.tsx",
+    "src/app/(site)/pricing/page.tsx",
+    "src/app/(app)/settings/billing/page.tsx",
+    "src/app/billing/checkout/route.ts",
+    "src/app/billing/portal/route.ts",
+    "scripts/billing-sync.ts",
+    "src/lib/billing/onboarding.ts"
+  ],
+  "dbSchema": ["src/db/schema/billing.ts"],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "payment-webhooks",
+        "import": "billingWebhookHandler",
+        "from": "src/lib/billing/webhooks.ts"
+      },
+      {
+        "slot": "dashboard-widgets",
+        "import": "PlanWidget",
+        "from": "src/components/billing/plan-widget.tsx",
+        "order": 10
+      },
+      {
+        "slot": "email-templates",
+        "import": "PaymentFailedEmail",
+        "from": "src/emails/payment-failed.tsx"
+      },
+      {
+        "slot": "onboarding-tasks",
+        "import": "billingOnboardingTask",
+        "from": "src/lib/billing/onboarding.ts",
+        "order": 20
+      }
+    ],
+    "nav": [
+      {
+        "location": "header",
+        "label": "Pricing",
+        "href": "/pricing"
+      },
+      {
+        "location": "settings",
+        "label": "Billing",
+        "href": "/settings/billing",
+        "icon": "credit-card"
+      }
+    ],
+    "scripts": {
+      "billing:sync": "tsx scripts/billing-sync.ts"
+    },
+    "siteConfig": {
+      "billing": {
+        "currency": "usd",
+        "trialDays": 14,
+        "plans": [
+          {
+            "id": "free",
+            "name": "Free",
+            "description": "For trying things out.",
+            "price": {
+              "monthly": 0,
+              "yearly": 0
+            },
+            "features": ["1 project", "Community support"],
+            "limits": {
+              "projects": 1
+            }
+          },
+          {
+            "id": "pro",
+            "name": "Pro",
+            "description": "For professionals and small teams.",
+            "price": {
+              "monthly": 19,
+              "yearly": 190
+            },
+            "features": ["Unlimited projects", "Priority email support", "Advanced analytics"],
+            "limits": {
+              "projects": 1000
+            },
+            "highlighted": true,
+            "badge": "Most popular"
+          },
+          {
+            "id": "enterprise",
+            "name": "Enterprise",
+            "description": "For organizations with custom needs.",
+            "price": {
+              "monthly": null
+            },
+            "features": ["Everything in Pro", "SSO and audit log", "Dedicated support"],
+            "contactHref": "/contact"
+          }
+        ]
+      }
+    }
+  },
+  "routes": ["/pricing", "/settings/billing", "/billing/checkout", "/billing/portal"],
+  "postInstall": [
+    "Plans, prices, features and limits live in site.config.ts → billing.plans.",
+    "Development: checkout uses the mock provider (/dev/checkout). Production: `pnpm billing:sync` creates the Stripe products and prices (lookup keys <plan>_monthly / <plan>_yearly)."
+  ]
+}

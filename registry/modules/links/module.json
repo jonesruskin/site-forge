@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "links",
+  "version": "1.0.0",
+  "title": "Links page",
+  "description": "A link-in-bio page from site.config.ts with UTM tagging, a scannable QR code to share it in person, and a one-tap \u201csave contact\u201d vCard.",
+  "category": "portfolio",
+  "ui": ["button", "avatar", "popover"],
+  "files": [
+    "src/lib/links/config.ts",
+    "src/lib/links/qr.ts",
+    "src/components/links/qr-code.tsx",
+    "src/app/(links)/links/page.tsx",
+    "src/app/(links)/links/vcard/route.ts",
+    "src/app/(links)/links/qr.svg/route.ts"
+  ],
+  "dependencies": {
+    "uqr": "^0.1.3"
+  },
+  "contributes": {
+    "siteConfig": {
+      "links": {
+        "bio": "Designer and developer. Building calm software.",
+        "avatar": "",
+        "utm": true,
+        "items": [
+          { "label": "Latest project", "href": "/projects", "highlight": true },
+          { "label": "Read the blog", "href": "/blog" },
+          { "label": "Say hello", "href": "/contact" }
+        ]
+      }
+    }
+  },
+  "routes": ["/links", "/links/vcard", "/links/qr.svg"],
+  "postInstall": [
+    "Edit site.config.ts → links. Put /links in your social bios; print /links/qr.svg for talks and business cards."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "tooltip",
+  "version": "1.0.0",
+  "description": "Hover/focus hint for icon buttons (Radix).",
+  "files": ["src/components/ui/tooltip.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

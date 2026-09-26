@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "starter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ignore": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowBuilds": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "env": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "default": false,
+            "type": "boolean"
+          },
+          "scope": {
+            "default": "server",
+            "type": "string",
+            "enum": [
+              "server",
+              "client",
+              "shared"
+            ]
+          },
+          "example": {
+            "default": "",
+            "type": "string"
+          },
+          "howTo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ]
+      }
+    },
+    "slots": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "description": "Unique kebab-case identifier."
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "export": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_$][\\w$]*$"
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "typeImports": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inferred": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "file",
+          "export",
+          "type",
+          "description"
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "starter",
+    "slots"
+  ]
+}

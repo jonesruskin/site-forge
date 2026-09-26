@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "docs",
+  "version": "1.0.0",
+  "title": "Docs",
+  "description": "Documentation from MDX folders: sidebar, prev/next, TOC, edit links and \u2318K client-side search (static index, lazy-loaded).",
+  "category": "content",
+  "requires": ["mdx", "seo"],
+  "ui": ["prose", "dialog", "kbd"],
+  "files": [
+    "content/docs/index.mdx",
+    "content/docs/guides/writing-pages.mdx",
+    "content/docs/guides/organizing.mdx",
+    "src/lib/docs/docs.ts",
+    "src/lib/docs/config.ts",
+    "src/lib/docs/sitemap.ts",
+    "src/components/docs/docs-sidebar.tsx",
+    "src/components/docs/docs-search.tsx",
+    "src/components/docs/doc-page.tsx",
+    "src/app/(site)/docs/layout.tsx",
+    "src/app/(site)/docs/page.tsx",
+    "src/app/(site)/docs/opengraph-image.tsx",
+    "src/app/(site)/docs/[slug]/page.tsx",
+    "src/app/(site)/docs/[slug]/opengraph-image.tsx",
+    "src/app/(site)/docs/[slug]/[page]/page.tsx",
+    "src/app/(site)/docs/[slug]/[page]/opengraph-image.tsx",
+    "src/app/(site)/docs/search-index.json/route.ts"
+  ],
+  "dependencies": {
+    "minisearch": "^7.1.0"
+  },
+  "contributes": {
+    "slots": [
+      {
+        "slot": "sitemap",
+        "import": "docsSitemap",
+        "from": "src/lib/docs/sitemap.ts"
+      }
+    ],
+    "nav": [
+      {
+        "location": "header",
+        "label": "Docs",
+        "href": "/docs"
+      }
+    ],
+    "siteConfig": {
+      "docs": {
+        "title": "Documentation",
+        "description": "Guides and reference.",
+        "editUrl": ""
+      }
+    }
+  },
+  "routes": ["/docs", "/docs/[slug]", "/docs/[slug]/[page]", "/docs/search-index.json"],
+  "postInstall": [
+    "Pages live in content/docs. Folders become sidebar groups; `order` in frontmatter sorts pages.",
+    "Set docs.editUrl in site.config.ts (e.g. https://github.com/you/repo/edit/main/) for edit links."
+  ]
+}

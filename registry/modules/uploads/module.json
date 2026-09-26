@@ -1,0 +1,104 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "uploads",
+  "version": "1.0.1",
+  "title": "File uploads",
+  "description": "Direct-to-storage uploads with progress: S3, R2, MinIO or any S3-compatible bucket via presigned URLs, private downloads, and a local-disk fallback in development.",
+  "category": "saas",
+  "requires": ["auth", "dashboard", "database"],
+  "ui": ["button", "progress", "card", "badge"],
+  "sections": ["empty-state"],
+  "files": [
+    "src/env/uploads.ts",
+    "src/db/schema/uploads.ts",
+    "src/lib/uploads/config.ts",
+    "src/lib/uploads/storage.ts",
+    "src/lib/uploads/uploads.ts",
+    "src/lib/uploads/actions.ts",
+    "src/lib/uploads/onboarding.ts",
+    "src/components/uploads/file-uploader.tsx",
+    "src/components/uploads/file-list.tsx",
+    "src/app/(app)/files/page.tsx",
+    "src/app/api/uploads/[id]/route.ts",
+    "scripts/uploads-cors.ts"
+  ],
+  "dependencies": {
+    "aws4fetch": "^1.0.20"
+  },
+  "dbSchema": ["src/db/schema/uploads.ts"],
+  "envFile": "src/env/uploads.ts",
+  "env": [
+    {
+      "name": "S3_ENDPOINT",
+      "description": "S3-compatible endpoint. Unset in development → files are stored in .site/dev/uploads",
+      "required": true,
+      "example": "https://<account-id>.r2.cloudflarestorage.com",
+      "howTo": "R2: dashboard → R2 → S3 API. AWS: https://s3.<region>.amazonaws.com"
+    },
+    {
+      "name": "S3_REGION",
+      "description": "Bucket region (\"auto\" for R2)",
+      "example": "auto"
+    },
+    {
+      "name": "S3_BUCKET",
+      "description": "Bucket name. Keep it private: downloads use short-lived signed URLs",
+      "required": true,
+      "example": "my-site-uploads"
+    },
+    {
+      "name": "S3_ACCESS_KEY_ID",
+      "description": "Access key with read/write on the bucket",
+      "required": true,
+      "example": "",
+      "howTo": "R2: Manage R2 API tokens → Object Read & Write. AWS: IAM user with s3:GetObject/PutObject/DeleteObject"
+    },
+    {
+      "name": "S3_SECRET_ACCESS_KEY",
+      "description": "Secret for the access key",
+      "required": true,
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "onboarding-tasks",
+        "import": "uploadsOnboardingTask",
+        "from": "src/lib/uploads/onboarding.ts",
+        "order": 50
+      }
+    ],
+    "nav": [
+      {
+        "location": "dashboard",
+        "label": "Files",
+        "href": "/files",
+        "icon": "folder"
+      }
+    ],
+    "next": {
+      "csp": {
+        "connect-src": ["$S3_ENDPOINT"],
+        "img-src": ["$S3_ENDPOINT"],
+        "media-src": ["$S3_ENDPOINT"]
+      }
+    },
+    "siteConfig": {
+      "uploads": {
+        "maxSizeMb": 25,
+        "accept": ["image/*", "application/pdf", "text/plain", "text/csv"],
+        "maxFilesPerUser": 200
+      }
+    },
+    "scripts": {
+      "uploads:cors": "tsx scripts/uploads-cors.ts"
+    },
+    "gitignore": [".site/dev/"]
+  },
+  "routes": ["/files", "/api/uploads/[id]"],
+  "postInstall": [
+    "Development stores files in .site/dev/uploads. For production set the S3_* variables, then run `pnpm uploads:cors` once so browsers may upload to the bucket.",
+    "Drop <FileUploader /> anywhere in the app; files land in the upload table with the owner's id."
+  ]
+}

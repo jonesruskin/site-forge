@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "mdx",
+  "version": "1.0.1",
+  "title": "MDX content",
+  "description": "Typed MDX collections: Zod-validated frontmatter, drafts, TOC, reading time, token-themed code highlighting, RSS helper.",
+  "category": "content",
+  "ui": ["prose"],
+  "files": [
+    "src/lib/mdx/collection.ts",
+    "src/lib/mdx/render.tsx",
+    "src/lib/mdx/rss.ts",
+    "src/lib/mdx/text.ts",
+    "src/components/mdx/mdx-components.tsx",
+    "src/components/mdx/callout.tsx",
+    "src/components/mdx/code-block.tsx",
+    "src/components/mdx/copy-button.tsx",
+    "src/components/mdx/table-of-contents.tsx"
+  ],
+  "dependencies": {
+    "github-slugger": "^2.0.0",
+    "next-mdx-remote-client": "^2.1.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.14.0",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.0",
+    "server-only": "^0.0.1",
+    "shiki": "^4.0.0",
+    "yaml": "^2.8.0"
+  },
+  "postInstall": [
+    "Content lives in /content. Define a collection with defineCollection({ directory, schema }).",
+    "Code highlighting is driven by theme tokens (primary, success, warning, ring): no extra CSS."
+  ]
+}

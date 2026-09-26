@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "cta-band",
+  "version": "1.0.0",
+  "title": "CTA band",
+  "description": "Closing call to action; inverted, muted or bordered.",
+  "group": "Conversion",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/cta-band.tsx"]
+}

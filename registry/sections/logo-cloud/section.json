@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "logo-cloud",
+  "version": "1.0.0",
+  "title": "Logo cloud",
+  "description": "Row of customer or partner logos with an optional caption.",
+  "group": "Social proof",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/logo-cloud.tsx"]
+}

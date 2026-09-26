@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "avatar",
+  "version": "1.0.0",
+  "description": "Image avatar with initials fallback while loading or on error.",
+  "files": ["src/components/ui/avatar.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

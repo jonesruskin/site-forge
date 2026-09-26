@@ -1,0 +1,63 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "payments",
+  "version": "1.1.0",
+  "title": "Payments",
+  "description": "Provider-agnostic checkout, customer portal and webhooks (Stripe adapter), with a mock provider so billing works locally with zero keys.",
+  "category": "commerce",
+  "ui": ["button", "card", "badge"],
+  "files": [
+    "src/env/payments.ts",
+    "src/lib/payments/types.ts",
+    "src/lib/payments/index.ts",
+    "src/lib/payments/stripe.ts",
+    "src/lib/payments/mock.ts",
+    "src/lib/payments/mock-actions.ts",
+    "src/lib/payments/dispatch.ts",
+    "src/app/api/payments/webhook/route.ts",
+    "src/app/dev/checkout/[id]/page.tsx",
+    "src/app/dev/billing-portal/page.tsx"
+  ],
+  "envFile": "src/env/payments.ts",
+  "dependencies": {
+    "server-only": "^0.0.1",
+    "stripe": "^22.0.0"
+  },
+  "env": [
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "description": "Stripe secret key. Unset in development = mock provider with a fake checkout at /dev/checkout",
+      "required": true,
+      "example": "sk_test_\u2026",
+      "howTo": "https://dashboard.stripe.com/apikeys"
+    },
+    {
+      "name": "STRIPE_WEBHOOK_SECRET",
+      "description": "Signing secret of the webhook endpoint <site>/api/payments/webhook",
+      "required": true,
+      "example": "whsec_\u2026",
+      "howTo": "Dashboard \u2192 Developers \u2192 Webhooks, or `stripe listen --forward-to localhost:3000/api/payments/webhook`"
+    }
+  ],
+  "slots": {
+    "payment-webhooks": {
+      "file": "src/generated/payment-webhooks.ts",
+      "export": "paymentWebhookHandlers",
+      "type": "(event: PaymentEvent) => Promise<void>",
+      "typeImports": ["import type { PaymentEvent } from \"../lib/payments/types\";"],
+      "description": "Handlers for normalized payment events (billing \u2192 subscriptions, store \u2192 orders)."
+    }
+  },
+  "contributes": {
+    "next": {
+      "csp": {
+        "form-action": ["https://checkout.stripe.com", "https://billing.stripe.com"]
+      }
+    }
+  },
+  "routes": ["/api/payments/webhook", "/dev/checkout/[id]", "/dev/billing-portal"],
+  "postInstall": [
+    "Development: no keys needed. Checkouts open a mock payment page at /dev/checkout.",
+    "Production: set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET; subscribe the webhook to checkout.session.completed, customer.subscription.* and invoice.payment_failed."
+  ]
+}

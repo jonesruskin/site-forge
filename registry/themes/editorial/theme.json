@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "name": "editorial",
+  "title": "Editorial",
+  "description": "Warm paper, ink-black type, a serif display face and generous, slow rhythm. Square corners.",
+  "fonts": {
+    "display": "Fraunces",
+    "body": "Source Serif 4",
+    "mono": "JetBrains Mono"
+  }
+}

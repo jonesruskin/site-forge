@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "feature-grid",
+  "version": "1.0.0",
+  "title": "Feature grid",
+  "description": "2\u20134 column grid of features with icons and optional links.",
+  "group": "Features",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/feature-grid.tsx"]
+}

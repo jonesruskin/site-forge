@@ -15,12 +15,14 @@ Read this file fully before changing anything under `apps/starter`, `registry/` 
 | `registry/modules/<name>`  | `module.json` + `README.md` + `files/` (mirrors project paths).                          |
 | `registry/sections/<name>` | UI skeleton sections. `section.json` + `files/`.                                         |
 | `registry/ui/<name>`       | Primitives (button, input, dialog …). `ui.json` + `files/`.                              |
-| `registry/presets/*.json`  | Named bundles of modules + sections + pages + theme.                                     |
+| `registry/presets/*.json`  | Named bundles of modules + sections + theme; pages in `registry/presets/files/<name>/`.  |
 | `registry/themes/<name>`   | Example `theme.css` token sets (+ `theme.json` fonts).                                   |
 | `registry/core.json`       | Slot definitions owned by the starter.                                                   |
 | `packages/cli`             | `@site-forge/create-site` — bins `create-site` and `site`.                               |
 | `packages/config`          | Shared tsconfig/eslint/prettier for the CLI and scripts (NOT for generated sites).       |
-| `scripts/`                 | Registry validation, preset builds, playground sync, screenshots.                        |
+| `scripts/`                 | Registry validation, preset builds, playground sync, catalog, screenshots.               |
+| `docs/`                    | Architecture, CLI, theming, module authoring, cloud workflow; `catalog.md` is generated. |
+| `e2e/`                     | Playwright specs against the playground build (functional + axe).                        |
 
 ## Toolchain (pinned on purpose)
 
@@ -30,6 +32,30 @@ Read this file fully before changing anything under `apps/starter`, `registry/` 
 - Next.js 16 App Router: `proxy.ts` (not `middleware.ts`), async `params`/`searchParams`,
   `eslint .` instead of `next lint`, `next typegen` before `tsc`.
 - Tailwind v4 CSS-first config. There is no `tailwind.config.*` anywhere.
+- pnpm 12 enforces a `minimumReleaseAge` supply-chain policy: versions published in the last day
+  are rejected. In manifests and the starter, use ranges anchored on a minor (`^16.3.0`, not
+  `^16.3.6`) so fresh installs never require a just-published patch.
+- Generated projects ship a `pnpm-workspace.yaml` (written by the CLI) listing `allowBuilds`
+  for native deps. A module whose dependency runs install scripts must list it in
+  `contributes.allowBuilds`, or pnpm ≥11 fails the install.
+- Items must not re-declare starter dependencies (the validator enforces it): `site remove`
+  prunes an item's dependencies when nothing else lists them.
+- Preset pages must typecheck with only the preset's modules installed: the playground can't
+  catch that. Use `isInstalled("name")` from `@/generated/modules` for optional checks, and run
+  `pnpm build:preset <name>` after touching a preset or anything it uses.
+
+## Commands
+
+| Command                     | Use                                                           |
+| --------------------------- | ------------------------------------------------------------- |
+| `pnpm validate`             | Registry rules (run after every registry change)              |
+| `pnpm check`                | Typecheck, lint, unit tests for workspace packages            |
+| `pnpm sync:starter`         | Regenerate starter baselines + JSON schemas (`--check` in CI) |
+| `pnpm playground:sync`      | Regenerate apps/playground, then `pnpm install`               |
+| `pnpm test:e2e`             | Playwright against the playground production build            |
+| `pnpm build:preset [names]` | Generate presets (or `starter`) with the CLI and build them   |
+| `pnpm docs:catalog`         | Regenerate docs/catalog.md (`--check` in CI)                  |
+| `pnpm format`               | Prettier                                                      |
 
 ## Starter rules
 
@@ -54,6 +80,13 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
   `dark:` is allowed only for showing/hiding elements.
 - Motion uses `transition-*` defaults (token-driven durations/easing) or `duration-(--motion-fast)`.
 - Spacing is scaled by `--dial-density` automatically — use normal spacing utilities.
+- Tones: any block can add `tone-inverted` (or `<Section tone="inverted">`) to flip light/dark
+  tokens locally. theme.css scopes light tokens to `:root, .dark .tone-inverted` and dark tokens
+  to `.dark, :root:not(.dark) .tone-inverted`; keep that structure in every theme.
+- Contrast: `--input` borders must stay ≥3:1 against `--background` (WCAG 1.4.11); text tokens
+  ≥4.5:1. The theme lab and the axe e2e suite both check this.
+- Tailwind only generates classes it can see as complete strings. Never build class names
+  dynamically (`${prefix}:hidden`); write the literal class in source.
 - `scripts/validate-registry.ts` greps registry files for forbidden patterns; CI fails on them.
 
 ## Module rules
@@ -71,18 +104,43 @@ ring-ring text-destructive bg-success …`, radii `rounded-sm|md|lg|xl`, shadows
    (e.g. email logs to console, database falls back to embedded PGlite).
 6. No placeholder TODOs, no fake data in module code. Demo content lives in the playground only
    (content modules may ship ONE example entry per collection so pages render).
-7. DB schema files live in `src/db/schema/<module>.ts` and use **relative imports only** (drizzle-kit).
+7. DB schema files live in `src/db/schema/<module>.ts`, use **relative imports only** (drizzle-kit)
+   and **explicit snake_case column names** (`text("user_id")`): no `casing` option, because
+   drizzle-kit's programmatic push ignores it.
 8. Everything user-facing is keyboard accessible and labelled. Forms: progressive enhancement
    with server actions + `useActionState`, Zod validation shared by client and server.
 9. Bump `version` in `module.json` whenever files change (drives `site diff`).
+   Files may be binary (images, fonts); the CLI copies bytes.
 10. README sections: What it does · Setup · Environment · Customization · Removal.
+
+## Next.js gotchas (learned the hard way)
+
+- A page-level `openGraph` replaces the parent's, so `createMetadata()` always names an image.
+  Routes that ship their own `opengraph-image.tsx` must pass `image: false` (or an explicit
+  image) so the file-based image wins. Dynamic image routes get hashed URLs; never hardcode them.
+- `opengraph-image` cannot live under catch-all segments; use fixed-depth dynamic routes.
+- Sibling dynamic segments must share a name (`[slug]` and `[slug]/[page]`, not `[group]`).
+- Never open connections at import time (builds import every route). The `db` export is a
+  lazy proxy; follow that pattern for any client that connects.
+- Forms are rate limited per IP. E2E tests set a random `x-forwarded-for` per test.
+- `EMAIL_OUTBOX=1` captures email in production builds (CI, previews); the e2e suite uses it.
+- `SKIP_ENV_VALIDATION=1` also skips Zod **defaults** in env fragments: values are raw
+  `process.env`. Repeat defaults at the call site (`env.X ?? "default"`).
+- Redirecting from inside a streamed boundary (pages with `loading.tsx`) aborts the response and
+  logs errors; redirect on the client after render instead (see onboarding's widget).
+- pnpm refuses installs when a dependency's build script is neither allowed nor denied. Modules
+  list them in `contributes.allowBuilds` (`"name"` allows, `"!name"` denies optional helpers);
+  the root `pnpm-workspace.yaml` needs the same entries for the playground.
 
 ## Slots
 
 A slot is a generated file that aggregates contributions from installed modules.
 Core slots (defined in `registry/core.json`): `providers`, `body-end`, `header-actions`,
-`next-plugins`, `sitemap`, `proxy`. Modules can define more (`auth-plugins`, `payment-webhooks` …)
-in their own manifest under `slots`. Contributions look like:
+`next-plugins`, `proxy`, `html-lang` (i18n sets `<html lang>`), `error-reporters` (errors caught
+by `error.tsx`/`global-error.tsx`, e.g. Sentry). Modules define more in their manifest under `slots`: `sitemap` (seo),
+`auth-plugins`/`auth-client-plugins`/`auth-events` (auth), `dashboard-widgets`/`dashboard-topbar`
+(dashboard), `payment-webhooks` (payments), `email-templates` (transactional-emails),
+`onboarding-tasks` (onboarding). Contributions look like:
 
 ```json
 { "slot": "sitemap", "import": "blogSitemap", "from": "src/lib/blog/sitemap.ts" }
@@ -92,16 +150,40 @@ Special generated files: `src/env.ts` (env fragments), `src/generated/modules.ts
 `src/generated/next.ts` (CSP sources, image hosts, server external packages, plugins),
 `src/generated/db-schema.ts` (when a module ships DB schema).
 
+- Contributing to a slot owned by a module you don't `require` is fine, but the contributed
+  file must not import that owner (use structural types, e.g. an object with `done(userId)`).
+- `proxy` handlers get `(request, response)`: set cookies/headers on the shared `response` and
+  return nothing to continue, or return a Response to stop (cookies already set are kept).
+- CSP sources can depend on env at build time (`src/lib/security-headers.ts`): `"$NAME"` is the
+  origin of NAME's value (e.g. `S3_ENDPOINT`), `"$NAME?https://host"` adds the host only when
+  NAME is set (analytics providers). Unset → nothing is added.
+
 ## Adding things
 
 - **Module**: copy an existing small module (e.g. `registry/modules/contact`), edit
   `module.json`, write files + README, run `pnpm validate`, then `pnpm playground:sync` and build.
 - **Section**: `registry/sections/<name>/section.json` + `files/src/components/sections/<name>.tsx`.
-  Props only (no copy), semantic tokens only, one exported component (+ its prop types).
-  Add a demo to `apps/playground/demo`.
+  Content comes only from props; semantic tokens only; one exported component (+ its prop
+  types). Compose from `section-kit` (`Section`, `SectionHeader`, `SectionActions`,
+  `SectionMedia`). Micro-labels needed for accessibility or controls (e.g. "Menu", "Monthly")
+  are optional props with English defaults. Prefer zero-JS behavior (native `<details>`, the
+  Popover API, radio + `:has()`), and add a demo block to
+  `apps/playground/demo/src/app/(site)/sections/page.tsx`.
 - **UI primitive**: `registry/ui/<name>/ui.json` + `files/src/components/ui/<name>.tsx`.
 - **Preset**: `registry/presets/<name>.json` — modules, sections, pages, theme. CI builds every preset.
 - **Theme**: `registry/themes/<name>/theme.css` (+ `theme.json` for fonts). Only dials + token overrides.
+
+## Playground and e2e
+
+- `pnpm playground:sync` regenerates `apps/playground` through the real CLI with every module,
+  section and primitive, then overlays `apps/playground/demo/` (the only committed part).
+  The playground is gitignored, so the sync adds `@source "../"` to its globals.css (Tailwind
+  skips gitignored files otherwise).
+- `pnpm --filter playground build && pnpm test:e2e` runs Playwright + axe (WCAG 2.1 AA, light
+  and dark, desktop and mobile) plus zero-JS interaction tests. Set `CHROMIUM_PATH` to use a
+  preinstalled browser.
+- Visual QA: `node scripts/qa-sections.mjs http://localhost:3300 <out> [light|dark] [theme]`
+  screenshots every section, optionally under another registry theme.
 
 ## Quality gates
 

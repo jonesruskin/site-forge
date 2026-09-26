@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "accordion",
+  "version": "1.0.0",
+  "description": "Collapsible sections with single or multiple open items (Radix).",
+  "files": ["src/components/ui/accordion.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

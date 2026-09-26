@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "empty-state",
+  "version": "1.0.0",
+  "title": "Empty state",
+  "description": "Icon, message and next actions for empty lists and first-run screens.",
+  "group": "Application",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/empty-state.tsx"]
+}

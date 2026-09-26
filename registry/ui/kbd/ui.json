@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "kbd",
+  "version": "1.0.0",
+  "description": "Keyboard key hint, e.g. \u2318K.",
+  "files": ["src/components/ui/kbd.tsx"]
+}

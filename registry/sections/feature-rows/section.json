@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "feature-rows",
+  "version": "1.0.0",
+  "title": "Feature rows",
+  "description": "Alternating media/text rows with bullets and actions.",
+  "group": "Features",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/feature-rows.tsx"]
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "theme-lab",
+  "version": "1.0.0",
+  "title": "Theme lab",
+  "description": "Dev-only /lab page: drag the theme dials, watch real components restyle, check contrast, and save back to theme.css.",
+  "category": "developer",
+  "ui": ["button", "badge", "card", "input", "field", "alert", "switch"],
+  "files": [
+    "src/app/lab/page.tsx",
+    "src/components/theme-lab/theme-lab.tsx",
+    "src/components/theme-lab/preview.tsx",
+    "src/components/theme-lab/contrast.tsx",
+    "src/lib/theme-lab/dials.ts",
+    "src/lib/theme-lab/color.ts",
+    "src/lib/theme-lab/actions.ts"
+  ],
+  "contributes": {
+    "features": { "themeLab": false }
+  },
+  "routes": ["/lab"],
+  "postInstall": [
+    "Run the dev server and open /lab. Save writes the dials straight into src/styles/theme.css.",
+    "The lab 404s in production unless `features.themeLab` is true in site.config.ts."
+  ]
+}

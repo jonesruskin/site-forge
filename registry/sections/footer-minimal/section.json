@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "footer-minimal",
+  "version": "1.0.0",
+  "title": "Footer: minimal",
+  "description": "A single quiet row: name, links, copyright.",
+  "group": "Navigation",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/footer-minimal.tsx"]
+}

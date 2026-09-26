@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "checkbox",
+  "version": "1.0.0",
+  "description": "Accessible checkbox (Radix) that submits with native forms.",
+  "files": ["src/components/ui/checkbox.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

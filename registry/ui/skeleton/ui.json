@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "skeleton",
+  "version": "1.0.0",
+  "description": "Loading placeholder that respects reduced motion.",
+  "files": ["src/components/ui/skeleton.tsx"]
+}

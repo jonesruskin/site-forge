@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "page-header",
+  "version": "1.0.0",
+  "title": "Page header",
+  "description": "Title block for inner pages with eyebrow, description, breadcrumbs and actions.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/page-header.tsx"]
+}

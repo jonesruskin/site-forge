@@ -1,0 +1,113 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "analytics",
+  "version": "1.0.1",
+  "title": "Analytics",
+  "description": "One track() for Plausible, PostHog, Google Analytics 4 or Umami, chosen by env vars; waits for cookie consent when the provider needs it; logs events locally in dev.",
+  "category": "seo-ops",
+  "files": [
+    "src/env/analytics.ts",
+    "src/lib/analytics/providers.ts",
+    "src/lib/analytics/track.ts",
+    "src/lib/analytics/consent.ts",
+    "src/components/analytics/analytics.tsx"
+  ],
+  "envFile": "src/env/analytics.ts",
+  "env": [
+    {
+      "name": "NEXT_PUBLIC_PLAUSIBLE_DOMAIN",
+      "scope": "client",
+      "description": "Enables Plausible (cookieless) for this domain",
+      "example": "",
+      "howTo": "https://plausible.io/sites"
+    },
+    {
+      "name": "NEXT_PUBLIC_PLAUSIBLE_SRC",
+      "scope": "client",
+      "description": "Script URL for self-hosted Plausible (default https://plausible.io/js/script.js)",
+      "example": ""
+    },
+    {
+      "name": "NEXT_PUBLIC_POSTHOG_KEY",
+      "scope": "client",
+      "description": "Enables PostHog (project API key, phc_…)",
+      "example": "",
+      "howTo": "PostHog → Project settings → Project API key"
+    },
+    {
+      "name": "NEXT_PUBLIC_POSTHOG_HOST",
+      "scope": "client",
+      "description": "PostHog ingest host",
+      "example": "https://us.i.posthog.com"
+    },
+    {
+      "name": "NEXT_PUBLIC_GA_MEASUREMENT_ID",
+      "scope": "client",
+      "description": "Enables Google Analytics 4 (G-XXXXXXX)",
+      "example": "",
+      "howTo": "GA → Admin → Data streams"
+    },
+    {
+      "name": "NEXT_PUBLIC_UMAMI_WEBSITE_ID",
+      "scope": "client",
+      "description": "Enables Umami (cookieless)",
+      "example": "",
+      "howTo": "Umami → Settings → Websites"
+    },
+    {
+      "name": "NEXT_PUBLIC_UMAMI_SRC",
+      "scope": "client",
+      "description": "Umami script URL (default Umami Cloud)",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "body-end",
+        "import": "Analytics",
+        "from": "src/components/analytics/analytics.tsx",
+        "order": 10
+      }
+    ],
+    "next": {
+      "csp": {
+        "script-src": [
+          "$NEXT_PUBLIC_PLAUSIBLE_SRC",
+          "$NEXT_PUBLIC_PLAUSIBLE_DOMAIN?https://plausible.io",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://us-assets.i.posthog.com",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://eu-assets.i.posthog.com",
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com",
+          "$NEXT_PUBLIC_UMAMI_SRC",
+          "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://cloud.umami.is"
+        ],
+        "connect-src": [
+          "$NEXT_PUBLIC_PLAUSIBLE_SRC",
+          "$NEXT_PUBLIC_PLAUSIBLE_DOMAIN?https://plausible.io",
+          "$NEXT_PUBLIC_POSTHOG_HOST",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://us.i.posthog.com",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://us-assets.i.posthog.com",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://eu.i.posthog.com",
+          "$NEXT_PUBLIC_POSTHOG_KEY?https://eu-assets.i.posthog.com",
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.google-analytics.com",
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.analytics.google.com",
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com",
+          "$NEXT_PUBLIC_UMAMI_SRC",
+          "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://cloud.umami.is",
+          "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://api-gateway.umami.dev"
+        ],
+        "img-src": [
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.google-analytics.com",
+          "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com"
+        ]
+      }
+    },
+    "siteConfig": {
+      "analytics": { "consent": "cookieless-exempt" }
+    }
+  },
+  "postInstall": [
+    "Set the env var for one provider (e.g. NEXT_PUBLIC_PLAUSIBLE_DOMAIN). Without any, track() logs to the browser console in development.",
+    "Custom events: import { track } from \"@/lib/analytics/track\"; track(\"signup\", { plan: \"pro\" })."
+  ]
+}

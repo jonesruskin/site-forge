@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "dashboard-shell",
+  "version": "1.0.0",
+  "title": "Dashboard shell",
+  "description": "App layout: sidebar nav with active state, topbar, mobile drawer via the Popover API.",
+  "group": "Application",
+  "sections": ["section-kit"],
+  "files": [
+    "src/components/sections/dashboard-shell.tsx",
+    "src/components/sections/dashboard-nav.tsx"
+  ]
+}

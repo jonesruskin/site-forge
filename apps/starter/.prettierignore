@@ -2,3 +2,5 @@
 node_modules
 pnpm-lock.yaml
 src/generated
+src/env.ts
+src/proxy.ts

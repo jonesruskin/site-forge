@@ -1,0 +1,11 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "name": "terminal",
+  "title": "Terminal",
+  "description": "Monospace everything, phosphor-green accent, zero radius, no shadows, near-instant motion, compact density.",
+  "fonts": {
+    "body": "JetBrains Mono",
+    "display": "JetBrains Mono",
+    "mono": "JetBrains Mono"
+  }
+}

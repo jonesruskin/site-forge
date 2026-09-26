@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "sentry",
+  "version": "1.0.0",
+  "title": "Error monitoring (Sentry)",
+  "description": "Sentry for server, edge and browser errors, React error boundaries and request errors, tunnelled through your own domain; inert until a DSN is set.",
+  "category": "seo-ops",
+  "files": [
+    "src/env/sentry.ts",
+    "src/instrumentation.ts",
+    "src/instrumentation-client.ts",
+    "src/lib/sentry/options.ts",
+    "src/lib/sentry/next-plugin.ts",
+    "src/lib/sentry/report.ts"
+  ],
+  "dependencies": {
+    "@sentry/nextjs": "^10.75.0"
+  },
+  "envFile": "src/env/sentry.ts",
+  "env": [
+    {
+      "name": "NEXT_PUBLIC_SENTRY_DSN",
+      "scope": "client",
+      "description": "Project DSN. Unset = Sentry stays off",
+      "example": "",
+      "howTo": "Sentry → Project settings → Client keys (DSN)"
+    },
+    {
+      "name": "SENTRY_AUTH_TOKEN",
+      "description": "Build-time token to upload source maps (readable stack traces)",
+      "example": "",
+      "howTo": "Sentry → Settings → Auth tokens (org:ci scope)"
+    },
+    {
+      "name": "SENTRY_ORG",
+      "description": "Organization slug, for source map upload",
+      "example": ""
+    },
+    {
+      "name": "SENTRY_PROJECT",
+      "description": "Project slug, for source map upload",
+      "example": ""
+    }
+  ],
+  "contributes": {
+    "slots": [
+      {
+        "slot": "next-plugins",
+        "import": "sentryNextPlugin",
+        "from": "src/lib/sentry/next-plugin.ts",
+        "order": 1000
+      },
+      {
+        "slot": "error-reporters",
+        "import": "reportToSentry",
+        "from": "src/lib/sentry/report.ts"
+      }
+    ],
+    "allowBuilds": ["@sentry/cli", "!@swc/core"]
+  },
+  "postInstall": [
+    "Set NEXT_PUBLIC_SENTRY_DSN to start reporting. Add SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in CI for readable stack traces."
+  ]
+}

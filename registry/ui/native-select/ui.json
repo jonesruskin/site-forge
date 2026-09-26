@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "native-select",
+  "version": "1.0.0",
+  "description": "Styled native <select>: zero JS, best mobile UX, works in any form.",
+  "files": ["src/components/ui/native-select.tsx"]
+}

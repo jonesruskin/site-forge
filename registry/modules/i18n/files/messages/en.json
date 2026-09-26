@@ -1,0 +1,10 @@
+{
+  "Common": {
+    "language": "Language",
+    "switchLanguage": "Change language"
+  },
+  "Example": {
+    "greeting": "Hello, {name}!",
+    "items": "{count, plural, =0 {No items} one {One item} other {# items}}"
+  }
+}

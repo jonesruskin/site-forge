@@ -5,3 +5,5 @@ pnpm-lock.yaml
 **/src/generated
 # apps format themselves (they carry their own prettier config + plugins)
 apps
+registry/schema
+docs/catalog.md

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "project-grid",
+  "version": "1.0.0",
+  "title": "Project grid",
+  "description": "Portfolio projects with images, years and tags.",
+  "group": "Content",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/project-grid.tsx"]
+}

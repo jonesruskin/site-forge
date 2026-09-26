@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "navbar-simple",
+  "version": "1.0.0",
+  "title": "Navbar: simple",
+  "description": "Logo, links and actions in one row; popover menu on mobile.",
+  "group": "Navigation",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/navbar-simple.tsx"]
+}

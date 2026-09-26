@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "separator",
+  "version": "1.0.0",
+  "description": "Horizontal or vertical divider with correct separator semantics.",
+  "files": ["src/components/ui/separator.tsx"]
+}

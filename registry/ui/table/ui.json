@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "table",
+  "version": "1.0.0",
+  "description": "Responsive data table parts with horizontal scrolling on small screens.",
+  "files": ["src/components/ui/table.tsx"]
+}

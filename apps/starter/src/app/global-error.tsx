@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { errorReporters } from "@/generated/error-reporters";
+
 import "./globals.css";
 
 /** Last-resort boundary for errors thrown by the root layout itself. */
@@ -10,6 +14,10 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    for (const report of errorReporters) report(error);
+  }, [error]);
+
   return (
     <html lang="en">
       <body>

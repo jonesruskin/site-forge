@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "bento-grid",
+  "version": "1.0.0",
+  "title": "Bento grid",
+  "description": "Asymmetric grid of feature tiles in five sizes, with media slots.",
+  "group": "Features",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/bento-grid.tsx"]
+}

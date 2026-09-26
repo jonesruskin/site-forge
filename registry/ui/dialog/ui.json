@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "dialog",
+  "version": "1.0.0",
+  "description": "Modal dialog (Radix): focus trap, Esc to close, scroll lock.",
+  "files": ["src/components/ui/dialog.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}

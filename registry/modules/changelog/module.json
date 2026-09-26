@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "changelog",
+  "version": "1.0.0",
+  "title": "Changelog",
+  "description": "Release notes from MDX: dated entries with versions and change types, deep links, RSS feed.",
+  "category": "content",
+  "requires": ["mdx"],
+  "ui": ["prose", "badge"],
+  "sections": ["page-header"],
+  "files": [
+    "content/changelog/2026-01-01-first-release.mdx",
+    "src/lib/changelog/entries.ts",
+    "src/app/(site)/changelog/page.tsx",
+    "src/app/(site)/changelog/rss.xml/route.ts"
+  ],
+  "contributes": {
+    "nav": [
+      { "location": "footer", "group": "Product", "label": "Changelog", "href": "/changelog" }
+    ],
+    "siteConfig": {
+      "changelog": { "title": "Changelog", "description": "New features, improvements and fixes." }
+    }
+  },
+  "routes": ["/changelog", "/changelog/rss.xml"],
+  "postInstall": [
+    "Add entries as content/changelog/<date>-<slug>.mdx with title, date, version? and type?."
+  ]
+}

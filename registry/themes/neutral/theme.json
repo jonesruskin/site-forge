@@ -1,0 +1,6 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "name": "neutral",
+  "title": "Neutral",
+  "description": "Plain grayscale with Geist. A blank canvas: no personality until you add one."
+}

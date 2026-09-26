@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/section.schema.json",
+  "name": "testimonials",
+  "version": "1.0.0",
+  "title": "Testimonials",
+  "description": "Quote cards in a masonry-like grid, with an optional featured quote.",
+  "group": "Social proof",
+  "sections": ["section-kit"],
+  "files": ["src/components/sections/testimonials.tsx"]
+}

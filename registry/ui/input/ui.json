@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "input",
+  "version": "1.0.0",
+  "description": "Text input styled with tokens; supports aria-invalid and file inputs.",
+  "files": ["src/components/ui/input.tsx"]
+}

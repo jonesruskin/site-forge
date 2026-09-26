@@ -1,0 +1,49 @@
+name: Presets
+
+# Every preset is generated with the local CLI and must install, typecheck, lint and
+# build on its own, exactly as a new user would get it. The weekly run catches
+# upstream releases (projects resolve fresh dependency versions) breaking a preset.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "registry/**"
+      - "apps/starter/**"
+      - "packages/cli/**"
+      - "scripts/build-preset.ts"
+      - ".github/workflows/presets.yml"
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: presets-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [starter, saas, landing, portfolio, blog, agency, docs, waitlist, digital-store]
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build the CLI
+        run: pnpm --filter @site-forge/create-site build
+      - name: Generate, install, typecheck, lint and build
+        run: pnpm build:preset ${{ matrix.preset }}

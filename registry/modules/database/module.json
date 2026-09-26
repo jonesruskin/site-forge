@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/module.schema.json",
+  "name": "database",
+  "version": "1.1.1",
+  "title": "Database",
+  "description": "Drizzle ORM on Postgres (Neon, Supabase or any Postgres). Zero-setup embedded PGlite in development with automatic schema push.",
+  "category": "saas",
+  "files": ["src/db/index.ts", "src/env/database.ts", "drizzle.config.ts", "scripts/dev-db.ts"],
+  "envFile": "src/env/database.ts",
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.0",
+    "drizzle-orm": "^0.45.0",
+    "postgres": "^3.4.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.0"
+  },
+  "env": [
+    {
+      "name": "DATABASE_URL",
+      "description": "Postgres connection string. Unset in development = embedded PGlite in .site/dev/pglite",
+      "required": true,
+      "example": "postgres://user:password@host:5432/db?sslmode=require",
+      "howTo": "Neon: console.neon.tech → Connection string (pooled). Supabase: Project settings → Database → Transaction pooler"
+    }
+  ],
+  "contributes": {
+    "scripts": {
+      "predev": "tsx scripts/dev-db.ts",
+      "db:generate": "drizzle-kit generate",
+      "db:migrate": "drizzle-kit migrate",
+      "db:push": "drizzle-kit push",
+      "db:studio": "drizzle-kit studio",
+      "db:dev": "tsx scripts/dev-db.ts"
+    },
+    "next": {
+      "serverExternalPackages": ["@electric-sql/pglite"]
+    },
+    "gitignore": [".site/dev/"]
+  },
+  "postInstall": [
+    "Development needs nothing: `pnpm dev` pushes the schema into an embedded PGlite database.",
+    "Production: set DATABASE_URL, then `pnpm db:generate` and `pnpm db:migrate` (commit the /drizzle folder)."
+  ]
+}

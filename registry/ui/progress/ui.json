@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "progress",
+  "version": "1.0.0",
+  "description": "Accessible progress bar (role=progressbar) with value and label.",
+  "files": ["src/components/ui/progress.tsx"]
+}

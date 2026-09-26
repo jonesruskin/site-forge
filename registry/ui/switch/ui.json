@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/ui.schema.json",
+  "name": "switch",
+  "version": "1.0.0",
+  "description": "On/off toggle (Radix) that submits with native forms.",
+  "files": ["src/components/ui/switch.tsx"],
+  "dependencies": {
+    "radix-ui": "^1.6.0"
+  }
+}
