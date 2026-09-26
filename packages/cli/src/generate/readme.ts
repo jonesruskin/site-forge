@@ -1,4 +1,5 @@
 import type { ModuleManifest, ProjectManifest } from "../schema/manifest";
+import { runScript } from "../utils/package-manager";
 
 const START = "<!-- site-forge:modules:start -->";
 const END = "<!-- site-forge:modules:end -->";
@@ -21,7 +22,7 @@ export function generateReadme(input: {
   manifest: ProjectManifest;
   modules: ModuleManifest[];
 }) {
-  const run = input.packageManager === "npm" ? "npm run" : input.packageManager;
+  const run = runScript(input.packageManager);
   return `# ${input.name}
 
 ${input.description}

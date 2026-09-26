@@ -4,6 +4,7 @@ import path from "node:path";
 import { glob } from "tinyglobby";
 
 import type { Registry } from "../registry/registry";
+import { isCliManaged } from "./project";
 import type { ProjectManifest } from "../schema/manifest";
 import { sha256, writeText } from "../utils/fs";
 
@@ -15,7 +16,7 @@ const ALWAYS_IGNORED = [
   "**/*.tsbuildinfo",
 ];
 
-/** Copies the starter into `projectDir`, recording a hash for every file. */
+/** Copies the starter into `projectDir`, recording a hash for every file you own. */
 export async function copyStarter(
   registry: Registry,
   projectDir: string,
@@ -31,7 +32,7 @@ export async function copyStarter(
   for (const file of files.sort()) {
     const content = await readFile(path.join(starterDir, file));
     await writeText(path.join(projectDir, file), content.toString("utf8"));
-    manifest.files[file] = { owner: "starter", hash: sha256(content) };
+    if (!isCliManaged(file)) manifest.files[file] = { owner: "starter", hash: sha256(content) };
   }
   return files;
 }

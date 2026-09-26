@@ -6,8 +6,10 @@ site-forge assumes nothing about your machine. Everything works from a browser, 
 ## Create a site without cloning anything
 
 ```sh
-npx @site-forge/create-site my-site --preset portfolio --yes
+pnpm dlx @site-forge/create-site my-site --preset portfolio --yes
 ```
+
+(`npx` works too and creates an npm project: use `npm run dev`, `npm run site …` in it.)
 
 The CLI downloads the registry from GitHub (`jonesruskin/site-forge`, branch `main`) as an
 anonymous tarball, so no account or token is needed. `GITHUB_TOKEN` is used when present (for
@@ -16,6 +18,10 @@ project remembers it, so later `site add` calls use the same registry version un
 `site update`.
 
 `--github` creates the repository with the GitHub CLI and pushes the first commit.
+
+In a GitHub Codespace, `gh` is logged in with the Codespace's own token, which can only access
+the repository the Codespace was opened from, so creating a new repository fails. Run
+`unset GITHUB_TOKEN && gh auth login` first (the CLI prints these steps if it happens).
 
 ## Working on a site in a cloud session
 
@@ -56,6 +62,11 @@ cloud sessions it installs dependencies and generates the playground, so `pnpm c
    it on npm with provenance, then creates a GitHub release.
 4. Approve it: npmjs.com → your avatar → **Staged Packages** → approve with your 2FA code (or
    `npm stage approve <stage-id> --otp <code>`). Nothing is public until you do.
+
+The very first version of a new package can't be staged (npm only stages versions of packages
+that already exist), so it was published by hand with 2FA: `pnpm --filter @site-forge/create-site
+build`, then `pnpm publish --access public` in `packages/cli`. Every later version goes through
+the workflow.
 
 One-time setup: create the `site-forge` organization on npmjs.com, enable 2FA, generate a
 **granular access token** with **Read and write (stage only)** for the `@site-forge` scope, and

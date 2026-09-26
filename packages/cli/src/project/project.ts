@@ -7,6 +7,26 @@ import { exists, readJson, writeJson } from "../utils/fs";
 
 export const MANIFEST_PATH = ".site/manifest.json";
 
+/**
+ * Files the CLI itself writes or edits (generated slots, env, config codemods).
+ * They're never hash-tracked: a changed hash would only mean the CLI did its job,
+ * not that you customized the file.
+ */
+const CLI_MANAGED = new Set([
+  "package.json",
+  "site.config.ts",
+  "README.md",
+  ".gitignore",
+  ".env.example",
+  "pnpm-workspace.yaml",
+  "src/env.ts",
+  "src/proxy.ts",
+]);
+
+export function isCliManaged(file: string) {
+  return CLI_MANAGED.has(file) || file.startsWith("src/generated/");
+}
+
 export type PackageJson = {
   name?: string;
   version?: string;
